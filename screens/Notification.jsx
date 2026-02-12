@@ -1,10 +1,8 @@
 import { View, Text, TouchableOpacity, FlatList, SafeAreaView, Image } from 'react-native'
 import React, { useState } from 'react'
-import { useNavigation } from '@react-navigation/native'
 import MyStyleSheet from '../styles/MyStyleSheet'
 
 export default function Notification() {
-  const opx = useNavigation()
   const [activeTab, setActiveTab] = useState('Unread')
 
   const notifications = [
@@ -30,27 +28,17 @@ export default function Notification() {
       icon: require('../public/Calendar.svg'), 
       time: '3h ago', 
       text: "Bill's grooming session starts in 2 hours.", 
-      unread: false // Ginawang false para ma-test ang 'Read' tab
+      unread: true 
     },
   ]
 
-  // --- FILTER LOGIC ---
-  const filteredNotifications = notifications.filter(notif => {
-    if (activeTab === 'Unread') return notif.unread === true;
-    if (activeTab === 'Read') return notif.unread === false;
-    return true; // 'See All' - ibabalik lahat
-  })
-
   return (
     <SafeAreaView style={MyStyleSheet.container}>
-      <View style={MyStyleSheet.notifHeader}>
-        <TouchableOpacity onPress={() => opx.goBack()}>
-          <Image source={require('../public/back_arrow.svg')} style={{ width: 24, height: 24 }} />
-        </TouchableOpacity>
-        <Text style={MyStyleSheet.notifHeaderText}>Notifications</Text>
-        <View style={{ width: 24 }} /> 
-      </View>
+      {/* The Custom Header was removed from here. 
+        The system will now use its own header at the top.
+      */}
 
+      {/* Segmented Filter Tab */}
       <View style={MyStyleSheet.tabBar}>
         {['Unread', 'Read', 'See All'].map((tab) => (
           <TouchableOpacity 
@@ -63,16 +51,11 @@ export default function Notification() {
         ))}
       </View>
 
+      {/* Notification List */}
       <FlatList
-        data={filteredNotifications} // Gamitin ang filtered array dito
+        data={notifications}
         keyExtractor={item => item.id}
         contentContainerStyle={{ paddingHorizontal: 20, paddingTop: 10 }}
-        // Empty state message kung walang notification sa tab
-        ListEmptyComponent={
-          <Text style={{ textAlign: 'center', marginTop: 50, color: '#999' }}>
-            No {activeTab.toLowerCase()} notifications.
-          </Text>
-        }
         renderItem={({ item }) => (
           <View style={MyStyleSheet.notifCard}>
             <View style={MyStyleSheet.notifRow}>
