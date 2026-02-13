@@ -36,7 +36,7 @@ export default function App() {
 
   return (
 <NavigationContainer>
-  <MScreen.Navigator initialRouteName='landing'>
+  <MScreen.Navigator initialRouteName='dashboard'>
     <MScreen.Screen name='landing' component={LandingPage}/> 
     <MScreen.Screen name='login' component={LoginPage}/>
     <MScreen.Screen name='register' component={RegisterPage}/>
