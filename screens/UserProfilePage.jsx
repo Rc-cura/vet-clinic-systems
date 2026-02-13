@@ -5,6 +5,7 @@ import MyStyleSheet from '../styles/MyStyleSheet'
 
 export default function UserProfilePage() {
   const opx = useNavigation()
+
   const [logoutVisible, setLogoutVisible] = useState(false)
 
   return (
@@ -24,7 +25,7 @@ export default function UserProfilePage() {
         {/* Form Fields */}
         <View style={{ marginTop: 10 }}>
           <Text style={MyStyleSheet.inputLabel}>First Name</Text>
-          <TextInput style={MyStyleSheet.inputBox} placeholder="" />
+          <TextInput style={MyStyleSheet.inputBox} placeholder=""/>
 
           <Text style={MyStyleSheet.inputLabel}>Last Name</Text>
           <TextInput style={MyStyleSheet.inputBox} placeholder="" />
