@@ -6,7 +6,6 @@ import MyStyleSheet from '../styles/MyStyleSheet'
 export default function BookAppointmentPets() {
   const opx = useNavigation()
 
-  // Halimbawang data para sa mga Pets
   const petData = [
     { id: '1', name: 'Pet 1' },
     { id: '2', name: 'Pet 2' },
@@ -17,7 +16,7 @@ export default function BookAppointmentPets() {
   const renderPetItem = ({ item }) => (
     <TouchableOpacity 
       style={MyStyleSheet.gridItem}
-      onPress={() => opx.navigate('service')} // Palitan ng tamang route
+      onPress={() => opx.navigate('service')} 
     >
       <View style={MyStyleSheet.gridImagePlaceholder} />
     </TouchableOpacity>
@@ -25,30 +24,21 @@ export default function BookAppointmentPets() {
 
   return (
     <SafeAreaView style={MyStyleSheet.container}>
-      {/* Header */}
-      <View style={MyStyleSheet.formHeader}>
-        <TouchableOpacity onPress={() => opx.goBack()}>
-          <Text style={{ fontSize: 24, fontWeight: 'bold' }}>←</Text>
-        </TouchableOpacity>
-        <Text style={MyStyleSheet.formHeaderTitle}>Book an Appointment</Text>
-        <View style={{ width: 40 }} />
-      </View>
-
-      <View style={{ paddingHorizontal: 25, marginTop: 20 }}>
+      <View style={{ paddingHorizontal: 25, paddingTop: 20 }}>
         <Text style={MyStyleSheet.selectPetLabel}>Select Pet</Text>
         
-        {/* Progress Bar (Blue line) */}
-        <View style={MyStyleSheet.progressBarBg}>
-          <View  style={[MyStyleSheet.progressBarActive, { width: '25%' }]} />
+        <View style={[MyStyleSheet.progressBarBg, { marginTop: 20 }]}>
+          <View style={[MyStyleSheet.progressBarActive, { width: '25%' }]} />
         </View>
 
         <FlatList
           data={petData}
           renderItem={renderPetItem}
           keyExtractor={item => item.id}
-          numColumns={2} // Eto ang gagawa ng Grid
+          numColumns={2} 
           columnWrapperStyle={{ justifyContent: 'space-between' }}
           style={{ marginTop: 20 }}
+          showsVerticalScrollIndicator={false}
         />
       </View>
     </SafeAreaView>

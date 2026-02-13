@@ -9,36 +9,23 @@ export default function EditPetsPage() {
 
   return (
     <SafeAreaView style={MyStyleSheet.container}>
-      {/* Header */}
-      <View style={MyStyleSheet.formHeader}>
-        <TouchableOpacity onPress={() => opx.goBack()}>
-          {/* Back Arrow SVG */}
-          <Image 
-            source={require('../public/back_arrow.svg')} 
-            style={{ width: 24, height: 24 }} 
-          />
-        </TouchableOpacity>
-        <Text style={MyStyleSheet.formHeaderTitle}>Edit Pet Profile</Text>
-        <View style={{ width: 40 }} />
-      </View>
+      {/* Custom Header removed. Using system header from App.js now. */}
 
-      <ScrollView contentContainerStyle={{ paddingHorizontal: 30, paddingBottom: 40 }}>
-        
+      <ScrollView contentContainerStyle={{ paddingHorizontal: 30, paddingBottom: 40, paddingTop: 20 }}>
+
         {/* Profile Image with Camera Icon Overlay */}
         <View style={MyStyleSheet.editPhotoContainer}>
           <View style={MyStyleSheet.sumBigCircle}>
-            {/* Main Pet Image SVG */}
-            <Image 
-              source={require('../public/blackpaw.svg')} 
-              style={{ width: 80, height: 80 }} 
+            <Image
+              source={require('../public/blackpaw.svg')}
+              style={{ width: 80, height: 80 }}
               resizeMode="contain"
             />
           </View>
           <TouchableOpacity style={MyStyleSheet.cameraIconOverlay}>
-            {/* Camera Icon SVG */}
-            <Image 
-              source={require('../public/camera.svg')} 
-              style={{ width: 20, height: 20 }} 
+            <Image
+              source={require('../public/camera.svg')}
+              style={{ width: 20, height: 20 }}
               resizeMode='contain'
             />
           </TouchableOpacity>
@@ -52,14 +39,26 @@ export default function EditPetsPage() {
           <TextInput style={MyStyleSheet.formInput} placeholder="Gender" placeholderTextColor="#AAA" />
 
           {/* Inline Age and Weight */}
-          <View style={MyStyleSheet.inlineInputs}>
-            <TextInput style={[MyStyleSheet.formInput, { flex: 1, marginRight: 10 }]} placeholder="Age" placeholderTextColor="#AAA" />
-            <TextInput style={[MyStyleSheet.formInput, { flex: 1, width:10 }]} placeholder="Weight" placeholderTextColor="#AAA" />
+          <View style={[MyStyleSheet.inlineInputs, { flexDirection: 'row', width: '100%' }]}>
+            <View style={{ flex: 1, marginRight: 10 }}>
+              <TextInput
+                style={[MyStyleSheet.formInput, { width: '100%' }]}
+                placeholder="Age"
+                placeholderTextColor="#AAA"
+              />
+            </View>
+            <View style={{ flex: 1 }}>
+              <TextInput
+                style={[MyStyleSheet.formInput, { width: '100%' }]}
+                placeholder="Weight"
+                placeholderTextColor="#AAA"
+              />
+            </View>
           </View>
 
-          <TextInput 
-            style={[MyStyleSheet.formInput, MyStyleSheet.textArea]} 
-            placeholder="Remarks" 
+          <TextInput
+            style={[MyStyleSheet.formInput, MyStyleSheet.textArea]}
+            placeholder="Remarks"
             placeholderTextColor="#AAA"
             multiline={true}
             numberOfLines={4}
@@ -67,8 +66,8 @@ export default function EditPetsPage() {
         </View>
 
         {/* Save Button */}
-        <TouchableOpacity 
-          style={[MyStyleSheet.primaryBlueBtn, { marginTop: 30 }]} 
+        <TouchableOpacity
+          style={[MyStyleSheet.primaryBlueBtn, { marginTop: 30 }]}
           onPress={() => setModalVisible(true)}
         >
           <Text style={MyStyleSheet.primaryBlueBtnText}>Save</Text>
@@ -79,13 +78,8 @@ export default function EditPetsPage() {
       <Modal animationType="fade" transparent={true} visible={modalVisible}>
         <View style={MyStyleSheet.modalOverlay}>
           <View style={MyStyleSheet.modalContainer}>
-            {/* Success Checkmark SVG  <Image 
-              source={require('../public/success_check.svg')} 
-              style={{ width: 50, height: 50, marginBottom: 15, alignSelf: 'center' }} 
-            />*/}
-           
             <Text style={MyStyleSheet.modalTitle}>Successfully Edited Pet Profile</Text>
-            <TouchableOpacity 
+            <TouchableOpacity
               style={MyStyleSheet.modalViewProfileBtn}
               onPress={() => {
                 setModalVisible(false);

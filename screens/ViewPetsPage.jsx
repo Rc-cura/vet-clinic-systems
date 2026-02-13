@@ -8,16 +8,9 @@ export default function ViewPetsPage() {
 
   return (
     <SafeAreaView style={MyStyleSheet.container}>
-      {/* Header */}
-      <View style={MyStyleSheet.formHeader}>
-        <TouchableOpacity onPress={() => opx.goBack()}>
-          <Text style={{ fontSize: 24, fontWeight: 'bold' }}>←</Text>
-        </TouchableOpacity>
-        <Text style={MyStyleSheet.formHeaderTitle}>Pet Profile</Text>
-        <View style={{ width: 40 }} /> 
-      </View>
+      
 
-      <ScrollView contentContainerStyle={{ paddingHorizontal: 30, flexGrow: 1 }}>
+      <ScrollView contentContainerStyle={{ paddingHorizontal: 30, flexGrow: 1, paddingTop: 20 }}>
         
         {/* Profile Hero */}
         <View style={MyStyleSheet.summaryHero}>
@@ -49,14 +42,14 @@ export default function ViewPetsPage() {
             <Text style={MyStyleSheet.detailValueText}>kg</Text>
           </View>
 
-          {/* Remarks (Walang line sa ilalim base sa layout mo) */}
+          {/* Remarks */}
           <View style={{ marginTop: 20 }}>
             <Text style={{ fontWeight: 'bold', color: '#000', fontSize: 15 }}>Remarks</Text>
           </View>
         </View>
 
         {/* Edit Button */}
-        <View style={{ flex: 1, justifyContent: 'flex-end', marginBottom: 200 }}>
+        <View style={{ flex: 1, justifyContent: 'flex-end', marginBottom: 40 }}>
           <TouchableOpacity 
             style={MyStyleSheet.primaryBlueBtn}
             onPress={() => opx.navigate('editpets')}

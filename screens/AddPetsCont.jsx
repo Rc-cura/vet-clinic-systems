@@ -9,33 +9,22 @@ export default function AddPetsCont() {
 
   return (
     <SafeAreaView style={MyStyleSheet.container}>
-      {/* Header */}
-      <View style={MyStyleSheet.formHeader}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          {/* Back Arrow SVG */}
-          <Image 
-            source={require('../public/back_arrow.svg')} 
-            style={{ width: 24, height: 24 }} 
-          />
-        </TouchableOpacity>
-        <Text style={MyStyleSheet.formHeaderTitle}>Add Pet</Text>
-        <View style={{ width: 40 }} />
-      </View>
+      {/* Custom Header removed. Using system header from App.js now. */}
 
-      <View style={{ paddingHorizontal: 30, flex: 1 }}>
+      <View style={{ paddingHorizontal: 30, flex: 1, marginTop: 20 }}>
         {/* Profile Section */}
         <View style={MyStyleSheet.summaryProfileRow}>
           <View>
             <Text style={MyStyleSheet.summaryPetName}>Pet Name</Text>
             <Text style={MyStyleSheet.summaryPetType}>Type | Breed</Text>
           </View>
-          {/* Summary Circle with SVG Pet Icon <Image 
+          <View style={MyStyleSheet.summaryCircleGray}>
+             {/* You can uncomment this if you have the SVG ready */}
+             {/* <Image 
                 source={require('../public/bluepaw.svg')} 
                 style={{ width: 45, height: 45 }} 
                 resizeMode="contain"
-             />*/}
-          <View style={MyStyleSheet.summaryCircleGray}>
-             
+             /> */}
           </View>
         </View>
 
@@ -56,7 +45,7 @@ export default function AddPetsCont() {
         </TouchableOpacity>
       </View>
 
-      {/* SUCCESS MODAL (Pop-up Message) */}
+      {/* SUCCESS MODAL */}
       <Modal
         animationType="fade"
         transparent={true}
@@ -64,12 +53,6 @@ export default function AddPetsCont() {
       >
         <View style={MyStyleSheet.modalOverlay}>
           <View style={MyStyleSheet.modalContainer}>
-            {/* Success Icon Placeholder  <Image 
-              source={require('../public/check.svg')} 
-              style={{ width: 50, height: 50, marginBottom: 15, alignSelf: 'center' }} 
-            />
-            */}
-           
             <Text style={MyStyleSheet.modalTitle}>Successfully Added Pet</Text>
             
             <TouchableOpacity 
@@ -86,7 +69,7 @@ export default function AddPetsCont() {
                 navigation.navigate('petsadded'); 
               }}
             >
-              <Text style={MyStyleSheet.modalViewText}>View Profile</Text>
+              <Text style={MyStyleSheet.modalViewText}>View Pets</Text>
             </TouchableOpacity>
           </View>
         </View>

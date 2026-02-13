@@ -9,9 +9,8 @@ export default function AppointmentDateTime() {
   const opx = useNavigation();
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedTime, setSelectedTime] = useState(null);
-  const [selectedVet, setSelectedVet] = useState(null); // State para sa Vet
+  const [selectedVet, setSelectedVet] = useState(null); 
 
-  // Listahan ng mga Veterinarian (Base sa image_59acdc.png)
   const vetData = [
     { label: 'Dr. Smith', value: 'dr_smith' },
     { label: 'Dr. Garcia', value: 'dr_garcia' },
@@ -37,23 +36,17 @@ export default function AppointmentDateTime() {
 
   return (
     <SafeAreaView style={MyStyleSheet.container}>
-      <View style={MyStyleSheet.formHeader}>
-        <TouchableOpacity onPress={() => opx.goBack()}>
-          <Text style={{ fontSize: 24, fontWeight: 'bold' }}>←</Text>
-        </TouchableOpacity>
-        <Text style={MyStyleSheet.formHeaderTitle}>Book an Appointment</Text>
-        <View style={{ width: 40 }} />
-      </View>
-
-      <ScrollView contentContainerStyle={{ paddingHorizontal: 25, paddingBottom: 40 }}>
+      <ScrollView contentContainerStyle={{ paddingHorizontal: 25, paddingBottom: 40, paddingTop: 20 }}>
         
-        {/* PROGRESS BAR SECTION (Optional, base sa photo) */}
-        <View style={{ height: 4, backgroundColor: '#E0E0E0', borderRadius: 2, marginVertical: 20, flexDirection: 'row' }}>
+        {/* Step Label - Now Centered to match 'Select Service' page */}
+        <Text style={[MyStyleSheet.selectPetLabel, { textAlign: 'center' }]}>Select Veterinarian</Text>
+        
+        {/* Progress Bar - 75% */}
+        <View style={[MyStyleSheet.progressBarBg, { alignSelf: 'center', marginTop: 20, marginBottom: 20 }]}>
            <View style={{ width: '75%', backgroundColor: '#5C93E8', height: '100%', borderRadius: 2 }} />
         </View>
 
-        {/* SELECT VETERINARIAN SECTION */}
-        <Text style={[MyStyleSheet.selectPetLabel, { marginBottom: 10 }]}>Select Veterinarian</Text>
+        {/* SELECT VETERINARIAN SECTION (Dropdown Kept) */}
         <View style={{ marginBottom: 20 }}>
           <Text style={{ fontSize: 14, color: '#333', marginBottom: 5, fontWeight: '600' }}>Attending Vet</Text>
           <Dropdown
@@ -71,7 +64,7 @@ export default function AppointmentDateTime() {
         </View>
 
         {/* SELECT DATE & TIME SECTION */}
-        <Text style={[MyStyleSheet.selectPetLabel, { marginBottom: 10 }]}>Select Date & Time</Text>
+        <Text style={[MyStyleSheet.selectPetLabel, { marginBottom: 15, textAlign: 'center' }]}>Select Date & Time</Text>
         <View style={MyStyleSheet.calendarCard}>
           <Calendar
             onDayPress={day => setSelectedDate(day.dateString)}

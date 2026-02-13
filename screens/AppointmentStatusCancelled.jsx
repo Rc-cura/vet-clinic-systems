@@ -15,16 +15,9 @@ export default function AppointmentStatusCancelled() {
 
   return (
     <SafeAreaView style={MyStyleSheet.container}>
-      {/* Header */}
-      <View style={MyStyleSheet.formHeader}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Image source={require('../public/back_arrow.svg')} style={{ width: 24, height: 24 }} />
-        </TouchableOpacity>
-        <Text style={MyStyleSheet.formHeaderTitle}>Appointment Details</Text>
-        <View style={{ width: 40 }} />
-      </View>
+      {/* Manual Header removed. Using system header from App.js now. */}
 
-      <ScrollView contentContainerStyle={{ paddingHorizontal: 25, paddingBottom: 40 }}>
+      <ScrollView contentContainerStyle={{ paddingHorizontal: 25, paddingBottom: 40, paddingTop: 20 }}>
         
         {/* Main Status Card */}
         <View style={MyStyleSheet.detailsMainCard}>
@@ -32,7 +25,7 @@ export default function AppointmentStatusCancelled() {
           <Text style={MyStyleSheet.detailsTimeText}>9:00 AM</Text>
           
           {/* Light Red badge for Cancelled status */}
-          <View style={[MyStyleSheet.detailsStatusBadge, { backgroundColor: '#FFBDBD', width: 350 }]}>
+          <View style={[MyStyleSheet.detailsStatusBadge, { backgroundColor: '#FFBDBD', width: '100%' }]}>
             <Text style={[MyStyleSheet.detailsStatusText, { color: '#000', alignSelf: "center" }]}>Cancelled Appointment</Text>
           </View>
           
@@ -89,7 +82,7 @@ export default function AppointmentStatusCancelled() {
 
       </ScrollView>
 
-      {/* Modal 2: Success Message (Keeping as reference) */}
+      {/* Success Modal */}
       <Modal visible={successModalVisible} transparent animationType="fade">
         <View style={MyStyleSheet.modalOverlay}>
           <View style={MyStyleSheet.policyBox}>
