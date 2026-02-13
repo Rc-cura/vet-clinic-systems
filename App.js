@@ -30,6 +30,7 @@ import AppointmentStatusPending from './screens/AppointmentStatusPending';
 import AppointmentStatusCancelled from './screens/AppointmentStatusCancelled';
 
 
+export let Registered = [];
 
 export default function App() {
   const MScreen = createNativeStackNavigator()
