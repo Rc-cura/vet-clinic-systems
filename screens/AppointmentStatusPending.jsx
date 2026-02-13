@@ -17,16 +17,11 @@ export default function AppointmentStatusPending() {
 
   return (
     <SafeAreaView style={MyStyleSheet.container}>
-      {/* Header */}
-      <View style={MyStyleSheet.formHeader}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Image source={require('../public/back_arrow.svg')} style={{ width: 24, height: 24 }} />
-        </TouchableOpacity>
-        <Text style={MyStyleSheet.formHeaderTitle}>Appointment Details</Text>
-        <View style={{ width: 40 }} />
-      </View>
+      {/* The Custom Header (formHeader) has been removed. 
+          Ensure App.js has 'headerShown: true' for this screen.
+      */}
 
-      <ScrollView contentContainerStyle={{ paddingHorizontal: 25, paddingBottom: 40 }}>
+      <ScrollView contentContainerStyle={{ paddingHorizontal: 25, paddingBottom: 40, paddingTop: 20 }}>
         
         {/* Main Status Card (Pending) */}
         <View style={MyStyleSheet.detailsMainCard}>

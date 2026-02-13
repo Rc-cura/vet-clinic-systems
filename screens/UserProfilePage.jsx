@@ -2,47 +2,66 @@ import { View, Text, TouchableOpacity, SafeAreaView, ScrollView, TextInput, Moda
 import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import MyStyleSheet from '../styles/MyStyleSheet'
+import { useUser } from '../context/UserContext' 
 
 export default function UserProfilePage() {
   const opx = useNavigation()
+  const { user, updateUser } = useUser() 
 
   const [logoutVisible, setLogoutVisible] = useState(false)
 
   return (
     <SafeAreaView style={MyStyleSheet.container}>
-      {/* Header */}
-      <View style={MyStyleSheet.formHeader}>
-        <TouchableOpacity onPress={() => opx.goBack()}>
-          <Text style={{ fontSize: 24, fontWeight: 'bold' }}>←</Text>
-        </TouchableOpacity>
-        <Text style={MyStyleSheet.formHeaderTitle}>My Profile</Text>
-        <View style={{ width: 40 }} />
-      </View>
+      
 
-      <ScrollView contentContainerStyle={{ paddingHorizontal: 30, paddingBottom: 40 }}>
+      <ScrollView contentContainerStyle={{ paddingHorizontal: 30, paddingBottom: 40, paddingTop: 20 }}>
         <Text style={MyStyleSheet.profileMainTitle}>Account Information</Text>
 
         {/* Form Fields */}
         <View style={{ marginTop: 10 }}>
           <Text style={MyStyleSheet.inputLabel}>First Name</Text>
-          <TextInput style={MyStyleSheet.inputBox} placeholder=""/>
+          <TextInput 
+            style={MyStyleSheet.inputBox} 
+            value={user?.fname || ""} 
+            editable={false} 
+          />
 
           <Text style={MyStyleSheet.inputLabel}>Last Name</Text>
-          <TextInput style={MyStyleSheet.inputBox} placeholder="" />
+          <TextInput 
+            style={MyStyleSheet.inputBox} 
+            value={user?.lname || ""} 
+            editable={false} 
+          />
 
           <Text style={MyStyleSheet.inputLabel}>Email</Text>
-          <TextInput style={MyStyleSheet.inputBox} placeholder="" keyboardType="email-address" />
+          <TextInput 
+            style={MyStyleSheet.inputBox} 
+            value={user?.email || ""} 
+            editable={false} 
+          />
 
           <Text style={MyStyleSheet.inputLabel}>Contact Number</Text>
-          <TextInput style={MyStyleSheet.inputBox} placeholder="" keyboardType="phone-pad" />
+          <TextInput 
+            style={MyStyleSheet.inputBox} 
+            value={user?.contact || ""} 
+            editable={false} 
+          />
 
           <Text style={MyStyleSheet.inputLabel}>Password</Text>
-          <TextInput style={MyStyleSheet.inputBox} placeholder="" secureTextEntry={true} />
+          <TextInput 
+            style={MyStyleSheet.inputBox} 
+            value={user?.password || ""} 
+            secureTextEntry={true} 
+            editable={false} 
+          />
         </View>
 
         {/* Action Buttons */}
         <View style={{ marginTop: 20 }}>
-          <TouchableOpacity style={MyStyleSheet.primaryBlueBtn} onPress={() => {opx.navigate('editprofile')}}>
+          <TouchableOpacity 
+            style={MyStyleSheet.primaryBlueBtn} 
+            onPress={() => opx.navigate('editprofile')}
+          >
             <Text style={MyStyleSheet.primaryBlueBtnText}>Edit</Text>
           </TouchableOpacity>
 
@@ -55,7 +74,7 @@ export default function UserProfilePage() {
         </View>
       </ScrollView>
 
-      {/* LOGOUT MODAL (image_4dea9c.png) */}
+      {/* LOGOUT MODAL */}
       <Modal animationType="fade" transparent={true} visible={logoutVisible}>
         <View style={MyStyleSheet.modalOverlay}>
           <View style={MyStyleSheet.logoutModalContainer}>
@@ -67,14 +86,15 @@ export default function UserProfilePage() {
                 style={MyStyleSheet.yesBtn}
                 onPress={() => {
                   setLogoutVisible(false);
-                  opx.navigate('login'); // O kung saan man ang login route mo
+                  updateUser(null); 
+                  opx.navigate('login'); 
                 }}
               >
                 <Text style={MyStyleSheet.yesNoText}>Yes</Text>
               </TouchableOpacity>
 
               <TouchableOpacity 
-                style={MyStyleSheet.noBtn}
+                style={MyStyleSheet.noBtn} 
                 onPress={() => setLogoutVisible(false)}
               >
                 <Text style={MyStyleSheet.yesNoText}>No</Text>

@@ -15,16 +15,11 @@ export default function AppointmentStatusApproved() {
 
   return (
     <SafeAreaView style={MyStyleSheet.container}>
-      {/* Header */}
-      <View style={MyStyleSheet.formHeader}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Image source={require('../public/back_arrow.svg')} style={{ width: 24, height: 24 }} />
-        </TouchableOpacity>
-        <Text style={MyStyleSheet.formHeaderTitle}>Appointment Details</Text>
-        <View style={{ width: 40 }} />
-      </View>
+      {/* Custom formHeader removed. 
+         System header from App.js will now be used.
+      */}
 
-      <ScrollView contentContainerStyle={{ paddingHorizontal: 25, paddingBottom: 40 }}>
+      <ScrollView contentContainerStyle={{ paddingHorizontal: 25, paddingBottom: 40, paddingTop: 20 }}>
         
         {/* Main Status Card (Approved - Blue Badge) */}
         <View style={MyStyleSheet.detailsMainCard}>
@@ -32,7 +27,7 @@ export default function AppointmentStatusApproved() {
           <Text style={MyStyleSheet.detailsTimeText}>9:00 AM</Text>
           
           <View style={[MyStyleSheet.detailsStatusBadge, { backgroundColor: '#D1E3FF', width: 350 }]}>
-            <Text style={[MyStyleSheet.detailsStatusText, { color: '#000', alignSelf: "center" }]}>Appointment Scheduled</Text>
+            <Text style={[MyStyleSheet.detailsStatusText, { color: '#000', alignSelf: "center" }]}>Appointment Approved</Text>
           </View>
           
           <Text style={MyStyleSheet.requestedDateLabel}>
@@ -99,7 +94,7 @@ export default function AppointmentStatusApproved() {
 
       </ScrollView>
 
-      {/* --- MODALS --- */}
+      {/* Modals remain the same */}
       <Modal visible={cancelModalVisible} transparent animationType="fade">
         <View style={MyStyleSheet.modalOverlay}>
           <View style={MyStyleSheet.policyBox}>

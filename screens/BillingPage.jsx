@@ -2,9 +2,12 @@ import { View, Text, TouchableOpacity, FlatList, SafeAreaView, Modal, Image } fr
 import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import MyStyleSheet from '../styles/MyStyleSheet'
+import { useUser } from '../context/UserContext' // 1. Import the context hook
 
 export default function BillingPage() {
   const opx = useNavigation()
+  const { user } = useUser() // 2. Access global user data
+  
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedInvoice, setSelectedInvoice] = useState(null);
 
@@ -63,10 +66,12 @@ export default function BillingPage() {
   return (
     <SafeAreaView style={MyStyleSheet.container}>
       <View style={MyStyleSheet.dashHeader}>
-        <Text style={MyStyleSheet.welcomeText}>Hi, User!</Text>
+        {/* 3. Updated dynamic greeting */}
+        <Text style={MyStyleSheet.welcomeText}>Hi, {user?.fname || 'User'}!</Text>
+        
         <View style={MyStyleSheet.headerIcons}>
           <TouchableOpacity onPress={()=>{opx.navigate('userprofile')}}>
-          <View style={MyStyleSheet.profileCircle}/>
+            <View style={MyStyleSheet.profileCircle}/>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => opx.navigate('notification')}>
             <Image source={require('../public/Doorbell.svg')} style={{ width: 24, height: 24 }} />

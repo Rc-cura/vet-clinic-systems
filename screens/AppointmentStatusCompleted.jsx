@@ -9,16 +9,10 @@ export default function AppointmentStatusCompleted() {
 
   return (
     <SafeAreaView style={MyStyleSheet.container}>
-      {/* Header */}
-      <View style={MyStyleSheet.formHeader}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Image source={require('../public/back_arrow.svg')} style={{ width: 24, height: 24 }} />
-        </TouchableOpacity>
-        <Text style={MyStyleSheet.formHeaderTitle}>Appointment Details</Text>
-        <View style={{ width: 40 }} />
-      </View>
+      {/* Custom Header removed to fix the double arrow/gap issue.
+          App.js will now provide the native header. */}
 
-      <ScrollView contentContainerStyle={{ paddingHorizontal: 25, paddingBottom: 40 }}>
+      <ScrollView contentContainerStyle={{ paddingHorizontal: 25, paddingBottom: 40, paddingTop: 20 }}>
         
         {/* Main Status Card (Completed) */}
         <View style={MyStyleSheet.detailsMainCard}>
@@ -36,7 +30,6 @@ export default function AppointmentStatusCompleted() {
 
         {/* Pet Info */}
         <View style={MyStyleSheet.summaryCard}>
-          {/* Centered Pet Icon using cat.svg */}
           <View style={[MyStyleSheet.iconPlaceholderCircle, { justifyContent: 'center', alignItems: 'center' }]}>
             <Image 
                 source={require('../public/blackpaw.svg')} 
@@ -50,7 +43,7 @@ export default function AppointmentStatusCompleted() {
           </View>
         </View>
 
-        {/* Service Info - Changed to medical_icon.svg */}
+        {/* Service Info */}
         <View style={MyStyleSheet.summaryCard}>
           <View style={[MyStyleSheet.iconPlaceholderSquare, { justifyContent: 'center', alignItems: 'center' }]}>
              <Image source={require('../public/medical_icon.svg')} style={{ width: 24, height: 24 }} />
@@ -69,7 +62,7 @@ export default function AppointmentStatusCompleted() {
           </Text>
         </View>
 
-        {/* Veterinarian Info - Changed to vet.png */}
+        {/* Veterinarian Info */}
         <View style={MyStyleSheet.summaryCard}>
           <View style={[MyStyleSheet.iconPlaceholderSquare, { justifyContent: 'center', alignItems: 'center' }]}>
              <Image source={require('../public/vet.svg')} style={{ width: 24, height: 24 }} resizeMode="contain" />
@@ -79,7 +72,7 @@ export default function AppointmentStatusCompleted() {
           </View>
         </View>
 
-        {/* Laboratory Results - Changed to results.png */}
+        {/* Laboratory Results */}
         <TouchableOpacity 
           style={MyStyleSheet.summaryCard} 
           onPress={() => setDownloadModal(true)}

@@ -3,36 +3,42 @@ import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import MyStyleSheet from '../styles/MyStyleSheet'
 import { Registered } from '../App'
-
-
+import { useUser } from '../context/UserContext';
 
 export default function LoginPage() {
-  const opx = useNavigation()
+  const opx = useNavigation();
+  const { updateUser } = useUser(); 
+  const [getLogin, setLogin] = useState({ email: "", password: "" });
+  const [Msg, setMsg] = useState("");
 
-   const [getLogin, setLogin] = useState({ email: "", password: "" });
-    const [Msg, setMsg] = useState("");
+  // 1. You need this function to handle typing
+  const changeHandler = (field, value) => {
+    setLogin({ ...getLogin, [field]: value });
+  };
 
-    const changeHandler = (field, value) => {
-        setLogin({ ...getLogin, [field]: value });
-    };
+  const loginAccount = () => {
+    const userFound = Registered.find(item => item.email === getLogin.email && item.password === getLogin.password);
+    
+    if (getLogin.email === "" || getLogin.password === "") {
+        setMsg("Please fill up all fields");
+        return;
+    }
 
-    const loginAccount = () => {
-        if (getLogin.email === "" || getLogin.password === "") {
-            setMsg("Please fill up all fields");
-            return;
-        }
+    if (!userFound) {
+      setMsg("Invalid email or password");
+      return;
+    }
+    
+    updateUser(userFound); // Saves to Context
+    opx.navigate('otplogin'); 
+  };
 
-        const userFound = Registered.find(item => item.email === getLogin.email && item.password === getLogin.password);
-        if (!userFound) {
-            setMsg("Invalid email or password");
-            return;
-        }
-        opx.navigate('otplogin',{user: userFound});
-      };
+  // REMOVED the extra " }; " that was here
+
   return (
     <SafeAreaView style={MyStyleSheet.container}>
-      <ImageBackground 
-        source={{ uri: 'https://via.placeholder.com/500' }} // Use your background asset here
+      <ImageBackground
+        source={{ uri: 'https://via.placeholder.com/500' }} 
         style={MyStyleSheet.bgImage}
         resizeMode="cover"
       >
@@ -43,17 +49,28 @@ export default function LoginPage() {
             <Text style={MyStyleSheet.clinicSub}>VETERINARY CLINIC</Text>
           </View>
           <View style={MyStyleSheet.logoCircleSmall}>
-             <Image source={require('../public/logo.svg')} style={{width: 70, height: 70}} />
+            <Image source={require('../public/logo.svg')} style={{ width: 70, height: 70 }} />
           </View>
         </View>
 
         {/* Floating Login Card */}
         <View style={MyStyleSheet.formCard}>
           <Text style={MyStyleSheet.cardTitle}>Login</Text>
-          <Text style={{alignSelf:"center", color: "red", marginBottom:10}}>{Msg}</Text>
-          
-          <TextInput style={MyStyleSheet.input} onChangeText={(e) => {changeHandler("email", e);}} placeholder='Enter Email' keyboardType="email-address" autoCapitalize="none"/>
-          <TextInput style={MyStyleSheet.input} onChangeText={(e) => {changeHandler("password", e);}} placeholder='Enter Password' secureTextEntry/>
+          <Text style={{ alignSelf: "center", color: "red", marginBottom: 10 }}>{Msg}</Text>
+
+          <TextInput 
+            style={MyStyleSheet.input} 
+            onChangeText={(e) => changeHandler("email", e)} 
+            placeholder='Enter Email' 
+            keyboardType="email-address" 
+            autoCapitalize="none" 
+          />
+          <TextInput 
+            style={MyStyleSheet.input} 
+            onChangeText={(e) => changeHandler("password", e)} 
+            placeholder='Enter Password' 
+            secureTextEntry 
+          />
 
           <TouchableOpacity style={{ alignSelf: 'flex-end', marginBottom: 20 }}>
             <Text style={MyStyleSheet.forgotText}>Forgot password?</Text>
@@ -69,7 +86,7 @@ export default function LoginPage() {
           <View style={MyStyleSheet.dividerRow}>
             <View style={MyStyleSheet.line} /><Text style={MyStyleSheet.orText}>or login with</Text><View style={MyStyleSheet.line} />
           </View>
-          
+
           <View style={MyStyleSheet.iconRow}>
             <TouchableOpacity style={MyStyleSheet.socialIcon}><Text>FB</Text></TouchableOpacity>
             <TouchableOpacity style={MyStyleSheet.socialIcon}><Text>G</Text></TouchableOpacity>
@@ -77,7 +94,7 @@ export default function LoginPage() {
           </View>
 
           <TouchableOpacity onPress={() => opx.navigate('register')}>
-            <Text style={MyStyleSheet.footerText}>Don't have an account? <Text style={{fontWeight: 'bold', color: '#4E5DB2'}}>Signup</Text></Text>
+            <Text style={MyStyleSheet.footerText}>Don't have an account? <Text style={{ fontWeight: 'bold', color: '#4E5DB2' }}>Signup</Text></Text>
           </TouchableOpacity>
         </View>
 

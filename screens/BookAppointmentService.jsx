@@ -23,14 +23,7 @@ export default function BookAppointmentService() {
 
   return (
     <SafeAreaView style={MyStyleSheet.container}>
-      {/* Header */}
-      <View style={MyStyleSheet.formHeader}>
-        <TouchableOpacity onPress={() => opx.goBack()}>
-          <Image source={require('../public/back_arrow.svg')} style={{ width: 24, height: 24 }} />
-        </TouchableOpacity>
-        <Text style={MyStyleSheet.formHeaderTitle}>Book an Appointment</Text>
-        <View style={{ width: 40 }} />
-      </View>
+      {/* Custom Header removed. Using system header from App.js now. */}
 
       <ScrollView contentContainerStyle={{ paddingHorizontal: 25, paddingBottom: 40 }}>
         <Text style={[MyStyleSheet.selectPetLabel, { textAlign: 'center', marginTop: 20 }]}>Select Service</Text>
@@ -53,7 +46,6 @@ export default function BookAppointmentService() {
                 ]} 
                 onPress={() => toggleService(item.id)}
               >
-                {/* SVG Icon Replacement */}
                 <Image 
                   source={item.icon} 
                   style={{ width: 50, height: 50, marginBottom: 10 }} 

@@ -1,24 +1,32 @@
 import { View, Text, TouchableOpacity, Image, ScrollView, SafeAreaView } from 'react-native'
 import React from 'react'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native' // Removed useRoute
 import MyStyleSheet from '../styles/MyStyleSheet'
+import { useUser } from '../context/UserContext' // Import the context hook
 
 export default function DashboardPage() {
   const opx = useNavigation()
+  
+  // 1. Grab the user data globally from Context
+  const { user } = useUser()
 
   return (
     <SafeAreaView style={MyStyleSheet.container}>
       {/* Top Header */}
       <View style={MyStyleSheet.dashHeader}>
-        <Text style={MyStyleSheet.welcomeText}>Hi, User!</Text>
+        {/* 2. Dynamically display the user's first name */}
+        <Text style={MyStyleSheet.welcomeText}>Hi, {user?.fname || 'User'}!</Text>
+        
         <View style={MyStyleSheet.headerIcons}>
           
-          <TouchableOpacity onPress={() => { opx.navigate('userprofile') }}>
-            <View style={MyStyleSheet.profileCircle} />
+          {/* 3. No need to pass user params here anymore! */}
+          <TouchableOpacity onPress={() => opx.navigate('userprofile')}>
+            <View style={MyStyleSheet.profileCircle}>
+               {/* Optional: Add an image or initials here if you have them */}
+            </View>
           </TouchableOpacity>
 
           <TouchableOpacity style={MyStyleSheet.notifBtn} onPress={() => { opx.navigate('notification') }}>
-            {/* Notification Bell Icon */}
             <Image source={require('../public/Doorbell.svg')} style={{ width: 22, height: 22 }} />
           </TouchableOpacity>
         </View>
@@ -50,7 +58,6 @@ export default function DashboardPage() {
         {/* Book Appointment CTA */}
         <TouchableOpacity style={MyStyleSheet.bookBtn} onPress={()=>{opx.navigate('appointment')}}>
           <View style={MyStyleSheet.bookIconContainer}>
-              {/* Calendar Icon */}
               <Image source={require('../public/bookapp.svg')} style={{ width: 20, height: 20 }} />
           </View>
           <View style={{marginLeft: 12}}>

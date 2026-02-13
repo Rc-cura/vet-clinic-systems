@@ -1,6 +1,6 @@
 import { View, Text, TextInput, TouchableOpacity, Image, ImageBackground, SafeAreaView } from 'react-native'
 import React from 'react'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native' // Removed useRoute
 import MyStyleSheet from '../styles/MyStyleSheet'
 
 export default function Otplogin() {
@@ -9,11 +9,10 @@ export default function Otplogin() {
   return (
     <SafeAreaView style={MyStyleSheet.container}>
       <ImageBackground 
-        source={{ uri: 'https://via.placeholder.com/500' }} // Your paw background
+        source={{ uri: 'https://via.placeholder.com/500' }} 
         style={MyStyleSheet.bgImage}
         resizeMode="cover"
       >
-        {/* Header (Same as Login/Register) */}
         <View style={MyStyleSheet.regHeader}>
           <View>
             <Text style={MyStyleSheet.clinicName}>ST JOSEPH</Text>
@@ -22,7 +21,6 @@ export default function Otplogin() {
           <View style={MyStyleSheet.logoCircleSmall}><Image source={require('../public/logo.svg')} style={{width: 70, height: 70}}/></View>
         </View>
 
-        {/* OTP Modal Card */}
         <View style={MyStyleSheet.formCard}>
           <TouchableOpacity style={{ alignSelf: 'flex-end' }} onPress={() => opx.goBack()}>
             <Text style={{ fontSize: 20, color: '#666' }}>✕</Text>
@@ -33,7 +31,6 @@ export default function Otplogin() {
             Please enter the verification code sent to your email to securely sign in to your account.
           </Text>
 
-          {/* OTP Input Boxes Row */}
           <View style={MyStyleSheet.otpRow}>
             {[1, 2, 3, 4, 5, 6].map((_, i) => (
               <TextInput key={i} style={MyStyleSheet.otpInput} keyboardType="number-pad" maxLength={1} />
@@ -49,6 +46,7 @@ export default function Otplogin() {
             <Text style={MyStyleSheet.cancelBtnText}>Cancel</Text>
           </TouchableOpacity>
 
+          {/* CLEAN NAVIGATION: Dashboard will grab user from useUser() directly */}
           <TouchableOpacity style={MyStyleSheet.regButton} onPress={() => opx.navigate('dashboard')}>
             <Text style={MyStyleSheet.buttonText}>Verify</Text>
           </TouchableOpacity>

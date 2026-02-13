@@ -8,22 +8,18 @@ export default function AddPets() {
 
   return (
     <SafeAreaView style={MyStyleSheet.container}>
-      {/* Custom Header */}
-      <View style={MyStyleSheet.formHeader}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={MyStyleSheet.backBtn}>
-          {/* Back Arrow Replacement */}
-          <Image source={require('../public/back_arrow.svg')} style={{ width: 24, height: 24 }} />
-        </TouchableOpacity>
-        <Text style={MyStyleSheet.formHeaderTitle}>Add Pet</Text>
-        <View style={{ width: 40 }} /> {/* Spacer to center the title */}
-      </View>
+      {/* Manual Header removed to get rid of the second arrow. 
+          Make sure App.js has headerTitleAlign: 'center' and title: 'Add Pet'
+      */}
 
-      <ScrollView contentContainerStyle={MyStyleSheet.formScrollContent} showsVerticalScrollIndicator={false}>
+      <ScrollView 
+        contentContainerStyle={[MyStyleSheet.formScrollContent, { paddingTop: 20 }]} 
+        showsVerticalScrollIndicator={false}
+      >
         
         {/* Upload Section */}
         <View style={MyStyleSheet.uploadContainer}>
           <View style={MyStyleSheet.profileCircleBlack}>
-            {/* 🐱 Emoji replaced with SVG */}
             <Image 
               source={require('../public/bluepaw.svg')} 
               style={{ width: 60, height: 60 }} 
@@ -31,7 +27,6 @@ export default function AddPets() {
             /> 
           </View>
           <TouchableOpacity style={MyStyleSheet.uploadOutlineBtn}>
-            {/* 📤 Emoji replaced with SVG */}
             <Image 
               source={require('../public/upload.svg')} 
               style={{ width: 20, height: 20, marginRight: 8 }} 
@@ -47,10 +42,22 @@ export default function AddPets() {
           <TextInput style={MyStyleSheet.formInput} placeholder="Breed" placeholderTextColor="#AAA" />
           <TextInput style={MyStyleSheet.formInput} placeholder="Gender" placeholderTextColor="#AAA" />
 
-          {/* Inline Age and Weight */}
-          <View style={MyStyleSheet.inlineInputs}>
-            <TextInput style={[MyStyleSheet.formInput, { flex: 1, marginRight: 10 }]} placeholder="Age" placeholderTextColor="#AAA" />
-            <TextInput style={[MyStyleSheet.formInput, { flex: 1, width:10 }]} placeholder="Weight" placeholderTextColor="#AAA" />
+          {/* Inline Age and Weight - FIXED OVERFLOW */}
+          <View style={[MyStyleSheet.inlineInputs, { flexDirection: 'row', width: '100%' }]}>
+            <View style={{ flex: 1, marginRight: 10 }}>
+              <TextInput 
+                style={[MyStyleSheet.formInput, { width: '100%' }]} 
+                placeholder="Age" 
+                placeholderTextColor="#AAA" 
+              />
+            </View>
+            <View style={{ flex: 1 }}>
+              <TextInput 
+                style={[MyStyleSheet.formInput, { width: '100%' }]} 
+                placeholder="Weight" 
+                placeholderTextColor="#AAA" 
+              />
+            </View>
           </View>
 
           <TextInput 
