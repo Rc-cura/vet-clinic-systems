@@ -34,6 +34,9 @@ import AppointmentStatusCancelled from './screens/AppointmentStatusCancelled';
 
 export const Registered = [];
 
+export const Pets = [];
+
+
 export default function App() {
   const MScreen = createNativeStackNavigator()
 
@@ -43,7 +46,7 @@ export default function App() {
 
 
       <NavigationContainer>
-        <MScreen.Navigator initialRouteName='landing'>
+        <MScreen.Navigator initialRouteName='addpets'>
           <MScreen.Screen name='landing' component={LandingPage} />
           <MScreen.Screen name='login' component={LoginPage} />
           <MScreen.Screen name='register' component={RegisterPage} />
