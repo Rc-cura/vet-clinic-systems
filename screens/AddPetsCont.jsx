@@ -1,11 +1,27 @@
 import { View, Text, TouchableOpacity, SafeAreaView, Modal, Image } from 'react-native'
 import React, { useState } from 'react'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import MyStyleSheet from '../styles/MyStyleSheet'
+import { Pets } from '../App'
+
+
 
 export default function AddPetsCont() {
   const navigation = useNavigation()
+
+
+
+  const route = useRoute();
+  const { petData } = route.params || {};
   const [modalVisible, setModalVisible] = useState(false); 
+
+    const handleAddToAccount = () => {
+  if (petData) {
+    Pets.push(petData); // Simply push the object
+    console.log("Pet added to array:", Pets);
+    setModalVisible(true);     // Show success message
+  }
+};
 
   return (
     <SafeAreaView style={MyStyleSheet.container}>
@@ -15,31 +31,37 @@ export default function AddPetsCont() {
         {/* Profile Section */}
         <View style={MyStyleSheet.summaryProfileRow}>
           <View>
-            <Text style={MyStyleSheet.summaryPetName}>Pet Name</Text>
-            <Text style={MyStyleSheet.summaryPetType}>Type | Breed</Text>
+            <Text style={MyStyleSheet.summaryPetName}>{petData?.pname}</Text>
+            <Text style={MyStyleSheet.summaryPetType}>{petData?.species} | {petData?.breed}</Text>
           </View>
           <View style={MyStyleSheet.summaryCircleGray}>
-             {/* You can uncomment this if you have the SVG ready */}
-             {/* <Image 
-                source={require('../public/bluepaw.svg')} 
-                style={{ width: 45, height: 45 }} 
-                resizeMode="contain"
-             /> */}
+            {petData?.pimage ? (
+    <Image 
+      source={{ uri: petData.pimage }} 
+      style={{ width: '100%', height: '100%', borderRadius: 50 }} 
+    />
+  ) : (
+    <Image 
+      source={require('../public/bluepaw.svg')} 
+      style={{ width: 45, height: 45 }} 
+      resizeMode="contain"
+    />
+  )}
           </View>
         </View>
 
         {/* Details List */}
         <View style={MyStyleSheet.detailsContainer}>
-          <View style={MyStyleSheet.detailItem}><Text style={MyStyleSheet.detailLabel}>Gender</Text><Text style={MyStyleSheet.detailValue}>Female</Text></View>
-          <View style={MyStyleSheet.detailItem}><Text style={MyStyleSheet.detailLabel}>Age</Text><Text style={MyStyleSheet.detailValue}>0</Text></View>
-          <View style={MyStyleSheet.detailItem}><Text style={MyStyleSheet.detailLabel}>Weight</Text><Text style={MyStyleSheet.detailValue}>kg</Text></View>
-          <View style={[MyStyleSheet.detailItem, { borderBottomWidth: 0 }]}><Text style={MyStyleSheet.detailLabel}>Remarks</Text></View>
+          <View style={MyStyleSheet.detailItem}><Text style={MyStyleSheet.detailLabel}>Gender</Text><Text style={MyStyleSheet.detailValue}>{petData?.gender}</Text></View>
+          <View style={MyStyleSheet.detailItem}><Text style={MyStyleSheet.detailLabel}>Age</Text><Text style={MyStyleSheet.detailValue}>{petData?.age}</Text></View>
+          <View style={MyStyleSheet.detailItem}><Text style={MyStyleSheet.detailLabel}>Weight</Text><Text style={MyStyleSheet.detailValue}>{petData?.weight}</Text></View>
+          <View style={[MyStyleSheet.detailItem, { borderBottomWidth: 0 }]}><Text style={MyStyleSheet.detailLabel}>{petData?.remarks}</Text></View>
         </View>
 
         {/* Add to Account Button */}
         <TouchableOpacity 
           style={MyStyleSheet.continuePrimaryBtn} 
-          onPress={() => setModalVisible(true)} 
+          onPress={() => handleAddToAccount()} 
         >
           <Text style={MyStyleSheet.continueBtnText}>Add to Account</Text>
         </TouchableOpacity>
@@ -66,7 +88,7 @@ export default function AddPetsCont() {
               style={MyStyleSheet.modalViewProfileBtn}
               onPress={() => {
                 setModalVisible(false);
-                navigation.navigate('petsadded'); 
+                navigation.navigate('pet'); 
               }}
             >
               <Text style={MyStyleSheet.modalViewText}>View Pets</Text>
