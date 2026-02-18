@@ -6,7 +6,7 @@ import MyStyleSheet from '../styles/MyStyleSheet'
 export default function BookAppointmentService() {
   const opx = useNavigation()
   const route = useRoute()
-  const { petName, petImage, petDetails } = route.params || {}
+  const { petName, petImage, petDetails, petWeight } = route.params || {}
   
   const [selectedServices, setSelectedServices] = useState([])
 
@@ -79,6 +79,7 @@ export default function BookAppointmentService() {
               petName, 
               petImage, 
               petDetails, 
+              petWeight,
               service: allSelectedNames // Pass the combined string
             })
           }}
