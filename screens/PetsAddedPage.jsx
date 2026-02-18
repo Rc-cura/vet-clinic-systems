@@ -89,7 +89,7 @@ export default function PetsAddedPage() {
         </ScrollView>
       </View>
 
-      {/* Updated: Data source is now the global Pets array */}
+      
       <FlatList
         data={Pets}
         renderItem={renderPetCard}
@@ -100,7 +100,7 @@ export default function PetsAddedPage() {
         )}
       />
 
-      {/* Bottom Nav - Kept exactly as your original styles */}
+      
       <View style={MyStyleSheet.bottomNav}>
         <TouchableOpacity style={MyStyleSheet.navItem} onPress={() => opx.navigate('dashboard')}>
           <Image source={require('../public/HomePage.svg')} style={{ width: 22, height: 22 }} />
