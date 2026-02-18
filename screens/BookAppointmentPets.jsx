@@ -18,7 +18,6 @@ export default function BookAppointmentPets() {
         onPress={() => opx.navigate('service', { 
           petName: item.pname, 
           petImage: item.pimage, 
-          // Build the details string here
           petDetails: `${item.species} - ${item.breed} - ${item.gender}`,
           petWeight: item.weight
         })} 
@@ -36,13 +35,14 @@ export default function BookAppointmentPets() {
   }
 
   const formatData = (data, numColumns) => {
-    const numberOfFullRows = Math.floor(data.length / numColumns);
-    let numberOfElementsLastRow = data.length - (numberOfFullRows * numColumns);
+    const dataCopy = [...data];
+    const numberOfFullRows = Math.floor(dataCopy.length / numColumns);
+    let numberOfElementsLastRow = dataCopy.length - (numberOfFullRows * numColumns);
     while (numberOfElementsLastRow !== numColumns && numberOfElementsLastRow !== 0) {
-      data.push({ id: `blank-${numberOfElementsLastRow}`, empty: true });
+      dataCopy.push({ id: `blank-${numberOfElementsLastRow}`, empty: true });
       numberOfElementsLastRow++;
     }
-    return data;
+    return dataCopy;
   };
 
   return (
@@ -53,7 +53,7 @@ export default function BookAppointmentPets() {
           <View style={[MyStyleSheet.progressBarActive, { width: '25%' }]} />
         </View>
         <FlatList
-          data={formatData([...Pets], 2)}
+          data={formatData(Pets, 2)}
           renderItem={renderPetItem}
           keyExtractor={(item, index) => index.toString()}
           numColumns={2}

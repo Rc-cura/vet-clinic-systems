@@ -9,7 +9,7 @@ export default function BookAppointmentDateTime() {
   const opx = useNavigation();
   const route = useRoute();
   
-  const { appointmentId, petName, petImage, petDetails, service } = route.params || {};
+  const { appointmentId, petName, petImage, petDetails, petWeight, service } = route.params || {};
 
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedTime, setSelectedTime] = useState(null);
@@ -114,6 +114,7 @@ export default function BookAppointmentDateTime() {
             petName, 
             petImage, 
             petDetails, 
+            petWeight,
             service, 
             selectedDate, 
             formattedTime: selectedTime,

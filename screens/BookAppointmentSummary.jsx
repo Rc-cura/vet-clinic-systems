@@ -8,7 +8,6 @@ export default function BookAppointmentSummary() {
   const opx = useNavigation();
   const route = useRoute();
   
-  // Destructuring all params passed through the booking flow
   const { 
     appointmentId, 
     selectedDate, 
@@ -34,7 +33,7 @@ export default function BookAppointmentSummary() {
       pet: petName,
       petImage: petImage,
       petDetails: petDetails,
-      petWeight: petWeight,
+      petWeight: petWeight, // SAVING IT TO GLOBAL DATA
       status: 'Pending Confirmation',
       type: 'Upcoming',
       requestedDate: new Date().toLocaleDateString(),
@@ -44,9 +43,7 @@ export default function BookAppointmentSummary() {
 
     if (appointmentId) {
       const index = Appointments.findIndex(item => item.id === appointmentId);
-      if (index !== -1) {
-        Appointments[index] = appointmentData;
-      }
+      if (index !== -1) Appointments[index] = appointmentData;
     } else {
       Appointments.push(appointmentData);
     }
@@ -61,7 +58,7 @@ export default function BookAppointmentSummary() {
         <Text style={MyStyleSheet.summaryTitle}>Summary</Text>
         <View style={[MyStyleSheet.progressBarFull, { marginTop: 20, marginBottom: 20 }]} />
 
-        {/* 1. PET CARD (Fixed Layout) */}
+        {/* PET CARD - WEIGHT FIXED */}
         <View style={MyStyleSheet.summaryCard}>
           <View style={[MyStyleSheet.iconPlaceholderCircle, { justifyContent: 'center', alignItems: 'center' }]}>
             <Image 
@@ -73,67 +70,37 @@ export default function BookAppointmentSummary() {
           <View style={{ flex: 1, marginLeft: 15 }}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                <Text style={MyStyleSheet.cardTitleText}>{petName || 'Pet Name'}</Text>
-               <Text style={{ color: '#AAA', fontSize: 13 }}>{petWeight} kg</Text>
+               <Text style={{ color: '#AAA', fontSize: 13 }}>{petWeight ? `${petWeight} kg` : ''}</Text>
             </View>
             <Text style={MyStyleSheet.cardSubText}>{petDetails || 'Species - Breed - Gender'}</Text>
           </View>
         </View>
 
-        {/* 2. SERVICE CARD */}
+        {/* REST OF CARDS */}
         <View style={MyStyleSheet.summaryCard}>
-          <View style={[MyStyleSheet.iconPlaceholderSquare, { justifyContent: 'center', alignItems: 'center' }]}>
-             <Image source={require('../public/medical_icon.svg')} style={{ width: 24, height: 24 }} />
-          </View>
-          <View>
-            <Text style={MyStyleSheet.cardTitleText}>Service</Text>
-            <Text style={MyStyleSheet.cardSubText}>{service || 'Type of Service'}</Text>
-          </View>
+          <View style={MyStyleSheet.iconPlaceholderSquare}><Image source={require('../public/medical_icon.svg')} style={{ width: 24, height: 24 }} /></View>
+          <View><Text style={MyStyleSheet.cardTitleText}>Service</Text><Text style={MyStyleSheet.cardSubText}>{service}</Text></View>
         </View>
 
-        {/* 3. VET CARD */}
         <View style={MyStyleSheet.summaryCard}>
-          <View style={[MyStyleSheet.iconPlaceholderSquare, { justifyContent: 'center', alignItems: 'center' }]}>
-             <Image source={require('../public/vet.svg')} style={{ width: 24, height: 24 }} resizeMode="contain" />
-          </View>
-          <View>
-            <Text style={MyStyleSheet.cardTitleText}>Veterinarian</Text>
-            <Text style={MyStyleSheet.cardSubText}>{vet || 'Assigned Vet'}</Text>
-          </View>
+          <View style={MyStyleSheet.iconPlaceholderSquare}><Image source={require('../public/vet.svg')} style={{ width: 24, height: 24 }} /></View>
+          <View><Text style={MyStyleSheet.cardTitleText}>Veterinarian</Text><Text style={MyStyleSheet.cardSubText}>{vet}</Text></View>
         </View>
 
-        {/* 4. DATE & TIME CARD */}
         <View style={MyStyleSheet.summaryCard}>
-          <View style={[MyStyleSheet.iconPlaceholderSquare, { justifyContent: 'center', alignItems: 'center' }]}>
-             <Image source={require('../public/Calendar.svg')} style={{ width: 24, height: 24 }} />
-          </View>
-          <View>
-            <Text style={MyStyleSheet.cardTitleText}>Date & Time</Text>
-            <Text style={MyStyleSheet.cardSubText}>{selectedDate} | {formattedTime}</Text>
-          </View>
+          <View style={MyStyleSheet.iconPlaceholderSquare}><Image source={require('../public/Calendar.svg')} style={{ width: 24, height: 24 }} /></View>
+          <View><Text style={MyStyleSheet.cardTitleText}>Date & Time</Text><Text style={MyStyleSheet.cardSubText}>{selectedDate} | {formattedTime}</Text></View>
         </View>
 
         <Text style={MyStyleSheet.noteLabel}>Add Note</Text>
-        <TextInput
-          style={MyStyleSheet.noteInput}
-          placeholder="Suggested"
-          multiline
-          numberOfLines={4}
-          value={note}
-          onChangeText={setNote}
-          selectionColor="transparent"
-        />
+        <TextInput style={MyStyleSheet.noteInput} placeholder="Suggested" multiline value={note} onChangeText={setNote} />
 
-        <TouchableOpacity 
-          style={[MyStyleSheet.primaryBlueBtn, { marginTop: 30 }]} 
-          onPress={() => setPolicyModal(true)}
-        >
-          <Text style={MyStyleSheet.primaryBlueBtnText}>
-            {appointmentId ? "Confirm Reschedule" : "Send Request"}
-          </Text>
+        <TouchableOpacity style={[MyStyleSheet.primaryBlueBtn, { marginTop: 30 }]} onPress={() => setPolicyModal(true)}>
+          <Text style={MyStyleSheet.primaryBlueBtnText}>{appointmentId ? "Confirm Reschedule" : "Send Request"}</Text>
         </TouchableOpacity>
       </ScrollView>
 
-      {/* --- MODALS --- */}
+      {/* MODALS */}
       <Modal visible={policyModal} transparent animationType="fade">
         <View style={MyStyleSheet.modalOverlay}>
           <View style={MyStyleSheet.policyBox}>
@@ -152,9 +119,7 @@ export default function BookAppointmentSummary() {
       <Modal visible={successModal} transparent animationType="fade">
         <View style={MyStyleSheet.modalOverlay}>
           <View style={MyStyleSheet.successBox}>
-            <Text style={MyStyleSheet.successBodyText}>
-                {appointmentId ? "Successfully rescheduled your appointment." : "Successfully submitted an appointment."}
-            </Text>
+            <Text style={MyStyleSheet.successBodyText}>Successfully submitted an appointment.</Text>
             <TouchableOpacity style={MyStyleSheet.successActionBtn} onPress={() => { setSuccessModal(false); opx.navigate('appointment'); }}>
               <Text style={{ color: '#FFF', fontWeight: 'bold' }}>Understood</Text>
             </TouchableOpacity>
