@@ -2,30 +2,38 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, SafeAreaView, ScrollView } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import { Dropdown } from 'react-native-element-dropdown'; 
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import MyStyleSheet from '../styles/MyStyleSheet';
 
-export default function AppointmentDateTime() {
+export default function BookAppointmentDateTime() {
   const opx = useNavigation();
+  const route = useRoute();
+  
+  const { appointmentId, petName, petImage, petDetails, service } = route.params || {};
+
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedTime, setSelectedTime] = useState(null);
   const [selectedVet, setSelectedVet] = useState(null); 
 
+  // NEW: Get today's date in YYYY-MM-DD format for the calendar restriction
+  const today = new Date().toISOString().split('T')[0];
+
   const vetData = [
-    { label: 'Dr. Smith', value: 'dr_smith' },
-    { label: 'Dr. Garcia', value: 'dr_garcia' },
-    { label: 'Dr. Santos', value: 'dr_santos' },
+    { label: 'Dr. Smith', value: 'Dr. Smith' },
+    { label: 'Dr. Garcia', value: 'Dr. Garcia' },
+    { label: 'Dr. Santos', value: 'Dr. Santos' },
   ];
 
   const generateTimeSlots = () => {
     const slots = [];
-    let start = 7.5; // 7:30 AM
-    let end = 17;    // 5:00 PM
+    let start = 7.5; 
+    let end = 17;    
     for (let time = start; time <= end; time += 0.5) {
       let hour = Math.floor(time);
       let minutes = (time % 1 === 0) ? '00' : '30';
       let ampm = hour >= 12 ? 'PM' : 'AM';
       let displayHour = hour > 12 ? hour - 12 : hour;
+      if (displayHour === 0) displayHour = 12;
       const timeString = `${displayHour}:${minutes} ${ampm}`;
       slots.push({ label: timeString, value: timeString });
     }
@@ -38,15 +46,12 @@ export default function AppointmentDateTime() {
     <SafeAreaView style={MyStyleSheet.container}>
       <ScrollView contentContainerStyle={{ paddingHorizontal: 25, paddingBottom: 40, paddingTop: 20 }}>
         
-        {/* Step Label - Now Centered to match 'Select Service' page */}
         <Text style={[MyStyleSheet.selectPetLabel, { textAlign: 'center' }]}>Select Veterinarian</Text>
         
-        {/* Progress Bar - 75% */}
         <View style={[MyStyleSheet.progressBarBg, { alignSelf: 'center', marginTop: 20, marginBottom: 20 }]}>
            <View style={{ width: '75%', backgroundColor: '#5C93E8', height: '100%', borderRadius: 2 }} />
         </View>
 
-        {/* SELECT VETERINARIAN SECTION (Dropdown Kept) */}
         <View style={{ marginBottom: 20 }}>
           <Text style={{ fontSize: 14, color: '#333', marginBottom: 5, fontWeight: '600' }}>Attending Vet</Text>
           <Dropdown
@@ -63,10 +68,11 @@ export default function AppointmentDateTime() {
           />
         </View>
 
-        {/* SELECT DATE & TIME SECTION */}
         <Text style={[MyStyleSheet.selectPetLabel, { marginBottom: 15, textAlign: 'center' }]}>Select Date & Time</Text>
         <View style={MyStyleSheet.calendarCard}>
           <Calendar
+            // UPDATED: Added minDate to disable past dates
+            minDate={today}
             onDayPress={day => setSelectedDate(day.dateString)}
             markedDates={{
               [selectedDate]: { selected: true, selectedColor: '#5C93E8' }
@@ -75,6 +81,8 @@ export default function AppointmentDateTime() {
               todayTextColor: '#5C93E8',
               selectedDayBackgroundColor: '#5C93E8',
               textDayHeaderFontWeight: 'bold',
+              // Optional: Style for disabled dates
+              textDisabledColor: '#d9e1e8'
             }}
           />
 
@@ -84,7 +92,7 @@ export default function AppointmentDateTime() {
               style={MyStyleSheet.dropdown}
               placeholderStyle={MyStyleSheet.placeholderStyle}
               selectedTextStyle={MyStyleSheet.selectedTextStyle}
-              data={timeData}
+              data={timeData} 
               maxHeight={200}
               labelField="label"
               valueField="value"
@@ -102,6 +110,11 @@ export default function AppointmentDateTime() {
           ]}
           disabled={!(selectedDate && selectedTime && selectedVet)}
           onPress={() => opx.navigate('summary', { 
+            appointmentId,
+            petName, 
+            petImage, 
+            petDetails, 
+            service, 
             selectedDate, 
             formattedTime: selectedTime,
             vet: selectedVet

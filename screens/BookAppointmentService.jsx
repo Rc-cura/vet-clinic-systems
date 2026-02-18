@@ -1,10 +1,13 @@
 import { View, Text, TouchableOpacity, SafeAreaView, ScrollView, Image } from 'react-native'
 import React, { useState } from 'react'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import MyStyleSheet from '../styles/MyStyleSheet'
 
 export default function BookAppointmentService() {
   const opx = useNavigation()
+  const route = useRoute()
+  const { petName, petImage, petDetails } = route.params || {}
+  
   const [selectedServices, setSelectedServices] = useState([])
 
   const services = [
@@ -23,8 +26,6 @@ export default function BookAppointmentService() {
 
   return (
     <SafeAreaView style={MyStyleSheet.container}>
-      {/* Custom Header removed. Using system header from App.js now. */}
-
       <ScrollView contentContainerStyle={{ paddingHorizontal: 25, paddingBottom: 40 }}>
         <Text style={[MyStyleSheet.selectPetLabel, { textAlign: 'center', marginTop: 20 }]}>Select Service</Text>
         
@@ -35,7 +36,6 @@ export default function BookAppointmentService() {
         <View style={{ alignItems: 'center' }}>
           {services.map((item) => {
             const isSelected = selectedServices.includes(item.id)
-            
             return (
               <TouchableOpacity 
                 key={item.id} 
@@ -68,16 +68,25 @@ export default function BookAppointmentService() {
             selectedServices.length === 0 && { backgroundColor: '#F0F0F0' }
           ]} 
           disabled={selectedServices.length === 0}
-          onPress={() => opx.navigate('datetime', { services: selectedServices })}
+          onPress={() => {
+            // FIXED: Map through all selected IDs to get their names, then join them with a comma
+            const allSelectedNames = services
+              .filter(s => selectedServices.includes(s.id))
+              .map(s => s.name)
+              .join(", ");
+
+            opx.navigate('datetime', { 
+              petName, 
+              petImage, 
+              petDetails, 
+              service: allSelectedNames // Pass the combined string
+            })
+          }}
         >
-          <Text style={[
-            MyStyleSheet.primaryBlueBtnText,
-            selectedServices.length === 0 && { color: '#CCC' }
-          ]}>
+          <Text style={[MyStyleSheet.primaryBlueBtnText, selectedServices.length === 0 && { color: '#CCC' }]}>
             Continue
           </Text>
         </TouchableOpacity>
-
       </ScrollView>
     </SafeAreaView>
   )
