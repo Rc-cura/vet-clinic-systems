@@ -1,108 +1,59 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, SafeAreaView, ScrollView, Modal, Image } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, SafeAreaView, ScrollView, Modal, Image, BackHandler } from 'react-native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import MyStyleSheet from '../styles/MyStyleSheet';
 
 export default function AppointmentStatusCancelled() {
   const navigation = useNavigation();
-  const [cancelModalVisible, setCancelModalVisible] = useState(false);
-  const [successModalVisible, setSuccessModalVisible] = useState(false);
+  const route = useRoute();
+  const { appointment } = route.params || {};
 
-  const handleConfirmCancellation = () => {
-    setCancelModalVisible(false);
-    setSuccessModalVisible(true);
+  const formatDisplayDate = (dateString) => {
+    if (!dateString) return "Thursday, 05 February";
+    const date = new Date(dateString);
+    const weekday = new Intl.DateTimeFormat('en-GB', { weekday: 'long' }).format(date);
+    const day = new Intl.DateTimeFormat('en-GB', { day: '2-digit' }).format(date);
+    const month = new Intl.DateTimeFormat('en-GB', { month: 'long' }).format(date);
+    return `${weekday}, ${day} ${month}`;
   };
+
+  useEffect(() => {
+    const backAction = () => { navigation.navigate('appointment'); return true; };
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+    const unsubscribe = navigation.addListener('beforeRemove', (e) => {
+      if (e.data.action.type === 'GO_BACK') { e.preventDefault(); navigation.navigate('appointment'); }
+    });
+    return () => { backHandler.remove(); unsubscribe(); };
+  }, [navigation]);
 
   return (
     <SafeAreaView style={MyStyleSheet.container}>
-      {/* Manual Header removed. Using system header from App.js now. */}
-
       <ScrollView contentContainerStyle={{ paddingHorizontal: 25, paddingBottom: 40, paddingTop: 20 }}>
-        
-        {/* Main Status Card */}
         <View style={MyStyleSheet.detailsMainCard}>
-          <Text style={MyStyleSheet.detailsDateText}>Thursday, 05 February</Text>
-          <Text style={MyStyleSheet.detailsTimeText}>9:00 AM</Text>
-          
-          {/* Light Red badge for Cancelled status */}
+          <Text style={MyStyleSheet.detailsDateText}>{formatDisplayDate(appointment?.date)}</Text>
+          <Text style={MyStyleSheet.detailsTimeText}>{appointment?.time}</Text>
           <View style={[MyStyleSheet.detailsStatusBadge, { backgroundColor: '#FFBDBD', width: '100%' }]}>
             <Text style={[MyStyleSheet.detailsStatusText, { color: '#000', alignSelf: "center" }]}>Cancelled Appointment</Text>
           </View>
-          
-          <Text style={MyStyleSheet.requestedDateLabel}>
-            Appointment Requested on 01-29-2025 9:00 a.m.
-          </Text>
         </View>
 
-        {/* Pet Info */}
         <View style={MyStyleSheet.summaryCard}>
-          <View style={[MyStyleSheet.iconPlaceholderCircle, { justifyContent: 'center', alignItems: 'center' }]}>
-            <Image source={require('../public/blackpaw.svg')} style={{ width: 35, height: 35 }} resizeMode="contain" />
+          <View style={MyStyleSheet.iconPlaceholderCircle}>
+            <Image source={appointment?.petImage ? { uri: appointment.petImage } : require('../public/blackpaw.svg')} style={{ width: 35, height: 35, borderRadius: 17.5 }} />
           </View>
-          <View>
-            <Text style={MyStyleSheet.cardTitleText}>Pet Name</Text>
-            <Text style={MyStyleSheet.cardSubText}>Species - Breed - Gender</Text>
-          </View>
-          <Text style={{position: 'absolute', right: 15, top: 15, color: '#999', fontSize: 10}}>kg</Text>
-        </View>
-
-        {/* Service Info */}
-        <View style={MyStyleSheet.summaryCard}>
-          <View style={[MyStyleSheet.iconPlaceholderSquare, { justifyContent: 'center', alignItems: 'center' }]}>
-             <Image source={require('../public/medical_icon.svg')} style={{ width: 24, height: 24 }} />
-          </View>
-          <View>
-            <Text style={MyStyleSheet.cardTitleText}>Service</Text>
-            <Text style={MyStyleSheet.cardSubText}>Type of Service</Text>
+          <View style={{ flex: 1, marginLeft: 15 }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <Text style={MyStyleSheet.cardTitleText}>{appointment?.pet}</Text>
+              <Text style={{ color: '#AAA' }}>{appointment?.petWeight} kg</Text>
+            </View>
+            <Text style={MyStyleSheet.cardSubText}>{appointment?.petDetails}</Text>
           </View>
         </View>
 
-        {/* Vet Info */}
-        <View style={MyStyleSheet.summaryCard}>
-          <View style={[MyStyleSheet.iconPlaceholderSquare, { justifyContent: 'center', alignItems: 'center' }]}>
-             <Image source={require('../public/vet.svg')} style={{ width: 24, height: 24 }} resizeMode="contain" />
-          </View>
-          <View>
-            <Text style={MyStyleSheet.cardTitleText}>Veterinarian</Text>
-          </View>
-        </View>
-
-        {/* Note Section */}
-        <Text style={MyStyleSheet.noteLabel}>Note</Text>
-        <View style={MyStyleSheet.noteDisplayBox}>
-          <Text style={MyStyleSheet.noteTextSmall}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-          </Text>
-        </View>
-
-        {/* Action Button */}
         <TouchableOpacity style={MyStyleSheet.primaryBlueBtn} onPress={() => navigation.navigate('selectpet')}>
           <Text style={MyStyleSheet.primaryBlueBtnText}>Book an Appointment</Text>
         </TouchableOpacity>
-
       </ScrollView>
-
-      {/* Success Modal */}
-      <Modal visible={successModalVisible} transparent animationType="fade">
-        <View style={MyStyleSheet.modalOverlay}>
-          <View style={MyStyleSheet.policyBox}>
-            <Text style={MyStyleSheet.modalTitleLarge}>Appointment Cancelled</Text>
-            <Text style={MyStyleSheet.modalBodyText}>
-              Your appointment has been successfully cancelled.
-            </Text>
-            <TouchableOpacity 
-                style={MyStyleSheet.modalUnderstandBtn} 
-                onPress={() => {
-                    setSuccessModalVisible(false);
-                    navigation.navigate('AppointmentPage'); 
-                }}
-            >
-              <Text style={{ color: '#FFF', fontWeight: 'bold' }}>Close</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
-
     </SafeAreaView>
   );
 }

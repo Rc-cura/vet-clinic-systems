@@ -1,26 +1,67 @@
 import { View, Text, TouchableOpacity, SafeAreaView, ScrollView, TextInput, Modal, Image } from 'react-native'
 import React, { useState } from 'react'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native' // Added useRoute
 import MyStyleSheet from '../styles/MyStyleSheet'
+import { Pets } from '../App' // Import the global Pets array
 
 export default function EditPetsPage() {
   const opx = useNavigation()
+  const route = useRoute()
+  
+  // Catch the pet data passed from the ViewPetsPage
+  const { pet } = route.params || {}
+
+  // Initialize states with existing pet data
+  const [pname, setPname] = useState(pet?.pname || '')
+  const [species, setSpecies] = useState(pet?.species || '')
+  const [breed, setBreed] = useState(pet?.breed || '')
+  const [gender, setGender] = useState(pet?.gender || '')
+  const [age, setAge] = useState(pet?.age || '')
+  const [weight, setWeight] = useState(pet?.weight || '')
+  const [remarks, setRemarks] = useState(pet?.remarks || '')
   const [modalVisible, setModalVisible] = useState(false)
+
+  const handleSave = () => {
+    // 1. Find the index of the pet in the global array
+    // We use a unique property or index. If you have an ID, use that.
+    const index = Pets.findIndex(item => item.pname === pet?.pname);
+
+    if (index !== -1) {
+      // 2. Update the object in the global array
+      Pets[index] = {
+        ...Pets[index],
+        pname,
+        species,
+        breed,
+        gender,
+        age,
+        weight,
+        remarks,
+      };
+    }
+
+    setModalVisible(true)
+  }
 
   return (
     <SafeAreaView style={MyStyleSheet.container}>
-      {/* Custom Header removed. Using system header from App.js now. */}
-
       <ScrollView contentContainerStyle={{ paddingHorizontal: 30, paddingBottom: 40, paddingTop: 20 }}>
 
         {/* Profile Image with Camera Icon Overlay */}
         <View style={MyStyleSheet.editPhotoContainer}>
           <View style={MyStyleSheet.sumBigCircle}>
-            <Image
-              source={require('../public/blackpaw.svg')}
-              style={{ width: 80, height: 80 }}
-              resizeMode="contain"
-            />
+             {pet?.pimage ? (
+                <Image 
+                  source={{ uri: pet.pimage }} 
+                  style={{ width: '100%', height: '100%', borderRadius: 50 }} 
+                />
+             ) : (
+                <Image
+                  source={require('../public/blackpaw.svg')}
+                  style={{ width: 80, height: 80 }}
+                  resizeMode="contain"
+                />
+             )}
           </View>
           <TouchableOpacity style={MyStyleSheet.cameraIconOverlay}>
             <Image
@@ -33,10 +74,34 @@ export default function EditPetsPage() {
 
         {/* Input Fields Group */}
         <View style={MyStyleSheet.inputGroup}>
-          <TextInput style={MyStyleSheet.formInput} placeholder="Pet's name" placeholderTextColor="#AAA" />
-          <TextInput style={MyStyleSheet.formInput} placeholder="Species" placeholderTextColor="#AAA" />
-          <TextInput style={MyStyleSheet.formInput} placeholder="Breed" placeholderTextColor="#AAA" />
-          <TextInput style={MyStyleSheet.formInput} placeholder="Gender" placeholderTextColor="#AAA" />
+          <TextInput 
+            style={MyStyleSheet.formInput} 
+            placeholder="Pet's name" 
+            value={pname}
+            onChangeText={setPname}
+            placeholderTextColor="#AAA" 
+          />
+          <TextInput 
+            style={MyStyleSheet.formInput} 
+            placeholder="Species" 
+            value={species}
+            onChangeText={setSpecies}
+            placeholderTextColor="#AAA" 
+          />
+          <TextInput 
+            style={MyStyleSheet.formInput} 
+            placeholder="Breed" 
+            value={breed}
+            onChangeText={setBreed}
+            placeholderTextColor="#AAA" 
+          />
+          <TextInput 
+            style={MyStyleSheet.formInput} 
+            placeholder="Gender" 
+            value={gender}
+            onChangeText={setGender}
+            placeholderTextColor="#AAA" 
+          />
 
           {/* Inline Age and Weight */}
           <View style={[MyStyleSheet.inlineInputs, { flexDirection: 'row', width: '100%' }]}>
@@ -44,6 +109,9 @@ export default function EditPetsPage() {
               <TextInput
                 style={[MyStyleSheet.formInput, { width: '100%' }]}
                 placeholder="Age"
+                value={age}
+                onChangeText={setAge}
+                keyboardType="numeric"
                 placeholderTextColor="#AAA"
               />
             </View>
@@ -51,6 +119,9 @@ export default function EditPetsPage() {
               <TextInput
                 style={[MyStyleSheet.formInput, { width: '100%' }]}
                 placeholder="Weight"
+                value={weight}
+                onChangeText={setWeight}
+                keyboardType="numeric"
                 placeholderTextColor="#AAA"
               />
             </View>
@@ -59,6 +130,8 @@ export default function EditPetsPage() {
           <TextInput
             style={[MyStyleSheet.formInput, MyStyleSheet.textArea]}
             placeholder="Remarks"
+            value={remarks}
+            onChangeText={setRemarks}
             placeholderTextColor="#AAA"
             multiline={true}
             numberOfLines={4}
@@ -68,7 +141,7 @@ export default function EditPetsPage() {
         {/* Save Button */}
         <TouchableOpacity
           style={[MyStyleSheet.primaryBlueBtn, { marginTop: 30 }]}
-          onPress={() => setModalVisible(true)}
+          onPress={handleSave}
         >
           <Text style={MyStyleSheet.primaryBlueBtnText}>Save</Text>
         </TouchableOpacity>
@@ -83,7 +156,10 @@ export default function EditPetsPage() {
               style={MyStyleSheet.modalViewProfileBtn}
               onPress={() => {
                 setModalVisible(false);
-                opx.navigate('viewpets');
+                // Navigate back and pass updated data to the view screen
+                opx.navigate('viewpets', { 
+                  pet: { ...pet, pname, species, breed, gender, age, weight, remarks } 
+                });
               }}
             >
               <Text style={MyStyleSheet.modalViewText}>View Profile</Text>

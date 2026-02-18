@@ -31,32 +31,24 @@ import AppointmentStatusCompleted from './screens/AppointmentStatusCompleted';
 import AppointmentStatusPending from './screens/AppointmentStatusPending';
 import AppointmentStatusCancelled from './screens/AppointmentStatusCancelled';
 
-
 export const Registered = [];
-
 export const Pets = [];
 
+export const Appointments = [];
 
 export default function App() {
   const MScreen = createNativeStackNavigator()
 
   return (
-
     <UserProvider>
-
-
       <NavigationContainer>
-        <MScreen.Navigator initialRouteName='addpets'>
+        <MScreen.Navigator initialRouteName='petsadded'>
           <MScreen.Screen name='landing' component={LandingPage} />
           <MScreen.Screen name='login' component={LoginPage} />
           <MScreen.Screen name='register' component={RegisterPage} />
           <MScreen.Screen name='otp' component={Otp} />
           <MScreen.Screen name='otplogin' component={Otplogin} />
-          {/* <MScreen.Screen name='dashboard' component={DashboardPage} /> */}
-          {/* <MScreen.Screen name='pet' component={PetManagementPage} /> */}
-          {/* <MScreen.Screen name='appointment' component={AppointmentPage} /> */}
-          {/* <MScreen.Screen name='billing' component={BillingPage} /> */}
-
+          
           <MScreen.Screen
             name='dashboard'
             component={DashboardPage}
@@ -100,7 +92,6 @@ export default function App() {
               headerTitleAlign: 'left',
             }}
           />
-
           
           <MScreen.Screen name='notification' component={Notification} />
           <MScreen.Screen name='addpets' component={AddPets} />
@@ -118,11 +109,8 @@ export default function App() {
           <MScreen.Screen name='pending' component={AppointmentStatusPending} />
           <MScreen.Screen name='approved' component={AppointmentStatusApproved} />
           <MScreen.Screen name='cancelled' component={AppointmentStatusCancelled} />
-
         </MScreen.Navigator>
       </NavigationContainer>
-
     </UserProvider>
   );
 }
-

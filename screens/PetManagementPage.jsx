@@ -29,7 +29,15 @@ export default function PetManagementPage() {
       <View style={MyStyleSheet.cardDivider} />
 
       <View style={MyStyleSheet.petActionRow}>
-        <TouchableOpacity style={MyStyleSheet.petActionBtn} onPress={() => opx.navigate('service')}>
+        {/* UPDATED: Passing pet info baton to ensure Summary Page isn't blank */}
+        <TouchableOpacity 
+          style={MyStyleSheet.petActionBtn} 
+          onPress={() => opx.navigate('service', { 
+            petName: item.pname, 
+            petImage: item.pimage,
+            petDetails: `${item.species} - ${item.breed} - ${item.gender}` 
+          })}
+        >
           <Image source={require('../public/addcalendar.svg')} style={{ width: 20, height: 20, marginRight: 5 }} />
           <Text style={MyStyleSheet.petActionLabel}>Add Appointment</Text>
         </TouchableOpacity>
