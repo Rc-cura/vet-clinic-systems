@@ -1,28 +1,28 @@
 import { View, Text, TouchableOpacity, Image, ScrollView, SafeAreaView } from 'react-native'
 import React from 'react'
-import { useNavigation } from '@react-navigation/native' // Removed useRoute
+import { useNavigation } from '@react-navigation/native'
 import MyStyleSheet from '../styles/MyStyleSheet'
-import { useUser } from '../context/UserContext' // Import the context hook
+import { useUser } from '../context/UserContext'
+import { Pets } from '../App' // Import your global pet array
 
 export default function DashboardPage() {
   const opx = useNavigation()
-  
-  // 1. Grab the user data globally from Context
   const { user } = useUser()
+
+  // Grab the first pet in the array to display on the main card
+  const displayPet = Pets.length > 0 ? Pets[0] : null;
 
   return (
     <SafeAreaView style={MyStyleSheet.container}>
       {/* Top Header */}
       <View style={MyStyleSheet.dashHeader}>
-        {/* 2. Dynamically display the user's first name */}
         <Text style={MyStyleSheet.welcomeText}>Hi, {user?.fname || 'User'}!</Text>
         
         <View style={MyStyleSheet.headerIcons}>
-          
-          {/* 3. No need to pass user params here anymore! */}
           <TouchableOpacity onPress={() => opx.navigate('userprofile')}>
             <View style={MyStyleSheet.profileCircle}>
-               {/* Optional: Add an image or initials here if you have them */}
+               {/* Show User Initial */}
+               <Text style={{color: '#5C93E8', fontWeight: 'bold'}}>{user?.fname?.charAt(0)}</Text>
             </View>
           </TouchableOpacity>
 
@@ -36,22 +36,52 @@ export default function DashboardPage() {
         {/* Active Pet Profiles Section */}
         <View style={MyStyleSheet.sectionRow}>
           <Text style={MyStyleSheet.sectionTitle}>Active Pet Profiles</Text>
-          <View style={MyStyleSheet.badge}><Text style={MyStyleSheet.badgeText}>3</Text></View>
+          <View style={MyStyleSheet.badge}>
+            <Text style={MyStyleSheet.badgeText}>{Pets.length}</Text>
+          </View>
         </View>
 
         {/* Pet Card */}
         <View style={MyStyleSheet.petCardContainer}>
-           <View style={MyStyleSheet.petCard}>
-              <View>
-                <Text style={MyStyleSheet.petName}>Pet Name</Text>
-                <Text style={MyStyleSheet.petDetails}>Type | Breed | Age | Sex</Text>
+           <TouchableOpacity 
+             style={MyStyleSheet.petCard} 
+             onPress={() => opx.navigate('pet')}
+           >
+              <View style={{ flex: 1 }}>
+                <Text style={MyStyleSheet.petName}>
+                  {displayPet ? displayPet.pname : "No Pets Added"}
+                </Text>
+                <Text style={MyStyleSheet.petDetails}>
+                  {displayPet 
+                    ? `${displayPet.species} | ${displayPet.breed} | ${displayPet.age} yrs | ${displayPet.gender}`
+                    : "Tap the Pets tab to add one!"}
+                </Text>
               </View>
-              <View style={MyStyleSheet.petPhotoCircle} />
-            </View>
+              
+              <View style={MyStyleSheet.petPhotoCircle}>
+                {displayPet?.pimage ? (
+                  <Image 
+                    source={{ uri: displayPet.pimage }} 
+                    style={{ width: '100%', height: '100%', borderRadius: 40 }} 
+                  />
+                ) : (
+                  <Image 
+                    source={require('../public/bluepaw.svg')} 
+                    style={{ width: 30, height: 30 }} 
+                    resizeMode="contain"
+                  />
+                )}
+              </View>
+            </TouchableOpacity>
+
+            {/* Pagination Dots based on number of pets */}
             <View style={MyStyleSheet.dashDotsRow}>
-                <View style={MyStyleSheet.dashDotActive} />
-                <View style={MyStyleSheet.dashDot} />
-                <View style={MyStyleSheet.dashDot} />
+                {Pets.length > 0 ? Pets.slice(0, 3).map((_, index) => (
+                  <View 
+                    key={index} 
+                    style={index === 0 ? MyStyleSheet.dashDotActive : MyStyleSheet.dashDot} 
+                  />
+                )) : <View style={MyStyleSheet.dashDotActive} />}
             </View>
         </View>
 
@@ -71,7 +101,9 @@ export default function DashboardPage() {
           <Text style={MyStyleSheet.cardHeading}>Health Alerts & Reminders</Text>
           <View style={MyStyleSheet.alertItem}>
             <Image source={require('../public/point.png')} style={{ width: 16, height: 16, marginRight: 8 }} />
-            <Text style={MyStyleSheet.alertText}>Rabies Vaccine due in 5 days</Text>
+            <Text style={MyStyleSheet.alertText}>
+              {displayPet ? `Check-up reminder for ${displayPet.pname}` : "No upcoming alerts"}
+            </Text>
           </View>
         </View>
 
@@ -81,10 +113,6 @@ export default function DashboardPage() {
           <View style={MyStyleSheet.activityItem}>
             <Image source={require('../public/medical_icon.svg')} style={{ width: 18, height: 18, marginRight: 8 }} />
             <Text style={MyStyleSheet.activityText}>January 12 - Vet Consultation</Text>
-          </View>
-          <View style={MyStyleSheet.activityItem}>
-            <Image source={require('../public/grooming_icon.svg')} style={{ width: 18, height: 18, marginRight: 8 }} />
-            <Text style={MyStyleSheet.activityText}>January 23 - Grooming</Text>
           </View>
         </View>
       </ScrollView>
