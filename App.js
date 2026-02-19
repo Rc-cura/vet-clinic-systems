@@ -42,7 +42,7 @@ export default function App() {
   return (
     <UserProvider>
       <NavigationContainer>
-        <MScreen.Navigator initialRouteName='petsadded'>
+        <MScreen.Navigator initialRouteName='dashboard'>
           <MScreen.Screen name='landing' component={LandingPage} />
           <MScreen.Screen name='login' component={LoginPage} />
           <MScreen.Screen name='register' component={RegisterPage} />
