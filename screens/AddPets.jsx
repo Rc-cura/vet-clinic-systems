@@ -18,6 +18,9 @@ export default function AddPets() {
     weight: "",
     remarks: "", 
   });
+  
+
+
 
   const genderData = [
     { label: 'Male', value: 'Male' },
@@ -65,104 +68,59 @@ export default function AddPets() {
 
   return (
     <SafeAreaView style={MyStyleSheet.container}>
-      <ScrollView 
-        contentContainerStyle={[MyStyleSheet.formScrollContent, { paddingTop: 20 }]} 
-        showsVerticalScrollIndicator={false}
-      >
+      <ScrollView  contentContainerStyle={[MyStyleSheet.formScrollContent, { paddingTop: 20 }]} showsVerticalScrollIndicator={false}>
         <View style={MyStyleSheet.uploadContainer}>
           <View style={MyStyleSheet.profileCircleBlack}>
             {getPet.pimage ? (
-              <Image 
-                source={{ uri: getPet.pimage }} 
-                style={{ width: 100, height: 100, borderRadius: 50 }} 
-              />
+              <Image source={{ uri: getPet.pimage }} style={{ width: 100, height: 100, borderRadius: 50 }}/>
             ) : (
-              <Image 
-                source={require('../public/bluepaw.svg')} 
-                style={{ width: 60, height: 60 }} 
-                resizeMode="contain"
-              />
+              <Image source={require('../public/bluepaw.svg')} style={{ width: 60, height: 60 }} resizeMode="contain"/>
             )}
           </View>
+
           <TouchableOpacity style={MyStyleSheet.uploadOutlineBtn} onPress={pickImage}>
-            <Image 
-              source={require('../public/upload.svg')} 
-              style={{ width: 20, height: 20, marginRight: 8 }} 
-            />
+
+            <Image source={require('../public/upload.svg')} style={{ width: 20, height: 20, marginRight: 8 }} />
             <Text style={MyStyleSheet.uploadBtnLabel}>Upload Image</Text>
+
           </TouchableOpacity>
+
         </View>
 
         <Text style={{ color: 'red', textAlign: 'center', marginBottom: 10 }}>{errorMsg}</Text>
 
         <View style={MyStyleSheet.inputGroup}>
-          <TextInput 
-            value={getPet.pname} 
-            onChangeText={(val) => changeHandler("pname", val)} 
-            style={MyStyleSheet.formInput} 
-            placeholder="Pet's name" 
-            placeholderTextColor="#AAA" 
-          />
-          <TextInput 
-            value={getPet.species} 
-            onChangeText={(val) => changeHandler("species", val)} 
-            style={MyStyleSheet.formInput} 
-            placeholder="Species" 
-            placeholderTextColor="#AAA" 
-          />
-          <TextInput 
-            value={getPet.breed} 
-            onChangeText={(val) => changeHandler("breed", val)} 
-            style={MyStyleSheet.formInput} 
-            placeholder="Breed" 
-            placeholderTextColor="#AAA" 
-          />
+          <TextInput value={getPet.pname} onChangeText={(val) => changeHandler("pname", val)} style={MyStyleSheet.formInput} placeholder="Pet's name" placeholderTextColor="#AAA" />
+
+          <TextInput value={getPet.species} onChangeText={(val) => changeHandler("species", val)} style={MyStyleSheet.formInput} placeholder="Species" placeholderTextColor="#AAA" />
+          <TextInput value={getPet.breed} onChangeText={(val) => changeHandler("breed", val)} style={MyStyleSheet.formInput} placeholder="Breed" placeholderTextColor="#AAA" />
           
-          <Dropdown
-            style={MyStyleSheet.formInput}
-            placeholderStyle={{ color: '#AAA' }}
-            selectedTextStyle={{ color: '#000' }}
-            data={genderData}
-            labelField="label"
-            valueField="value"
-            placeholder="Gender"
-            value={getPet.gender}
-            onChange={item => changeHandler("gender", item.value)}
-          />
+          <Dropdown style={MyStyleSheet.formInput} placeholderStyle={{ color: '#AAA' }} selectedTextStyle={{ color: '#000' }} data={genderData} labelField="label"
+            valueField="value" placeholder="Gender" value={getPet.gender} onChange={item => changeHandler("gender", item.value)}/>
 
           <View style={[MyStyleSheet.inlineInputs, { flexDirection: 'row', width: '100%' }]}>
+
             <View style={{ flex: 1, marginRight: 10 }}>
-              <TextInput 
-                value={getPet.age} 
-                onChangeText={(val) => changeHandler("age", val)} 
-                style={[MyStyleSheet.formInput, { width: '100%' }]} 
-                placeholder="Age" 
-                placeholderTextColor="#AAA" 
-              />
+
+              <TextInput value={getPet.age} onChangeText={(val) => changeHandler("age", val)} style={[MyStyleSheet.formInput, { width: '100%' }]} placeholder="Age"  placeholderTextColor="#AAA" />
             </View>
+
+
             <View style={{ flex: 1 }}>
-              <TextInput 
-                style={[MyStyleSheet.formInput, { width: '100%' }]} 
-                placeholder="Weight(kg)" 
-                placeholderTextColor="#AAA" 
-                value={getPet.weight} 
-                onChangeText={(val) => changeHandler("weight", val)}
-              />
+              <TextInput style={[MyStyleSheet.formInput, { width: '100%' }]} placeholder="Weight(kg)" placeholderTextColor="#AAA"  value={getPet.weight}  onChangeText={(val) => changeHandler("weight", val)}/>
+
+
+
             </View>
           </View>
 
-          <TextInput 
-            style={[MyStyleSheet.formInput, MyStyleSheet.textArea]} 
-            placeholder="Remarks" 
-            placeholderTextColor="#AAA"
-            onChangeText={(val) => setPet({...getPet, remarks: val})}
-            multiline={true}
-            numberOfLines={4}
-          />
+          <TextInput style={[MyStyleSheet.formInput, MyStyleSheet.textArea]} placeholder="Remarks"  placeholderTextColor="#AAA" onChangeText={(val) => setPet({...getPet, remarks: val})} multiline={true} numberOfLines={4}/>
         </View>
 
         <TouchableOpacity style={MyStyleSheet.continuePrimaryBtn} onPress={handleContinue}>
+
           <Text style={MyStyleSheet.continueBtnText}>Continue</Text>
+          
         </TouchableOpacity>
 
       </ScrollView>

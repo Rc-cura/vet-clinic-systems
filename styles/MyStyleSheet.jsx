@@ -13,16 +13,13 @@ const MyStyleSheet = StyleSheet.create({
   logoCircle: {
     width: 45,
     height: 45,
-    // borderRadius: 22.5,
-    // backgroundColor: '#fff',
-    // borderWidth: 1,
-    // borderColor: '#ddd',
+
     marginLeft: 7,
   },
   content: {
     flex: 1,
-    alignItems: 'center', // This centers everything horizontally
-    justifyContent: 'center', // This centers the whole group vertically
+    alignItems: 'center', 
+    justifyContent: 'center', 
     paddingHorizontal: 20,
     marginBottom: 30
   },
@@ -43,7 +40,7 @@ const MyStyleSheet = StyleSheet.create({
   dotsRow: {
     flexDirection: 'row',
     marginTop: 25,
-    marginBottom: 40, // Space between dots and the first button
+    marginBottom: 40, 
   },
   dot: {
     width: 8,
@@ -53,7 +50,7 @@ const MyStyleSheet = StyleSheet.create({
     marginHorizontal: 4,
   },
   dotActive: {
-    width: 24, // Wider dot like the design
+    width: 24, 
     height: 8,
     borderRadius: 4,
     backgroundColor: '#5C6BC0',
@@ -76,7 +73,7 @@ const MyStyleSheet = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
-  // Add these to your existing MyStyleSheet.js
+  
   bgImage: {
     flex: 1,
     paddingHorizontal: 20,
@@ -92,12 +89,12 @@ const MyStyleSheet = StyleSheet.create({
   clinicSub: { fontSize: 16, fontWeight: 'bold', color: '#1A3A77', letterSpacing: 1 },
   logoCircleSmall: { width: 60, height: 60, borderRadius: 30, backgroundColor: '#fff', elevation: 5, justifyContent: 'center', alignItems: 'center' },
   
-  // The Card Style
+ 
   formCard: {
     backgroundColor: '#FFF',
     borderRadius: 25,
     padding: 25,
-    elevation: 15, // High shadow for floating effect
+    elevation: 15, 
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 10 },
     shadowOpacity: 0.1,
@@ -124,7 +121,7 @@ const MyStyleSheet = StyleSheet.create({
     marginTop: 10,
   },
   
-  // Social Section
+
   socialSection: { marginTop: 30, alignItems: 'center' },
   dividerRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 20 },
   line: { flex: 1, height: 1, backgroundColor: '#DDD' },
@@ -136,7 +133,7 @@ const MyStyleSheet = StyleSheet.create({
     elevation: 3, shadowOpacity: 0.1,
   },
   footerText: { color: '#666', fontSize: 13 },
-  // Add these to your MyStyleSheet.js
+
   otpInstruction: {
     fontSize: 14,
     color: '#555',
@@ -310,14 +307,14 @@ const MyStyleSheet = StyleSheet.create({
     borderRadius: 20, 
     justifyContent: 'center', 
     alignItems: 'center',
-    marginTop: -40, // Lifted active icon
+    marginTop: -40, 
     elevation: 10,
     shadowColor: '#5C93E8',
     shadowOffset: { width: 0, height: 5 },
     shadowOpacity: 0.4,
   },
   navLabel: { fontSize: 11, fontWeight: 'bold', color: '#4468B0', marginTop: 4 },
-  // Notification Header
+
   notifHeader: { 
     flexDirection: 'row', 
     justifyContent: 'space-between', 
@@ -327,7 +324,7 @@ const MyStyleSheet = StyleSheet.create({
   },
   notifHeaderText: { fontSize: 18, fontWeight: 'bold', color: '#333' },
 
-  // Segmented Tabs
+ 
   tabBar: { 
     flexDirection: 'row', 
     backgroundColor: '#FFF', 
@@ -345,7 +342,7 @@ const MyStyleSheet = StyleSheet.create({
   tabText: { fontSize: 14, color: '#888' },
   tabTextActive: { color: '#333', fontWeight: 'bold' },
 
-  // Notification Cards
+
   notifCard: {
     backgroundColor: '#FFF',
     borderRadius: 20,
@@ -363,12 +360,12 @@ const MyStyleSheet = StyleSheet.create({
   notifTime: { fontSize: 12, color: '#AAA' },
   notifBody: { fontSize: 14, color: '#555', lineHeight: 20 },
 
-  // Pet Management Header
+
   petHeader: { paddingHorizontal: 25, marginTop: 20 },
   petHeaderText: { fontSize: 18, fontWeight: 'bold', color: '#333' },
   petHeaderDivider: { height: 1, backgroundColor: '#EEE', marginTop: 15, width: '100%' },
 
-  // Top Circles
+
   petActionRow: { flexDirection: 'row', paddingHorizontal: 25, marginTop: 20, alignItems: 'center' },
   allPetsCircle: { 
     width: 65, height: 65, borderRadius: 32.5, 
@@ -392,13 +389,13 @@ const MyStyleSheet = StyleSheet.create({
   addFirstBtn: { marginTop: 40 },
   addFirstBtnText: { color: '#4468B0', fontWeight: 'bold', fontSize: 15, letterSpacing: 0.5 },
 
-  // Active Icon for Pet Management (Bottom Nav)
+
   navItemActive: { 
     backgroundColor: '#5C93E8', width: 60, height: 60, borderRadius: 30, 
     justifyContent: 'center', alignItems: 'center', marginTop: -40,
     elevation: 8, shadowColor: '#5C93E8', shadowOpacity: 0.4, shadowRadius: 10,
   },
-// Empty State Appointment
+
   emptyAppointmentContainer: { 
     flex: 1, 
     alignItems: 'center', 
@@ -411,7 +408,7 @@ const MyStyleSheet = StyleSheet.create({
   bookLink: { marginTop: 50 },
   bookLinkText: { color: '#4468B0', fontWeight: 'bold', fontSize: 16 },
 
-  // Secondary Floating Action Button (FAB)
+  
   fabAdd: {
     position: 'absolute',
     right: 30,
@@ -428,7 +425,7 @@ const MyStyleSheet = StyleSheet.create({
     shadowRadius: 5,
   },
 
-  // Active Icon for Appointment (Bottom Nav)
+
   navItemActive: { 
     backgroundColor: '#5C93E8', 
     width: 60, 
@@ -443,7 +440,7 @@ const MyStyleSheet = StyleSheet.create({
     shadowRadius: 10,
   },
 
-  // Invoice Cards
+
   invoiceCard: {
     backgroundColor: '#FFF',
     borderRadius: 20,
@@ -482,9 +479,8 @@ const MyStyleSheet = StyleSheet.create({
   },
   downloadBtnText: { fontSize: 11, color: '#4468B0', fontWeight: 'bold' },
 
-  // Idagdag ang mga ito sa loob ng StyleSheet.create({...})
+ 
 
-  // Header Styles
   formHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -498,7 +494,7 @@ const MyStyleSheet = StyleSheet.create({
   formHeaderTitle: { fontSize: 18, fontWeight: 'bold', color: '#000' },
   backBtn: { padding: 5 },
 
-  // Upload Section
+
   formScrollContent: { paddingHorizontal: 25, paddingBottom: 50 },
   uploadContainer: {
     flexDirection: 'row',
@@ -526,7 +522,7 @@ const MyStyleSheet = StyleSheet.create({
   },
   uploadBtnLabel: { fontWeight: 'bold', fontSize: 14, marginLeft:50 },
 
-  // Form Inputs
+ 
   inputGroup: { marginTop: 5 },
   formInput: {
     backgroundColor: '#FFF',
@@ -538,7 +534,7 @@ const MyStyleSheet = StyleSheet.create({
     fontSize: 15,
     color: '#333',
     marginBottom: 15,
-    // Subtle shadow gaya ng nasa pic
+
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
@@ -548,7 +544,7 @@ const MyStyleSheet = StyleSheet.create({
   inlineInputs: { flexDirection: 'row', justifyContent: 'space-between' },
   textArea: { height: 100, textAlignVertical: 'top' },
 
-  // Blue Button
+
   continuePrimaryBtn: {
     backgroundColor: '#5C93E8',
     borderRadius: 25,
@@ -562,10 +558,10 @@ const MyStyleSheet = StyleSheet.create({
     elevation: 5,
   },
   continueBtnText: { color: '#FFF', fontWeight: 'bold', fontSize: 17 },
-  // Modal / Pop-up Styles
+
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)', // Madilim na background sa likod ng pop-up
+    backgroundColor: 'rgba(0,0,0,0.5)', 
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -601,7 +597,7 @@ const MyStyleSheet = StyleSheet.create({
     alignItems: 'center',
   },
   modalViewText: { fontWeight: 'bold', color: '#FFF' },
-  // Summary Page Styles
+  // dito summary page style natin
   summaryProfileRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -618,7 +614,7 @@ const MyStyleSheet = StyleSheet.create({
     backgroundColor: '#E0E0E0',
   },
 
-  // Detail Items with Bottom Border
+
   detailsContainer: { marginBottom: 50 },
   detailItem: {
     flexDirection: 'row',
@@ -630,7 +626,7 @@ const MyStyleSheet = StyleSheet.create({
   detailLabel: { fontSize: 15, color: '#444' },
   detailValue: { fontSize: 15, fontWeight: '500', color: '#000' },
 
-  // Pet Selector (Top)
+ 
   petSelectActive: {
     width: 65, height: 65, borderRadius: 33, 
     borderWidth: 1, borderColor: '#5C93E8', 
@@ -640,7 +636,7 @@ const MyStyleSheet = StyleSheet.create({
   petSelectCircle: { width: 65, height: 65, borderRadius: 33, backgroundColor: '#E0E0E0', justifyContent: 'center', alignItems: 'center' },
   petSelectLabel: { fontSize: 11, color: '#555', marginTop: 8, textAlign: 'center' },
 
-  // Pet Card
+ 
   petCardMain: {
     backgroundColor: '#FFF',
     borderRadius: 20,
@@ -662,11 +658,11 @@ const MyStyleSheet = StyleSheet.create({
   petActionBtn: { alignItems: 'center', flex: 1 },
   petActionLabel: { fontSize: 11, color: '#333', marginTop: 5, fontWeight: '500' },
 
-// Profile Top Section
+
   summaryHero: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between', // Itutulak nito ang text sa kaliwa at circle sa kanan
+    justifyContent: 'space-between', 
     marginTop: 40,
     marginBottom: 40,
   },
@@ -679,23 +675,23 @@ const MyStyleSheet = StyleSheet.create({
     backgroundColor: '#E0E0E0',
     justifyContent: 'center', 
     alignItems: 'center',      
-    overflow: 'hidden', // Ensures the image doesn't "leak" out of the circle
+    overflow: 'hidden', 
   },
 
-  // Detail Row Styling
+
   detailsListGroup: { marginTop: 10 },
   detailRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between', // Labels sa kaliwa, Values sa kanan
+    justifyContent: 'space-between', 
     alignItems: 'center',
     paddingVertical: 18,
     borderBottomWidth: 1,
-    borderBottomColor: '#EEEEEE', // Manipis na linya sa ilalim
+    borderBottomColor: '#EEEEEE', 
   },
   detailLabelText: { fontSize: 15, color: '#444' },
   detailValueText: { fontSize: 15, fontWeight: '500', color: '#000' },
 
-  // Blue Button Style
+ 
   primaryBlueBtn: {
     backgroundColor: '#5C93E8',
     height: 55,
@@ -707,12 +703,12 @@ const MyStyleSheet = StyleSheet.create({
 
   detailRowWithLine: {
     flexDirection: 'row',
-    justifyContent: 'space-between', // Itutulak ang Gender sa kaliwa at Female sa kanan
+    justifyContent: 'space-between', 
     alignItems: 'center',
-    paddingVertical: 15,            // Spacing sa itaas at ilalim ng text
-    borderBottomWidth: 1,           // Kapal ng linya
-    borderBottomColor: '#E0E0E0',    // Kulay ng linya (Light Gray)
-    marginBottom: 5,                // Space bago ang susunod na row
+    paddingVertical: 15,           
+    borderBottomWidth: 1,          
+    borderBottomColor: '#E0E0E0',    
+    marginBottom: 5,                
   },
   detailLabelText: {
     fontSize: 16,
@@ -724,7 +720,7 @@ const MyStyleSheet = StyleSheet.create({
     color: '#000',
   },
 
-  // Edit Photo Styles
+
   editPhotoContainer: {
     alignItems: 'center',
     marginTop: 30,
@@ -735,7 +731,7 @@ const MyStyleSheet = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     right: 5,
-   // backgroundColor: '#FFF',
+
     width: 35,
     height: 35,
     borderRadius: 18,
@@ -747,7 +743,7 @@ const MyStyleSheet = StyleSheet.create({
     shadowRadius: 3,
   },
 
-  // Input Box Style (Para sa lahat ng forms mo)
+
   inputBox: {
     height: 55,
     borderWidth: 1,
@@ -760,19 +756,18 @@ const MyStyleSheet = StyleSheet.create({
     marginBottom: 15,
   },
 
-  // Appointment Screen Header
   apptHeader: { flexDirection: 'row', justifyContent: 'space-between', padding: 25, alignItems: 'center' },
   apptHiUser: { fontSize: 18, fontWeight: 'bold' },
   apptUserCircle: { width: 35, height: 35, borderRadius: 18, backgroundColor: '#D9D9D9' },
   
-  // Tab Navigation Styles
+
   tabContainer: { flexDirection: 'row', backgroundColor: '#F5F5F5', marginHorizontal: 20, borderRadius: 10, padding: 5, marginBottom: 20 },
   tabButton: { flex: 1, paddingVertical: 10, alignItems: 'center', borderRadius: 8 },
   activeTabButton: { backgroundColor: '#FFF', elevation: 2, shadowColor: '#000', shadowOpacity: 0.1, shadowRadius: 3 },
   tabText: { color: '#888', fontSize: 13 },
   activeTabText: { color: '#000', fontWeight: 'bold' },
 
-  // Card Styles
+ 
   apptCard: { backgroundColor: '#FFF', borderRadius: 15, padding: 15, marginBottom: 15, elevation: 2, shadowColor: '#000', shadowOpacity: 0.05, shadowRadius: 5 },
   apptCardContent: { flexDirection: 'row', alignItems: 'center' },
   apptDateText: { fontSize: 14, fontWeight: 'bold', color: '#333' },
@@ -781,22 +776,22 @@ const MyStyleSheet = StyleSheet.create({
   apptStatusTag: { alignSelf: 'flex-start', paddingHorizontal: 12, paddingVertical: 4, borderRadius: 8 },
   apptStatusText: { fontSize: 11, fontWeight: '500' },
   
-  // Pet Circle inside Card
+
   apptPetCircle: { width: 45, height: 45, borderRadius: 23, backgroundColor: '#D9D9D9' , justifyContent: 'center',
   alignItems: 'center',
   overflow: 'hidden',},
   apptPetNameText: { fontSize: 11, marginTop: 5, fontWeight: 'bold' },
 
-  // Floating Action Button
+
   apptFab: { position: 'absolute', bottom: 100, right: 25, width: 55, height: 55, borderRadius: 28, backgroundColor: '#D1E3FF', justifyContent: 'center', alignItems: 'center', elevation: 5 },
 
-  // Container na may linya sa ilalim
+  
   apptHeaderContainer: {
     marginBottom:20,
     borderBottomWidth: 1,
-    borderBottomColor: '#c4bebe', // Light gray color para sa manipis na linya
+    borderBottomColor: '#c4bebe', 
     width: '100%',
-    paddingBottom: 10, // Space sa pagitan ng text at ng linya
+    paddingBottom: 10, 
   },
 
   apptHeader: { 
@@ -807,7 +802,7 @@ const MyStyleSheet = StyleSheet.create({
     alignItems: 'center' 
   },
 
-  // Profile Titles
+
   profileMainTitle: {
     fontSize: 24,
     fontWeight: 'bold',
@@ -823,7 +818,7 @@ const MyStyleSheet = StyleSheet.create({
     marginLeft: 5,
   },
 
-  // Logout Button Style (Outline)
+
   secondaryOutlineBtn: {
     height: 55,
     borderRadius: 28,
@@ -839,7 +834,7 @@ const MyStyleSheet = StyleSheet.create({
     fontWeight: 'bold',
   },
 
-  // Logout Modal Styles
+  
   logoutModalContainer: {
     width: '80%',
     backgroundColor: '#FFF',
@@ -865,7 +860,7 @@ const MyStyleSheet = StyleSheet.create({
     width: '100%',
   },
   yesBtn: {
-    backgroundColor: '#1A3578', // Dark Blue
+    backgroundColor: '#1A3578', 
     flex: 0.45,
     height: 45,
     borderRadius: 10,
@@ -873,7 +868,7 @@ const MyStyleSheet = StyleSheet.create({
     alignItems: 'center',
   },
   noBtn: {
-    backgroundColor: '#8B1A1A', // Dark Red
+    backgroundColor: '#8B1A1A', 
     flex: 0.45,
     height: 45,
     borderRadius: 10,
@@ -886,7 +881,7 @@ const MyStyleSheet = StyleSheet.create({
     fontSize: 16,
   },
 
-  // Success Modal for User Profile
+  
   successModalSmall: {
     width: '85%',
     backgroundColor: '#FFF',
@@ -919,14 +914,14 @@ const MyStyleSheet = StyleSheet.create({
     fontWeight: '600',
   },
 
-  // Label for Select Pet
+
   selectPetLabel: {
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 10,
   },
 
-  // Progress Bar Styles
+
   progressBarBg: {
     height: 4,
     backgroundColor: '#E0E0E0',
@@ -936,19 +931,19 @@ const MyStyleSheet = StyleSheet.create({
   },
   progressBarActive: {
     height: 4,
-    backgroundColor: '#5C93E8', // Blue progress
+    backgroundColor: '#5C93E8', 
     borderRadius: 2,
-    width: '30%', // Step 1 of 3 (halimbawa)
+    width: '30%', 
   },
 
-  // Grid Styles (image_4ec397.png)
+  
   gridItem: {
     flex: 1,
-    aspectRatio: 1, // Gagawin itong saktong square
+    aspectRatio: 1, 
     margin: 10,
     backgroundColor: '#FFF',
     borderRadius: 15,
-    // Shadows para magmukhang card
+    
     elevation: 4,
     shadowColor: '#000',
     shadowOpacity: 0.1,
@@ -957,19 +952,19 @@ const MyStyleSheet = StyleSheet.create({
   },
   gridImagePlaceholder: {
     flex: 1,
-    backgroundColor: '#D9D9D9', // Gray placeholder
+    backgroundColor: '#D9D9D9', 
   },
 
-  // Service Card Style
+  
   serviceCard: {
-    width: '60%', // Mas makitid gaya ng nasa image
+    width: '60%', 
     backgroundColor: '#FFF',
     borderRadius: 15,
     paddingVertical: 25,
     paddingHorizontal: 15,
     alignItems: 'center',
     marginBottom: 20,
-    // Shadows
+ 
     elevation: 4,
     shadowColor: '#000',
     shadowOpacity: 0.1,
@@ -982,7 +977,7 @@ const MyStyleSheet = StyleSheet.create({
     color: '#333',
   },
 
-  // Disclaimer Style
+ 
   disclaimerText: {
     fontSize: 11,
     color: '#666',
@@ -992,14 +987,14 @@ const MyStyleSheet = StyleSheet.create({
     fontStyle: 'italic',
   },
 
-  // Button Text (Kung wala pa ito sa sheet mo)
+ 
   primaryBlueBtnText: {
     color: '#FFF',
     fontSize: 17,
     fontWeight: 'bold',
   },
 
-  // Dropdown Style
+  
   dropdownBox: {
     height: 50,
     borderWidth: 1,
@@ -1012,7 +1007,7 @@ const MyStyleSheet = StyleSheet.create({
     backgroundColor: '#FFF',
   },
 
-  // Calendar Card Style (image_4f4e1c.png)
+  
   calendarCard: {
     backgroundColor: '#FFF',
     borderRadius: 20,
@@ -1029,13 +1024,13 @@ const MyStyleSheet = StyleSheet.create({
     marginBottom: 15,
   },
   calendarGridPlaceholder: {
-    height: 200, // Space para sa mga dates
+    height: 200,
     backgroundColor: '#FAFAFA',
     borderRadius: 10,
     marginBottom: 15,
   },
 
-  // Time Section
+  
   timePickerRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -1054,7 +1049,7 @@ const MyStyleSheet = StyleSheet.create({
   calendarCard: {
     backgroundColor: '#FFF',
     borderRadius: 20,
-    padding: 10, // Binawasan para sa library component
+    padding: 10, 
     elevation: 8,
     shadowColor: '#000',
     shadowOpacity: 0.1,
@@ -1073,7 +1068,7 @@ const MyStyleSheet = StyleSheet.create({
     paddingBottom: 10,
   },
   timePill: {
-    backgroundColor: '#F0F5FF', // Light blue tint
+    backgroundColor: '#F0F5FF', 
     paddingVertical: 8,
     paddingHorizontal: 20,
     borderRadius: 20,
@@ -1108,7 +1103,7 @@ const MyStyleSheet = StyleSheet.create({
     borderRadius: 15,
     alignItems: 'center',
     marginBottom: 10,
-    // Shadow for iOS/Android
+  
     elevation: 2,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
@@ -1129,7 +1124,7 @@ const MyStyleSheet = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 5,
   },
-  // Modal Styles
+  
   policyBox: { width: '85%', backgroundColor: '#FFF', borderRadius: 20, padding: 25 },
   modalTitleLarge: { fontSize: 22, fontWeight: 'bold', marginBottom: 15 },
   modalBodyText: { fontSize: 14, color: '#666', marginBottom: 20, lineHeight: 20 },
@@ -1228,14 +1223,14 @@ const MyStyleSheet = StyleSheet.create({
     justifyContent: 'center', alignItems: 'center', marginRight: 15 
   },
   secondaryBlueBtn: {
-    backgroundColor: '#D1E3FF', // Light blue background base sa mockup
+    backgroundColor: '#D1E3FF', 
     padding: 15,
     borderRadius: 15,
     alignItems: 'center',
     marginTop: 12,
   },
   secondaryBlueBtnText: {
-    color: '#5C93E8', // Darker blue text para readable
+    color: '#5C93E8', 
     fontWeight: 'bold',
     fontSize: 16,
   },
@@ -1258,26 +1253,26 @@ const MyStyleSheet = StyleSheet.create({
     alignItems: 'center',
   },
   serviceCard: {
-  // ... existing styles
+  
   borderWidth: 1,
-  borderColor: '#EEE', // Default color kapag hindi pa napili
+  borderColor: '#EEE', 
 },
 
 serviceCard: {
   backgroundColor: '#FFF',
-  width: 160,          // Base sa square-ish look sa image
+  width: 160,          
   height: 160,
   borderRadius: 20,
   justifyContent: 'center',
   alignItems: 'center',
   marginBottom: 20,
   padding: 15,
-  // Shadow para sa iOS
+  
   shadowColor: '#000',
   shadowOffset: { width: 0, height: 4 },
   shadowOpacity: 0.1,
   shadowRadius: 10,
-  // Shadow para sa Android
+ 
   elevation: 5,
   borderWidth: 1,
   borderColor: '#F0F0F0',
@@ -1291,7 +1286,7 @@ serviceCardText: {
 primaryBlueBtn: {
   backgroundColor: '#5C93E8',
   paddingVertical: 15,
-  borderRadius: 30,    // Rounded sides base sa images
+  borderRadius: 30,    
   alignItems: 'center',
   width: '100%',
 },

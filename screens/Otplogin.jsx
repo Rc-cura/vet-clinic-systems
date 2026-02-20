@@ -8,11 +8,7 @@ export default function Otplogin() {
 
   return (
     <SafeAreaView style={MyStyleSheet.container}>
-      <ImageBackground 
-        source={{ uri: 'https://via.placeholder.com/500' }} 
-        style={MyStyleSheet.bgImage}
-        resizeMode="cover"
-      >
+     
         <View style={MyStyleSheet.regHeader}>
           <View>
             <Text style={MyStyleSheet.clinicName}>ST JOSEPH</Text>
@@ -51,7 +47,7 @@ export default function Otplogin() {
             <Text style={MyStyleSheet.buttonText}>Verify</Text>
           </TouchableOpacity>
         </View>
-      </ImageBackground>
+
     </SafeAreaView>
   )
 }
