@@ -34,8 +34,7 @@ export default function AppointmentStatusPending() {
   return (
     <SafeAreaView style={MyStyleSheet.container}>
       <ScrollView contentContainerStyle={{ paddingHorizontal: 25, paddingBottom: 40, paddingTop: 20 }}>
-        
-        {/* HEADER */}
+
         <View style={MyStyleSheet.detailsMainCard}>
           <Text style={MyStyleSheet.detailsDateText}>{formatDisplayDate(appointment?.date)}</Text>
           <Text style={MyStyleSheet.detailsTimeText}>{appointment?.time || "Time TBA"}</Text>
@@ -45,87 +44,100 @@ export default function AppointmentStatusPending() {
           <Text style={MyStyleSheet.requestedDateLabel}>Requested on {appointment?.requestedDate}</Text>
         </View>
 
-        {/* 1. PET CARD */}
         <View style={MyStyleSheet.summaryCard}>
           <View style={MyStyleSheet.iconPlaceholderCircle}>
              <Image source={appointment?.petImage ? { uri: appointment.petImage } : require('../public/blackpaw.svg')} style={{ width: 35, height: 35, borderRadius: 17.5 }} />
           </View>
           <View style={{ flex: 1, marginLeft: 15 }}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+
               <Text style={MyStyleSheet.cardTitleText}>{appointment?.pet}</Text>
+
               <Text style={{ color: '#AAA', fontSize: 13 }}>{appointment?.petWeight} kg</Text>
+
             </View>
             <Text style={MyStyleSheet.cardSubText}>{appointment?.petDetails}</Text>
           </View>
         </View>
 
-        {/* 2. SERVICE CARD */}
+
         <View style={MyStyleSheet.summaryCard}>
           <View style={MyStyleSheet.iconPlaceholderSquare}><Image source={require('../public/medical_icon.svg')} style={{ width: 24, height: 24 }} /></View>
           <View><Text style={MyStyleSheet.cardTitleText}>Service</Text><Text style={MyStyleSheet.cardSubText}>{appointment?.service}</Text></View>
         </View>
 
-        {/* 3. VET CARD */}
+
         <View style={MyStyleSheet.summaryCard}>
           <View style={MyStyleSheet.iconPlaceholderSquare}><Image source={require('../public/vet.svg')} style={{ width: 24, height: 24 }} /></View>
           <View><Text style={MyStyleSheet.cardTitleText}>Veterinarian</Text><Text style={MyStyleSheet.cardSubText}>{appointment?.vet}</Text></View>
         </View>
 
-        {/* 4. NOTE SECTION */}
+
         <Text style={MyStyleSheet.noteLabel}>Note</Text>
         <View style={MyStyleSheet.noteDisplayBox}>
           <Text style={MyStyleSheet.noteTextSmall}>{appointment?.note || "No additional notes provided."}</Text>
         </View>
 
-        {/* ACTIONS */}
+ 
         <TouchableOpacity style={[MyStyleSheet.primaryBlueBtn, { marginTop: 20 }]}>
           <Text style={MyStyleSheet.primaryBlueBtnText}>Add to Calendar</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity 
-          style={MyStyleSheet.outlineBtn}
-          onPress={() => navigation.navigate('datetime', {
-            appointmentId: appointment?.id,
-            petName: appointment?.pet,
-            petImage: appointment?.petImage,
-            petDetails: appointment?.petDetails,
-            petWeight: appointment?.petWeight,
-            service: appointment?.service,
-            vet: appointment?.vet 
-          })}
-        >
+        <TouchableOpacity  style={MyStyleSheet.outlineBtn}onPress={() => navigation.navigate('datetime', { appointmentId: appointment?.id,petName: appointment?.pet,
+            petImage: appointment?.petImage, petDetails: appointment?.petDetails, petWeight: appointment?.petWeight, service: appointment?.service,
+            vet: appointment?.vet })}>
+
           <Text style={MyStyleSheet.outlineBtnText}>Reschedule</Text>
+
         </TouchableOpacity>
 
         <TouchableOpacity style={[MyStyleSheet.secondaryBlueBtn, {borderRadius: 10}]} onPress={() => setCancelModalVisible(true)}>
+
           <Text style={MyStyleSheet.secondaryBlueBtnText}>Cancel Appointment</Text>
+
         </TouchableOpacity>
+
       </ScrollView>
 
-      {/* CANCEL MODAL */}
+
       <Modal visible={cancelModalVisible} transparent animationType="fade">
+
         <View style={MyStyleSheet.modalOverlay}>
+
           <View style={MyStyleSheet.policyBox}>
+
             <Text style={MyStyleSheet.modalTitleLarge}>Cancel Appointment?</Text>
+
             <Text style={MyStyleSheet.modalBodyText}>Cancellations must be made at least one day before.</Text>
+
             <TouchableOpacity style={MyStyleSheet.modalCancelBtn} onPress={() => setCancelModalVisible(false)}>
               <Text>Keep Appointment</Text>
+
             </TouchableOpacity>
             <TouchableOpacity style={MyStyleSheet.modalUnderstandBtn} onPress={handleConfirmCancellation}>
+
               <Text style={{ color: '#FFF', fontWeight: 'bold' }}>Confirm Cancellation</Text>
+
             </TouchableOpacity>
           </View>
         </View>
       </Modal>
 
-      {/* SUCCESS MODAL */}
+
       <Modal visible={successModalVisible} transparent animationType="fade">
+
         <View style={MyStyleSheet.modalOverlay}>
+
           <View style={MyStyleSheet.policyBox}>
+
             <Text style={MyStyleSheet.modalTitleLarge}>Appointment Cancelled</Text>
+
             <TouchableOpacity style={MyStyleSheet.modalUnderstandBtn} onPress={() => { setSuccessModalVisible(false); navigation.navigate('appointment'); }}>
+
               <Text style={{ color: '#FFF', fontWeight: 'bold' }}>Close</Text>
+
             </TouchableOpacity>
+            
           </View>
         </View>
       </Modal>

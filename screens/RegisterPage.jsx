@@ -23,20 +23,17 @@ export default function RegisterPage() {
   const changeHandler = (field, value) => {
     let filteredValue = value;
 
-    // 1. Logic for Names (Letters only)
+
     if (field === "fname" || field === "lname") {
-      filteredValue = value.replace(/[^a-zA-Z\s]/g, ""); // Removes anything not a letter or space
+      filteredValue = value.replace(/[^a-zA-Z\s]/g, ""); 
     }
 
-    // 2. Logic for Contact (Numbers only, max 11 digits)
     if (field === "contact") {
-      filteredValue = value.replace(/[^0-9]/g, "").slice(0, 11); // Removes non-numbers and limits length
+      filteredValue = value.replace(/[^0-9]/g, "").slice(0, 11); 
     }
 
-    // 3. Update the state with filtered value
     setUser({ ...getUser, [field]: filteredValue });
 
-    // Password Strength Logic
     if (field === "password") {
       if (filteredValue.length === 0) {
         setMsg("");
@@ -49,7 +46,7 @@ export default function RegisterPage() {
       }
     }
 
-    // Email Validation Logic
+
     if (field === "email") {
       if (filteredValue.length > 0 && !filteredValue.toLowerCase().endsWith("@gmail.com")) {
         setMsg("Must be a @gmail.com address");
@@ -60,7 +57,7 @@ export default function RegisterPage() {
   };
 
   const RegisteredAccs = () => {
-    // Basic validation for empty fields
+
     if (getUser.fname === "" || getUser.email === "" || getUser.contact === "" || getUser.password === "" || getUser.lname === "" || getUser.cpassword === "") {
       setMsg("Please fill up all fields");
       return;
@@ -71,28 +68,32 @@ export default function RegisterPage() {
       return;
     }
 
+if (getUser.password.length < 9) {
+  setMsg("Password must be at least 9 characters long.");
+  return;
+}
+
     const Exists = Registered.find((item) => item.email === getUser.email);
+
     if (Exists) {
+
       setMsg("Email already exists");
+
       return;
+
     }
 
     Registered.push(getUser);
+
     updateUser(getUser); 
+
     opx.replace("otp");
   };
 
   return (
     <SafeAreaView style={MyStyleSheet.container}>
-      <KeyboardAvoidingView 
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={{ flex: 1 }}
-      >
-        <ImageBackground
-          source={{ uri: 'https://via.placeholder.com/500' }}
-          style={MyStyleSheet.bgImage}
-          resizeMode="cover"
-        >
+      <KeyboardAvoidingView  behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1 }}>
+        
           <ScrollView 
             showsVerticalScrollIndicator={false} 
             contentContainerStyle={{ flexGrow: 1, paddingBottom: 40 }}
@@ -111,7 +112,6 @@ export default function RegisterPage() {
               <Text style={MyStyleSheet.cardTitle}>Create an account</Text>
               <Text style={{ alignSelf: "center", color: Msg === "Strong Password" ? "green" : "red", marginBottom: 10 }}>{Msg}</Text>
 
-              {/* Added 'value' prop so the TextInput reflects the filtered text */}
               <TextInput style={MyStyleSheet.input} value={getUser.fname} onChangeText={(e) => changeHandler("fname", e)} placeholder='Enter First Name' />
               <TextInput style={MyStyleSheet.input} value={getUser.lname} onChangeText={(e) => changeHandler("lname", e)} placeholder='Enter Last Name' />
               <TextInput style={MyStyleSheet.input} value={getUser.email} onChangeText={(e) => changeHandler("email", e)} placeholder='Enter Email' keyboardType="email-address" autoCapitalize="none" />
@@ -141,7 +141,7 @@ export default function RegisterPage() {
               </TouchableOpacity>
             </View>
           </ScrollView>
-        </ImageBackground>
+
       </KeyboardAvoidingView>
     </SafeAreaView>
   )
