@@ -30,6 +30,12 @@ import AppointmentStatusApproved from './screens/AppointmentStatusApproved';
 import AppointmentStatusCompleted from './screens/AppointmentStatusCompleted';
 import AppointmentStatusPending from './screens/AppointmentStatusPending';
 import AppointmentStatusCancelled from './screens/AppointmentStatusCancelled';
+import AddProfilePic from './screens/AddProfilePic';
+import AddDetails from './screens/AddDetails';
+import ChatModule from './screens/ChatModule';
+
+
+
 
 export const Registered = [];
 export const Pets = [];
@@ -42,12 +48,16 @@ export default function App() {
   return (
     <UserProvider>
       <NavigationContainer>
-        <MScreen.Navigator initialRouteName='landing'>
+        <MScreen.Navigator initialRouteName='details'>
           <MScreen.Screen name='landing' component={LandingPage} />
           <MScreen.Screen name='login' component={LoginPage} />
           <MScreen.Screen name='register' component={RegisterPage} />
           <MScreen.Screen name='otp' component={Otp} />
           <MScreen.Screen name='otplogin' component={Otplogin} />
+          <MScreen.Screen name='profilepic' component={AddProfilePic} />
+          <MScreen.Screen name='details' component={AddDetails} />
+          <MScreen.Screen name='chat' component={ChatModule} />
+
           
           <MScreen.Screen
             name='dashboard'

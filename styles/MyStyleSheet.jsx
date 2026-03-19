@@ -1327,6 +1327,263 @@ billingModalBox: {
   billingTotalLabel: { fontSize: 18, fontWeight: 'bold' },
   billingTotalValue: { fontSize: 18, fontWeight: 'bold' },
 
+  inputGroup: {
+    marginBottom: 15,
+    width: '100%',
+  },
+  label: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#333',
+    marginBottom: 5,
+    marginLeft: 5, 
+  },
+ 
+  input: {
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 8,
+    padding: 12,
+    backgroundColor: '#fff',
+    fontSize: 16,
+  },
+
+  formCard: {
+    backgroundColor: '#FFFFFF',
+    marginHorizontal: 20,
+    borderRadius: 20,
+    padding: 25,
+    // Shadow for iOS
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    // Shadow for Android
+    elevation: 5,
+    marginTop: -20, // Overlaps slightly with header for a modern feel
+  },
+  inputGroup: {
+    marginBottom: 18,
+  },
+  label: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#555',
+    marginBottom: 6,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  input: {
+    backgroundColor: '#F3F4F6',
+    borderRadius: 12,
+    paddingHorizontal: 15,
+    paddingVertical: 12,
+    fontSize: 16,
+    color: '#333',
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+  },
+  msgBadge: {
+    padding: 8,
+    borderRadius: 8,
+    marginBottom: 20,
+  },
+  regButton: {
+    backgroundColor: '#4E5DB2',
+    paddingVertical: 15,
+    borderRadius: 12,
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  buttonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: 'bold',
+    letterSpacing: 1,
+  },
+// Add these to your MyStyleSheet.js
+
+  // Full screen container with light grey background
+  profilepic_container: {
+    flex: 1,
+    backgroundColor: '#F0F2F5', // Matches the second photo background
+    alignItems: 'center',
+    paddingTop: 60, // Space for the top header
+  },
+
+  // Headers and Text
+  profilepic_title: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#000',
+    marginBottom: 10,
+  },
+
+  profilepic_subtitle: {
+    fontSize: 13,
+    color: '#65676B',
+    textAlign: 'center',
+    paddingHorizontal: 40,
+    marginBottom: 50,
+  },
+
+  // The Blue Circle Profile Placeholder
+  profilepic_circle: {
+    width: 200,
+    height: 200,
+    borderRadius: 100,
+    borderWidth: 8,
+    borderColor: '#4A8CF7', // The blue outer ring
+    backgroundColor: '#FFF',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 80,
+  },
+
+  // The inner silhouette/person icon
+  profilepic_icon: {
+    width: 150,
+    height: 150,
+    borderRadius: 75,
+    backgroundColor: '#4A8CF7', // Solid blue person icon
+  },
+
+  // Button Styles (Full width pill buttons)
+  profilepic_addBtn: {
+    backgroundColor: '#4A8CF7',
+    width: '85%',
+    height: 50,
+    borderRadius: 25,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 15,
+  },
+
+  profilepic_skipBtn: {
+    backgroundColor: 'transparent',
+    width: '85%',
+    height: 50,
+    borderRadius: 25,
+    borderWidth: 1,
+    borderColor: '#4A8CF7',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  // Button Text
+  profilepic_btnText: {
+    color: '#FFF',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+
+  profilepic_skipText: {
+    color: '#4A8CF7',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+
+  // Text below the image
+  details_subtitle: {
+    fontSize: 12,
+    color: '#65676B',
+    textAlign: 'center',
+    paddingHorizontal: 40,
+    lineHeight: 18,
+    marginTop: 10,
+  },
+
+  // Gray labels above inputs
+  details_label: {
+    fontSize: 13,
+    color: '#8E8E8E',
+    marginBottom: 8,
+  },
+
+  // The white input box with the icon inside
+  details_inputWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFF',
+    borderWidth: 1,
+    borderColor: '#CED0D4',
+    borderRadius: 12,
+    paddingHorizontal: 15,
+    height: 55,
+  },
+
+  // Background Paw Decorations
+  pawDecoration: {
+    position: 'absolute',
+    opacity: 0.1, // Very light like in your photo
+    zIndex: -1,
+  },
+// Message Hub specific
+  messageHub_container: {
+    flex: 1,
+    backgroundColor: '#F0F2F5', // Light gray background from the screenshot
+  },
+  messageHub_header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    backgroundColor: '#FFF',
+  },
+  messageHub_title: {
+    flex: 1,
+    textAlign: 'center',
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginRight: 30, // Offsets the back arrow to center the text
+  },
+  searchContainer: {
+    backgroundColor: '#FFF',
+    flexDirection: 'row',
+    alignItems: 'center',
+    margin: 15,
+    paddingHorizontal: 15,
+    borderRadius: 25,
+    height: 45,
+    borderWidth: 1,
+    borderColor: '#E4E6EB',
+  },
+  chatList_card: {
+    backgroundColor: '#FFF',
+    marginHorizontal: 15,
+    borderRadius: 20,
+    padding: 10,
+    flex: 1,
+    marginBottom: 20,
+  },
+  chatItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#F0F2F5',
+  },
+  avatarCircle: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: '#000', // Black circle from your screenshot
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 15,
+  },
+  chatName: {
+    fontWeight: 'bold',
+    fontSize: 15,
+    color: '#000',
+  },
+  chatSnippet: {
+    color: '#8E8E8E',
+    fontSize: 13,
+    marginTop: 2,
+  }
+  
+
 })
 
 export default MyStyleSheet;
