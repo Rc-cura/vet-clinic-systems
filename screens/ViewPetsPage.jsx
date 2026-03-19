@@ -24,16 +24,9 @@ export default function ViewPetsPage() {
           </View>
           <View style={MyStyleSheet.sumBigCircle}>
              {pet?.pimage ? (
-                <Image 
-                  source={{ uri: pet.pimage }} 
-                  style={{ width: '100%', height: '100%', borderRadius: 50 }} 
-                />
+                <Image source={{ uri: pet.pimage }}  style={{ width: '100%', height: '100%', borderRadius: 50 }} />
              ) : (
-                <Image 
-                  source={require('../public/bluepaw.svg')} 
-                  style={{ width: 50, height: 50 }} 
-                  resizeMode="contain" 
-                />
+                <Image source={require('../public/bluepaw.svg')}  style={{ width: 50, height: 50 }}  resizeMode="contain"  />
              )}
           </View>
         </View>
@@ -43,37 +36,44 @@ export default function ViewPetsPage() {
           
           
           <View style={MyStyleSheet.detailRowWithLine}>
+
             <Text style={MyStyleSheet.detailLabelText}>Gender</Text>
+
             <Text style={MyStyleSheet.detailValueText}>{pet?.gender || 'N/A'}</Text>
+
           </View>
 
           
           <View style={MyStyleSheet.detailRowWithLine}>
+
             <Text style={MyStyleSheet.detailLabelText}>Age</Text>
+
             <Text style={MyStyleSheet.detailValueText}>{pet?.age || '0'}</Text>
           </View>
 
           
           <View style={MyStyleSheet.detailRowWithLine}>
+
             <Text style={MyStyleSheet.detailLabelText}>Weight</Text>
+
             <Text style={MyStyleSheet.detailValueText}>{pet?.weight ? `${pet.weight} kg` : 'N/A'}</Text>
           </View>
 
-          {/* Remarks */}
+
           <View style={{ marginTop: 20 }}>
+
             <Text style={{ fontWeight: 'bold', color: '#000', fontSize: 15 }}>Remarks</Text>
+
             <Text style={{ color: '#666', marginTop: 5 }}>
+
                 {pet?.remarks || "No additional remarks."}
             </Text>
           </View>
         </View>
 
-        {/* Edit Button */}
+       
         <View style={{ flex: 1, justifyContent: 'flex-end', marginBottom: 40 }}>
-          <TouchableOpacity 
-            style={MyStyleSheet.primaryBlueBtn}
-            onPress={() => opx.navigate('editpets', { pet })} 
-          >
+          <TouchableOpacity  style={MyStyleSheet.primaryBlueBtn} onPress={() => opx.navigate('editpets', { pet })} >
             <Text style={MyStyleSheet.primaryBlueBtnText}>Edit</Text>
           </TouchableOpacity>
         </View>

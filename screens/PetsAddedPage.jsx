@@ -2,99 +2,96 @@ import { View, Text, TouchableOpacity, SafeAreaView, FlatList, ScrollView, Image
 import React from 'react'
 import { useNavigation } from '@react-navigation/native'
 import MyStyleSheet from '../styles/MyStyleSheet'
-import { Pets } from '../App' // Integrated: Import global pet array
+import { Pets } from '../App' 
 
 export default function PetsAddedPage() {
   const opx = useNavigation()
 
-  // Updated: renderPetCard now uses dynamic keys (pname, species, etc.)
   const renderPetCard = ({ item }) => (
     <View style={MyStyleSheet.petCardMain}>
       <View style={MyStyleSheet.petCardHeader}>
         <View style={MyStyleSheet.petCardCircle}>
-          {/* Integrated: Dynamic image check */}
+     
           {item.pimage ? (
-            <Image 
-              source={{ uri: item.pimage }} 
-              style={{ width: '100%', height: '100%', borderRadius: 25 }} 
-            />
+            <Image source={{ uri: item.pimage }} style={{ width: '100%', height: '100%', borderRadius: 25 }} />
           ) : (
             <Image source={require('../public/blackpaw.svg')} style={{ width: 40, height: 40 }} resizeMode="contain" />
           )}
         </View>
+
         <View style={{ flex: 1, marginLeft: 15 }}>
           <Text style={MyStyleSheet.petCardName}>{item.pname}</Text>
+
           <Text style={MyStyleSheet.petCardSub}>{item.species} - {item.breed} - {item.gender}</Text>
         </View>
+
         <Text style={MyStyleSheet.petWeightTag}>{item.weight} kg</Text>
+
       </View>
       
       <View style={MyStyleSheet.cardDivider} />
 
       <View style={MyStyleSheet.petActionRow}>
-        {/* Updated: Passing pet data baton to service flow */}
-        <TouchableOpacity 
-          style={MyStyleSheet.petActionBtn} 
-          onPress={() => opx.navigate('service', { 
-            petName: item.pname, 
-            petImage: item.pimage,
-            petDetails: `${item.species} | ${item.breed}` 
-          })}
-        >
+
+        <TouchableOpacity  style={MyStyleSheet.petActionBtn} onPress={() => opx.navigate('service', {  petName: item.pname,  petImage: item.pimage,
+            petDetails: `${item.species} | ${item.breed}`  })} >
           <Image source={require('../public/addcalendar.svg')} style={{ width: 20, height: 20, marginRight: 5 }} />
           <Text style={MyStyleSheet.petActionLabel}>Add Appointment</Text>
         </TouchableOpacity>
         
-        <TouchableOpacity 
-          style={MyStyleSheet.petActionBtn} 
-          onPress={() => opx.navigate('viewpets', { pet: item })}
-        >
+        <TouchableOpacity  style={MyStyleSheet.petActionBtn}  onPress={() => opx.navigate('viewpets', { pet: item })}>
+
           <Image source={require('../public/bluepaw.svg')} style={{ width: 20, height: 20, marginRight: 5 }} />
+
           <Text style={MyStyleSheet.petActionLabel}>View Profile</Text>
+
         </TouchableOpacity>
+
       </View>
+
     </View>
   )
 
   return (
     <SafeAreaView style={MyStyleSheet.container}>
       <View style={{ padding: 25 }}>
+
         <Text style={MyStyleSheet.sectionTitle}>Your Pets</Text>
         
-        {/* Horizontal Pet Selector */}
+
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginVertical: 20 }}>
+
           <TouchableOpacity style={MyStyleSheet.petSelectActive}>
+
             <Text style={MyStyleSheet.petSelectTextActive}>All{"\n"}Pets</Text>
+
           </TouchableOpacity>
           
-          {/* Updated: Mapping through dynamic Pets array for top selectors */}
+
           {Pets.map((pet, index) => (
             <View key={index} style={{ alignItems: 'center', marginRight: 15 }}>
               <View style={MyStyleSheet.petSelectCircle}>
-                 <Image 
-                    source={pet.pimage ? {uri: pet.pimage} : require('../public/bluepaw.svg')} 
-                    style={pet.pimage ? { width: 30, height: 30, borderRadius: 15 } : { width: 18, height: 18 }} 
-                 />
+                 <Image source={pet.pimage ? {uri: pet.pimage} : require('../public/bluepaw.svg')} style={pet.pimage ? { width: 30, height: 30, borderRadius: 15 } : { width: 18, height: 18 }} />
               </View>
               <Text style={MyStyleSheet.petSelectLabel}>{pet.pname}</Text>
+
             </View>
           ))}
 
           <TouchableOpacity onPress={() => opx.navigate('addpets')} style={{ alignItems: 'center' }}>
             <View style={[MyStyleSheet.petSelectCircle, { backgroundColor: '#D1E3FF' }]}>
+
               <Text style={{ fontSize: 24, color: '#5C93E8' }}>+</Text>
+
             </View>
             <Text style={MyStyleSheet.petSelectLabel}>Add New</Text>
+
           </TouchableOpacity>
         </ScrollView>
       </View>
 
       
-      <FlatList
-        data={Pets}
-        renderItem={renderPetCard}
-        keyExtractor={(item, index) => index.toString()}
-        contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 100 }}
+      <FlatList data={Pets} renderItem={renderPetCard} keyExtractor={(item, index) => index.toString()} contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 100 }}
         ListEmptyComponent={() => (
             <Text style={{ textAlign: 'center', marginTop: 50, color: '#AAA' }}>No pets found.</Text>
         )}

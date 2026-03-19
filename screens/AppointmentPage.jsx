@@ -122,67 +122,68 @@ export default function AppointmentPage() {
         ))}
       </View>
 
-      <FlatList
-        data={filteredData}
-        renderItem={renderAppointmentCard}
-        keyExtractor={item => item.id}
-        extraData={refreshTrigger} 
-        contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 100, flexGrow: 1 }}
+      <FlatList data={filteredData} renderItem={renderAppointmentCard} keyExtractor={item => item.id}
+
+        extraData={refreshTrigger} contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 100, flexGrow: 1 }}
+
         ListEmptyComponent={() => (
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 50 }}>
-            <Image 
-              source={require('../public/appointmentcalendar.svg')} 
-              style={{ width: 250, height: 250 }} 
-              resizeMode="contain" 
-            />
-            <Text style={{ 
-              fontSize: 16, 
-              color: '#333', 
-              marginTop: 20, 
-              textAlign: 'center' 
-            }}>
+            <Image source={require('../public/appointmentcalendar.svg')} style={{ width: 250, height: 250 }} resizeMode="contain" />
+            <Text style={{  fontSize: 16, color: '#333', marginTop: 20,  textAlign: 'center' }}>
+
               You currently have no {activeTab === 'See All' ? '' : activeTab.toLowerCase()} appointments.
+
             </Text>
-            <TouchableOpacity 
-              style={{ marginTop: 50 }} 
-              onPress={() => opx.navigate('selectpet')}
-            >
-              <Text style={{ 
-                color: '#5C93E8', 
-                fontSize: 16, 
-                fontWeight: 'bold' 
-              }}>
-                Book Appointment
-              </Text>
+            <TouchableOpacity style={{ marginTop: 50 }} onPress={() => opx.navigate('selectpet')}>
+
+              <Text style={{ color: '#5C93E8', fontSize: 16, fontWeight: 'bold' }}> Book Appointment</Text>
+
             </TouchableOpacity>
+
           </View>
         )}
       />
 
       <TouchableOpacity style={MyStyleSheet.apptFab} onPress={()=>{opx.navigate('selectpet')}}>
+
         <Text style={{ fontSize: 30, color: '#5C93E8' }}>+</Text>
+
       </TouchableOpacity>
 
       <View style={MyStyleSheet.bottomNav}>
+
         <TouchableOpacity style={MyStyleSheet.navItem} onPress={() => opx.navigate('dashboard')}>
+
           <Image source={require('../public/HomePage.svg')} style={{ width: 22, height: 22 }} />
+
           <Text style={MyStyleSheet.navLabel}>Home</Text>
+
         </TouchableOpacity>
         
         <TouchableOpacity style={MyStyleSheet.navItem} onPress={() => opx.navigate('pet')}>
+
           <Image source={require('../public/Pets.svg')} style={{ width: 22, height: 22 }} />
+
           <Text style={MyStyleSheet.navLabel}>Pets</Text>
+
         </TouchableOpacity>
         
         <View style={MyStyleSheet.navItemContainer}>
+
            <TouchableOpacity style={MyStyleSheet.navItemActive}>
+
               <Image source={require('../public/Calendar.svg')} style={{ width: 22, height: 22 }} />
+
            </TouchableOpacity>
+
         </View>
         
         <TouchableOpacity style={MyStyleSheet.navItem} onPress={() => opx.navigate('billing')}>
+
           <Image source={require('../public/Bill.svg')} style={{ width: 22, height: 22 }} />
+
           <Text style={MyStyleSheet.navLabel}>Invoice</Text>
+          
         </TouchableOpacity>
       </View>
     </SafeAreaView>

@@ -8,11 +8,7 @@ export default function Otplogin() {
 
   return (
     <SafeAreaView style={MyStyleSheet.container}>
-      <ImageBackground 
-        source={{ uri: 'https://via.placeholder.com/500' }} 
-        style={MyStyleSheet.bgImage}
-        resizeMode="cover"
-      >
+     
         <View style={MyStyleSheet.regHeader}>
           <View>
             <Text style={MyStyleSheet.clinicName}>ST JOSEPH</Text>
@@ -47,11 +43,11 @@ export default function Otplogin() {
           </TouchableOpacity>
 
           {/* CLEAN NAVIGATION: Dashboard will grab user from useUser() directly */}
-          <TouchableOpacity style={MyStyleSheet.regButton} onPress={() => opx.navigate('dashboard')}>
+          <TouchableOpacity style={MyStyleSheet.regButton} onPress={() => opx.navigate('profilepic')}>
             <Text style={MyStyleSheet.buttonText}>Verify</Text>
           </TouchableOpacity>
         </View>
-      </ImageBackground>
+
     </SafeAreaView>
   )
 }

@@ -8,9 +8,13 @@ export default function LandingPage() {
 
   return (
     <SafeAreaView style={MyStyleSheet.container}>
+
       <View style={MyStyleSheet.header}>
+
         <View style={MyStyleSheet.logoCircle}>
+
           <Image source={require('../public/logo.svg')} style={MyStyleSheet.logoIcon} />
+          
         </View>
       </View>
 

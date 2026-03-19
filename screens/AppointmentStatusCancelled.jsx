@@ -29,44 +29,69 @@ export default function AppointmentStatusCancelled() {
     <SafeAreaView style={MyStyleSheet.container}>
       <ScrollView contentContainerStyle={{ paddingHorizontal: 25, paddingBottom: 40, paddingTop: 20 }}>
         
-        {/* HEADER */}
+       
         <View style={MyStyleSheet.detailsMainCard}>
+
+
           <Text style={MyStyleSheet.detailsDateText}>{formatDisplayDate(appointment?.date)}</Text>
+
+
           <Text style={MyStyleSheet.detailsTimeText}>{appointment?.time}</Text>
+
+
           <View style={[MyStyleSheet.detailsStatusBadge, { backgroundColor: '#FFBDBD', width: '100%' }]}>
             <Text style={[MyStyleSheet.detailsStatusText, { color: '#000', alignSelf: "center" }]}>Cancelled Appointment</Text>
           </View>
         </View>
 
-        {/* 1. PET CARD */}
+
         <View style={MyStyleSheet.summaryCard}>
+
           <View style={MyStyleSheet.iconPlaceholderCircle}>
+
             <Image source={appointment?.petImage ? { uri: appointment.petImage } : require('../public/blackpaw.svg')} style={{ width: 35, height: 35, borderRadius: 17.5 }} />
+
           </View>
+
           <View style={{ flex: 1, marginLeft: 15 }}>
+
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+
               <Text style={MyStyleSheet.cardTitleText}>{appointment?.pet}</Text>
+
+
               <Text style={{ color: '#AAA', fontSize: 13 }}>{appointment?.petWeight} kg</Text>
+
+
             </View>
+
+
             <Text style={MyStyleSheet.cardSubText}>{appointment?.petDetails}</Text>
+
+
           </View>
         </View>
 
-        {/* 2. SERVICE CARD */}
         <View style={MyStyleSheet.summaryCard}>
+
           <View style={MyStyleSheet.iconPlaceholderSquare}><Image source={require('../public/medical_icon.svg')} style={{ width: 24, height: 24 }} /></View>
+
           <View><Text style={MyStyleSheet.cardTitleText}>Service</Text><Text style={MyStyleSheet.cardSubText}>{appointment?.service}</Text></View>
         </View>
 
-        {/* 3. VET CARD */}
+
         <View style={MyStyleSheet.summaryCard}>
+
           <View style={MyStyleSheet.iconPlaceholderSquare}><Image source={require('../public/vet.svg')} style={{ width: 24, height: 24 }} /></View>
+
           <View><Text style={MyStyleSheet.cardTitleText}>Veterinarian</Text><Text style={MyStyleSheet.cardSubText}>{appointment?.vet}</Text></View>
         </View>
 
-        {/* 4. NOTE SECTION */}
+
         <Text style={MyStyleSheet.noteLabel}>Note</Text>
+
         <View style={MyStyleSheet.noteDisplayBox}>
+          
           <Text style={MyStyleSheet.noteTextSmall}>{appointment?.note || "No additional notes provided."}</Text>
         </View>
 
