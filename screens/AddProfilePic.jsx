@@ -55,7 +55,7 @@ export default function AddProfilePic() {
 
         <TouchableOpacity 
           style={MyStyleSheet.profilepic_skipBtn}
-          onPress={() => opx.navigate('dashboard')}
+          onPress={() => opx.navigate('details')}
         >
           <Text style={MyStyleSheet.profilepic_skipText}>Skip</Text>
         </TouchableOpacity>
