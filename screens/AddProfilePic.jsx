@@ -37,7 +37,6 @@ export default function AddProfilePic() {
           Add a photo to personalize your account. This will be visible to the veterinary staff during your appointments.
         </Text>
 
-        {/* Profile Placeholder Circle */}
         <View style={MyStyleSheet.profilepic_circle}>
            <View style={[MyStyleSheet.profilepic_icon, { overflow: 'hidden', justifyContent: 'center', alignItems: 'center' }]}>
               {selectedImage ? (
