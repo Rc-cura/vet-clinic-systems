@@ -37,7 +37,6 @@ export default function AddProfilePic() {
           Add a photo to personalize your account. This will be visible to the veterinary staff during your appointments.
         </Text>
 
-        {/* Profile Placeholder Circle */}
         <View style={MyStyleSheet.profilepic_circle}>
            <View style={[MyStyleSheet.profilepic_icon, { overflow: 'hidden', justifyContent: 'center', alignItems: 'center' }]}>
               {selectedImage ? (
@@ -55,7 +54,7 @@ export default function AddProfilePic() {
 
         <TouchableOpacity 
           style={MyStyleSheet.profilepic_skipBtn}
-          onPress={() => opx.navigate('dashboard')}
+          onPress={() => opx.navigate('details')}
         >
           <Text style={MyStyleSheet.profilepic_skipText}>Skip</Text>
         </TouchableOpacity>
