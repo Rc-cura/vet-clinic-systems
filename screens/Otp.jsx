@@ -14,7 +14,7 @@ export default function Otp() {
             <Text style={MyStyleSheet.clinicName}>ST JOSEPH</Text>
             <Text style={MyStyleSheet.clinicSub}>VETERINARY CLINIC</Text>
           </View>
-          <View style={MyStyleSheet.logoCircleSmall}><Image source={require('../public/logo.svg')} style={{width: 70, height: 70}} /></View>
+          <View style={MyStyleSheet.logoCircleSmall}><Image source={require('../public/logo.png')} style={{width: 70, height: 70}} /></View>
         </View>
 
 

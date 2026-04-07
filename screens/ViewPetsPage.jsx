@@ -26,7 +26,7 @@ export default function ViewPetsPage() {
              {pet?.pimage ? (
                 <Image source={{ uri: pet.pimage }}  style={{ width: '100%', height: '100%', borderRadius: 50 }} />
              ) : (
-                <Image source={require('../public/bluepaw.svg')}  style={{ width: 50, height: 50 }}  resizeMode="contain"  />
+                <Image source={require('../public/bluepaw.png')}  style={{ width: 50, height: 50 }}  resizeMode="contain"  />
              )}
           </View>
         </View>

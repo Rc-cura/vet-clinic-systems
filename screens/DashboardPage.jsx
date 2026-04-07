@@ -26,7 +26,7 @@
             </TouchableOpacity>
 
             <TouchableOpacity style={MyStyleSheet.notifBtn} onPress={() => { opx.navigate('notification') }}>
-              <Image source={require('../public/Doorbell.svg')} style={{ width: 22, height: 22 }} />
+              <Image source={require('../public/Doorbell.png')} style={{ width: 22, height: 22 }} />
             </TouchableOpacity>
           </View>
         </View>
@@ -61,7 +61,7 @@
 
                   {displayPet?.pimage ? ( <Image source={{ uri: displayPet.pimage }} style={{ width: '100%', height: '100%', borderRadius: 40 }} />
                   ) : (
-                    <Image source={require('../public/bluepaw.svg')}  style={{ width: 30, height: 30 }}  resizeMode="contain"/> )}
+                    <Image source={require('../public/bluepaw.png')}  style={{ width: 30, height: 30 }}  resizeMode="contain"/> )}
                 </View>
               </TouchableOpacity>
 
@@ -78,7 +78,7 @@
 
             <View style={MyStyleSheet.bookIconContainer}>
 
-                <Image source={require('../public/bookapp.svg')} style={{ width: 20, height: 20 }} />
+                <Image source={require('../public/bookapp.png')} style={{ width: 20, height: 20 }} />
 
             </View>
 
@@ -113,7 +113,7 @@
 
             <View style={MyStyleSheet.activityItem}>
 
-              <Image source={require('../public/medical_icon.svg')} style={{ width: 18, height: 18, marginRight: 8 }} />
+              <Image source={require('../public/medical_icon.png')} style={{ width: 18, height: 18, marginRight: 8 }} />
 
               <Text style={MyStyleSheet.activityText}>January 12 - Vet Consultation</Text>
             </View>
@@ -121,7 +121,7 @@
         </ScrollView>
 
         <TouchableOpacity style={MyStyleSheet.fab} onPress={()=>{opx.navigate('chat')}}>
-            <Image source={require('../public/message.svg')} style={{ width: 24, height: 24, tintColor: '#fff' }} />
+            <Image source={require('../public/message.png')} style={{ width: 24, height: 24, tintColor: '#fff' }} />
         </TouchableOpacity>
 
         <View style={MyStyleSheet.bottomNav}>
@@ -130,7 +130,7 @@
 
             <TouchableOpacity style={MyStyleSheet.navItemActive}>
 
-              <Image source={require('../public/HomePage.svg')} style={{ width: 22, height: 22 }} />
+              <Image source={require('../public/HomePage.png')} style={{ width: 22, height: 22 }} />
 
             </TouchableOpacity>
 
@@ -138,7 +138,7 @@
           
           <TouchableOpacity style={MyStyleSheet.navItem} onPress={()=>{opx.navigate('pet')}}>
 
-            <Image source={require('../public/Pets.svg')} style={{ width: 22, height: 22 }} />
+            <Image source={require('../public/Pets.png')} style={{ width: 22, height: 22 }} />
 
             <Text style={MyStyleSheet.navLabel}>Pets</Text>
 
@@ -146,7 +146,7 @@
 
           <TouchableOpacity style={MyStyleSheet.navItem} onPress={()=>{opx.navigate('appointment')}}>
 
-            <Image source={require('../public/Calendar.svg')} style={{ width: 22, height: 22 }} />
+            <Image source={require('../public/Calendar.png')} style={{ width: 22, height: 22 }} />
 
             <Text style={MyStyleSheet.navLabel}>Appointment</Text>
 
@@ -154,7 +154,7 @@
 
           <TouchableOpacity style={MyStyleSheet.navItem} onPress={()=>{opx.navigate('billing')}}>
 
-            <Image source={require('../public/Bill.svg')} style={{ width: 22, height: 22 }} />
+            <Image source={require('../public/Bill.png')} style={{ width: 22, height: 22 }} />
 
             <Text style={MyStyleSheet.navLabel}>Invoice</Text>
 

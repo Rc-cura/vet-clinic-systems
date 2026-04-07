@@ -16,13 +16,13 @@ export default function BookAppointmentService() {
 
 
   const services = [
-    { id: '1', name: 'Consultation Services', icon: require('../public/medical_icon.svg') },
-    { id: '2', name: 'Vaccination Services', icon: require('../public/vaccination.svg') },
-    { id: '3', name: 'Grooming & Wellness', icon: require('../public/grooming.svg') },
+    { id: '1', name: 'Consultation Services', icon: require('../public/medical_icon.png') },
+    { id: '2', name: 'Vaccination Services', icon: require('../public/vaccination.png') },
+    { id: '3', name: 'Grooming & Wellness', icon: require('../public/grooming.png') },
   ]
 
   const toggleService = (id) => {
-
+    
     if (selectedServices.includes(id)) {
 
       setSelectedServices(selectedServices.filter(serviceId => serviceId !== id))

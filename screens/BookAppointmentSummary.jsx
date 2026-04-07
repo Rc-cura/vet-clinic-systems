@@ -78,7 +78,7 @@ export default function BookAppointmentSummary() {
 
           <View style={[MyStyleSheet.iconPlaceholderCircle, { justifyContent: 'center', alignItems: 'center' }]}>
 
-            <Image source={petImage ? { uri: petImage } : require('../public/blackpaw.svg')} style={{ width: 35, height: 35, borderRadius: 17 }} resizeMode="contain" />
+            <Image source={petImage ? { uri: petImage } : require('../public/blackpaw.png')} style={{ width: 35, height: 35, borderRadius: 17 }} resizeMode="contain" />
           </View>
           <View style={{ flex: 1, marginLeft: 15 }}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -97,7 +97,7 @@ export default function BookAppointmentSummary() {
 
         <View style={MyStyleSheet.summaryCard}>
 
-          <View style={MyStyleSheet.iconPlaceholderSquare}><Image source={require('../public/medical_icon.svg')} style={{ width: 24, height: 24 }} /></View>
+          <View style={MyStyleSheet.iconPlaceholderSquare}><Image source={require('../public/medical_icon.png')} style={{ width: 24, height: 24 }} /></View>
 
           <View><Text style={MyStyleSheet.cardTitleText}>Service</Text><Text style={MyStyleSheet.cardSubText}>{service}</Text></View>
         </View>
@@ -105,13 +105,13 @@ export default function BookAppointmentSummary() {
 
         <View style={MyStyleSheet.summaryCard}>
 
-          <View style={MyStyleSheet.iconPlaceholderSquare}><Image source={require('../public/vet.svg')} style={{ width: 24, height: 24 }} /></View>
+          <View style={MyStyleSheet.iconPlaceholderSquare}><Image source={require('../public/vet.png')} style={{ width: 24, height: 24 }} /></View>
           <View><Text style={MyStyleSheet.cardTitleText}>Veterinarian</Text><Text style={MyStyleSheet.cardSubText}>{vet}</Text></View>
         </View>
 
         <View style={MyStyleSheet.summaryCard}>
 
-          <View style={MyStyleSheet.iconPlaceholderSquare}><Image source={require('../public/Calendar.svg')} style={{ width: 24, height: 24 }} /></View>
+          <View style={MyStyleSheet.iconPlaceholderSquare}><Image source={require('../public/Calendar.png')} style={{ width: 24, height: 24 }} /></View>
           <View><Text style={MyStyleSheet.cardTitleText}>Date & Time</Text><Text style={MyStyleSheet.cardSubText}>{selectedDate} | {formattedTime}</Text></View>
         </View>
 

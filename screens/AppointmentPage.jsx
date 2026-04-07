@@ -61,7 +61,7 @@ export default function AppointmentPage() {
           </Text>
           
           <View style={MyStyleSheet.apptServiceRow}>
-            <Image source={require('../public/medical_icon.svg')} style={{ width: 18, height: 18 }} />
+            <Image source={require('../public/medical_icon.png')} style={{ width: 18, height: 18 }} />
             <Text style={MyStyleSheet.apptServiceName}>{item.service}</Text>
           </View>
           
@@ -82,7 +82,7 @@ export default function AppointmentPage() {
              {item.petImage ? (
                 <Image source={{ uri: item.petImage }} style={{ width: 40, height: 40, borderRadius: 20 }} />
              ) : (
-                <Image source={require('../public/bluepaw.svg')} style={{ width: 40, height: 40, borderRadius: 20 }} resizeMode="contain"/>
+                <Image source={require('../public/bluepaw.png')} style={{ width: 40, height: 40, borderRadius: 20 }} resizeMode="contain"/>
              )}
           </View>
           <Text style={MyStyleSheet.apptPetNameText}>{item.pet}</Text>
@@ -104,7 +104,7 @@ export default function AppointmentPage() {
             </TouchableOpacity>
             
             <TouchableOpacity onPress={() => { opx.navigate('notification') }}>
-                <Image source={require('../public/Doorbell.svg')} style={{ width: 22, height: 22, marginLeft: 10 }} />
+                <Image source={require('../public/Doorbell.png')} style={{ width: 22, height: 22, marginLeft: 10 }} />
             </TouchableOpacity>
           </View>
         </View>
@@ -128,7 +128,7 @@ export default function AppointmentPage() {
 
         ListEmptyComponent={() => (
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 50 }}>
-            <Image source={require('../public/appointmentcalendar.svg')} style={{ width: 250, height: 250 }} resizeMode="contain" />
+            <Image source={require('../public/appointmentcalendar.png')} style={{ width: 250, height: 250 }} resizeMode="contain" />
             <Text style={{  fontSize: 16, color: '#333', marginTop: 20,  textAlign: 'center' }}>
 
               You currently have no {activeTab === 'See All' ? '' : activeTab.toLowerCase()} appointments.
@@ -154,7 +154,7 @@ export default function AppointmentPage() {
 
         <TouchableOpacity style={MyStyleSheet.navItem} onPress={() => opx.navigate('dashboard')}>
 
-          <Image source={require('../public/HomePage.svg')} style={{ width: 22, height: 22 }} />
+          <Image source={require('../public/HomePage.png')} style={{ width: 22, height: 22 }} />
 
           <Text style={MyStyleSheet.navLabel}>Home</Text>
 
@@ -162,7 +162,7 @@ export default function AppointmentPage() {
         
         <TouchableOpacity style={MyStyleSheet.navItem} onPress={() => opx.navigate('pet')}>
 
-          <Image source={require('../public/Pets.svg')} style={{ width: 22, height: 22 }} />
+          <Image source={require('../public/Pets.png')} style={{ width: 22, height: 22 }} />
 
           <Text style={MyStyleSheet.navLabel}>Pets</Text>
 
@@ -172,7 +172,7 @@ export default function AppointmentPage() {
 
            <TouchableOpacity style={MyStyleSheet.navItemActive}>
 
-              <Image source={require('../public/Calendar.svg')} style={{ width: 22, height: 22 }} />
+              <Image source={require('../public/Calendar.png')} style={{ width: 22, height: 22 }} />
 
            </TouchableOpacity>
 
@@ -180,7 +180,7 @@ export default function AppointmentPage() {
         
         <TouchableOpacity style={MyStyleSheet.navItem} onPress={() => opx.navigate('billing')}>
 
-          <Image source={require('../public/Bill.svg')} style={{ width: 22, height: 22 }} />
+          <Image source={require('../public/Bill.png')} style={{ width: 22, height: 22 }} />
 
           <Text style={MyStyleSheet.navLabel}>Invoice</Text>
           

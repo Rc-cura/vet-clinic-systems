@@ -11,7 +11,7 @@ export default function Notification() {
     { 
       id: '1', 
       type: 'Appointment', 
-      icon: require('../public/Calendar.svg'), 
+      icon: require('../public/Calendar.png'), 
       time: '1h ago', 
       text: "Your visit for Luna's annual checkup is confirmed for Feb 2nd at 10:00 AM.", 
       unread: true 
@@ -19,7 +19,7 @@ export default function Notification() {
     { 
       id: '2', 
       type: 'Billing', 
-      icon: require('../public/Bill.svg'), 
+      icon: require('../public/Bill.png'), 
       time: '10 mins ago', 
       text: "Your receipt for today's visit is ready for download. View it in your Billing tab.", 
       unread: true 
@@ -27,7 +27,7 @@ export default function Notification() {
     { 
       id: '3', 
       type: 'Appointment', 
-      icon: require('../public/Calendar.svg'), 
+      icon: require('../public/Calendar.png'), 
       time: '3h ago', 
       text: "Bill's grooming session starts in 2 hours.", 
       unread: false 

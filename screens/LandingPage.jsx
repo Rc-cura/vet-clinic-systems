@@ -13,13 +13,13 @@ export default function LandingPage() {
 
         <View style={MyStyleSheet.logoCircle}>
 
-          <Image source={require('../public/logo.svg')} style={MyStyleSheet.logoIcon} />
+          <Image source={require('../public/logo.png')} style={MyStyleSheet.logoIcon} />
           
         </View>
       </View>
 
       <View style={MyStyleSheet.content}>
-        <Image source={require('../public/landing.svg')} style={{width:300, height:300, marginBottom:20}}  />
+        <Image source={require('../public/landing.png')} style={{width:300, height:300, marginBottom:20}}  />
         <Text style={MyStyleSheet.title}>Welcome to the Family!</Text>
         <Text style={MyStyleSheet.subtitle}>Your Pet's Health in Your Pocket</Text>
         <View style={MyStyleSheet.pagination}>
