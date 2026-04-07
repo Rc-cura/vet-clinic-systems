@@ -64,11 +64,11 @@ export default function EditPetsPage() {
              {pet?.pimage ? (
                 <Image  source={{ uri: pet.pimage }}  style={{ width: '100%', height: '100%', borderRadius: 50 }} />
              ) : (
-                <Image source={require('../public/blackpaw.svg')}style={{ width: 80, height: 80 }} resizeMode="contain"/>
+                <Image source={require('../public/blackpaw.png')}style={{ width: 80, height: 80 }} resizeMode="contain"/>
              )}
           </View>
           <TouchableOpacity style={MyStyleSheet.cameraIconOverlay}>
-            <Image source={require('../public/camera.svg')} style={{ width: 20, height: 20 }} resizeMode='contain'/>
+            <Image source={require('../public/camera.png')} style={{ width: 20, height: 20 }} resizeMode='contain'/>
           </TouchableOpacity>
         </View>
 

@@ -72,7 +72,7 @@ export default function BillingPage() {
 
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
 
-                <Image source={require('../public/view_eye.svg')} style={{ width: 16, height: 16, marginRight: 5 }} />
+                <Image source={require('../public/view_eye.png')} style={{ width: 16, height: 16, marginRight: 5 }} />
 
                 <Text style={MyStyleSheet.viewBtnText}>View Details</Text>
 
@@ -84,7 +84,7 @@ export default function BillingPage() {
 
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
 
-                <Image source={require('../public/download.svg')} style={{ width: 16, height: 16, marginRight: 5 }} />
+                <Image source={require('../public/download.png')} style={{ width: 16, height: 16, marginRight: 5 }} />
 
                 <Text style={MyStyleSheet.downloadBtnText}>Download</Text>
 
@@ -117,7 +117,7 @@ export default function BillingPage() {
 
           <TouchableOpacity onPress={() => opx.navigate('notification')}>
 
-            <Image source={require('../public/Doorbell.svg')} style={{ width: 24, height: 24 }} />
+            <Image source={require('../public/Doorbell.png')} style={{ width: 24, height: 24 }} />
 
           </TouchableOpacity>
 
@@ -220,7 +220,7 @@ export default function BillingPage() {
 
         <TouchableOpacity style={MyStyleSheet.navItem} onPress={() => opx.navigate('dashboard')}>
 
-          <Image source={require('../public/HomePage.svg')} style={{ width: 22, height: 22 }} />
+          <Image source={require('../public/HomePage.png')} style={{ width: 22, height: 22 }} />
 
           <Text style={MyStyleSheet.navLabel}>Home</Text>
 
@@ -228,7 +228,7 @@ export default function BillingPage() {
 
         <TouchableOpacity style={MyStyleSheet.navItem} onPress={() => opx.navigate('pet')}>
 
-          <Image source={require('../public/Pets.svg')} style={{ width: 22, height: 22 }} />
+          <Image source={require('../public/Pets.png')} style={{ width: 22, height: 22 }} />
 
           <Text style={MyStyleSheet.navLabel}>Pets</Text>
 
@@ -236,7 +236,7 @@ export default function BillingPage() {
 
         <TouchableOpacity style={MyStyleSheet.navItem} onPress={() => opx.navigate('appointment')}>
 
-          <Image source={require('../public/Calendar.svg')} style={{ width: 22, height: 22 }} />
+          <Image source={require('../public/Calendar.png')} style={{ width: 22, height: 22 }} />
 
           <Text style={MyStyleSheet.navLabel}>Appoinment</Text>
 
@@ -245,7 +245,7 @@ export default function BillingPage() {
 
            <TouchableOpacity style={MyStyleSheet.navItemActive}>
 
-              <Image source={require('../public/Bill.svg')} style={{ width: 22, height: 22 }} />
+              <Image source={require('../public/Bill.png')} style={{ width: 22, height: 22 }} />
 
            </TouchableOpacity>
 

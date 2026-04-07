@@ -38,7 +38,7 @@ export default function AppointmentStatusCompleted() {
         <View style={MyStyleSheet.summaryCard}>
 
           <View style={[MyStyleSheet.iconPlaceholderCircle, { justifyContent: 'center', alignItems: 'center' }]}>
-            <Image source={require('../public/blackpaw.svg')} style={{ width: 35, height: 35 }} resizeMode="contain" />
+            <Image source={require('../public/blackpaw.png')} style={{ width: 35, height: 35 }} resizeMode="contain" />
           </View>
 
 
@@ -55,7 +55,7 @@ export default function AppointmentStatusCompleted() {
 
           <View style={[MyStyleSheet.iconPlaceholderSquare, { justifyContent: 'center', alignItems: 'center' }]}>
 
-             <Image source={require('../public/medical_icon.svg')} style={{ width: 24, height: 24 }} />
+             <Image source={require('../public/medical_icon.png')} style={{ width: 24, height: 24 }} />
 
           </View>
 
@@ -86,7 +86,7 @@ export default function AppointmentStatusCompleted() {
 
           <View style={[MyStyleSheet.iconPlaceholderSquare, { justifyContent: 'center', alignItems: 'center' }]}>
 
-             <Image source={require('../public/vet.svg')} style={{ width: 24, height: 24 }} resizeMode="contain" />
+             <Image source={require('../public/vet.png')} style={{ width: 24, height: 24 }} resizeMode="contain" />
           </View>
           <View>
             <Text style={MyStyleSheet.cardTitleText}>Veterinarian</Text>

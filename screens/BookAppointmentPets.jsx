@@ -22,7 +22,7 @@ export default function BookAppointmentPets() {
 
           {item.pimage ? (<Image source={{ uri: item.pimage }} style={{ width: '100%', height: '100%', borderRadius: 10 }} />
           ) : (
-            <Image source={require('../public/bluepaw.svg')} style={{ width: 40, height: 40 }} resizeMode="contain" />
+            <Image source={require('../public/bluepaw.png')} style={{ width: 40, height: 40 }} resizeMode="contain" />
           )}
 
         </View>

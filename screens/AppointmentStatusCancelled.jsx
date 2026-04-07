@@ -49,7 +49,7 @@ export default function AppointmentStatusCancelled() {
 
           <View style={MyStyleSheet.iconPlaceholderCircle}>
 
-            <Image source={appointment?.petImage ? { uri: appointment.petImage } : require('../public/blackpaw.svg')} style={{ width: 35, height: 35, borderRadius: 17.5 }} />
+            <Image source={appointment?.petImage ? { uri: appointment.petImage } : require('../public/blackpaw.png')} style={{ width: 35, height: 35, borderRadius: 17.5 }} />
 
           </View>
 
@@ -74,7 +74,7 @@ export default function AppointmentStatusCancelled() {
 
         <View style={MyStyleSheet.summaryCard}>
 
-          <View style={MyStyleSheet.iconPlaceholderSquare}><Image source={require('../public/medical_icon.svg')} style={{ width: 24, height: 24 }} /></View>
+          <View style={MyStyleSheet.iconPlaceholderSquare}><Image source={require('../public/medical_icon.png')} style={{ width: 24, height: 24 }} /></View>
 
           <View><Text style={MyStyleSheet.cardTitleText}>Service</Text><Text style={MyStyleSheet.cardSubText}>{appointment?.service}</Text></View>
         </View>
@@ -82,7 +82,7 @@ export default function AppointmentStatusCancelled() {
 
         <View style={MyStyleSheet.summaryCard}>
 
-          <View style={MyStyleSheet.iconPlaceholderSquare}><Image source={require('../public/vet.svg')} style={{ width: 24, height: 24 }} /></View>
+          <View style={MyStyleSheet.iconPlaceholderSquare}><Image source={require('../public/vet.png')} style={{ width: 24, height: 24 }} /></View>
 
           <View><Text style={MyStyleSheet.cardTitleText}>Veterinarian</Text><Text style={MyStyleSheet.cardSubText}>{appointment?.vet}</Text></View>
         </View>
