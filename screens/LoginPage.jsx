@@ -48,7 +48,7 @@ export default function LoginPage() {
               <Text style={MyStyleSheet.clinicSub}>VETERINARY CLINIC</Text>
             </View>
             <View style={MyStyleSheet.logoCircleSmall}>
-              <Image source={require('../public/logo.svg')} style={{ width: 70, height: 70 }} />
+              <Image source={require('../public/logo.png')} style={{ width: 70, height: 70 }} />
             </View>
           </View>
 

@@ -109,7 +109,7 @@ export default function RegisterPage() {
               <Text style={MyStyleSheet.clinicSub}>VETERINARY CLINIC</Text>
             </View>
             <View style={MyStyleSheet.logoCircleSmall}>
-              <Image source={require('../public/logo.svg')} style={{ width: 60, height: 60 }} />
+              <Image source={require('../public/logo.png')} style={{ width: 60, height: 60 }} />
             </View>
           </View>
 

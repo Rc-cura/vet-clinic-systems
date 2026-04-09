@@ -42,7 +42,7 @@ export default function AddPetsCont() {
             {petData?.pimage ? (
     <Image source={{ uri: petData.pimage }}  style={{ width: '100%', height: '100%', borderRadius: 50 }} />
   ) : (
-    <Image source={require('../public/bluepaw.svg')} style={{ width: 45, height: 45 }}  resizeMode="contain"/>
+    <Image source={require('../public/bluepaw.png')} style={{ width: 45, height: 45 }}  resizeMode="contain"/>
   )}
           </View>
         </View>

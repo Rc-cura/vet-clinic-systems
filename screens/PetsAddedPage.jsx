@@ -15,7 +15,7 @@ export default function PetsAddedPage() {
           {item.pimage ? (
             <Image source={{ uri: item.pimage }} style={{ width: '100%', height: '100%', borderRadius: 25 }} />
           ) : (
-            <Image source={require('../public/blackpaw.svg')} style={{ width: 40, height: 40 }} resizeMode="contain" />
+            <Image source={require('../public/blackpaw.png')} style={{ width: 40, height: 40 }} resizeMode="contain" />
           )}
         </View>
 
@@ -35,13 +35,13 @@ export default function PetsAddedPage() {
 
         <TouchableOpacity  style={MyStyleSheet.petActionBtn} onPress={() => opx.navigate('service', {  petName: item.pname,  petImage: item.pimage,
             petDetails: `${item.species} | ${item.breed}`  })} >
-          <Image source={require('../public/addcalendar.svg')} style={{ width: 20, height: 20, marginRight: 5 }} />
+          <Image source={require('../public/addcalendar.png')} style={{ width: 20, height: 20, marginRight: 5 }} />
           <Text style={MyStyleSheet.petActionLabel}>Add Appointment</Text>
         </TouchableOpacity>
         
         <TouchableOpacity  style={MyStyleSheet.petActionBtn}  onPress={() => opx.navigate('viewpets', { pet: item })}>
 
-          <Image source={require('../public/bluepaw.svg')} style={{ width: 20, height: 20, marginRight: 5 }} />
+          <Image source={require('../public/bluepaw.png')} style={{ width: 20, height: 20, marginRight: 5 }} />
 
           <Text style={MyStyleSheet.petActionLabel}>View Profile</Text>
 
@@ -71,7 +71,7 @@ export default function PetsAddedPage() {
           {Pets.map((pet, index) => (
             <View key={index} style={{ alignItems: 'center', marginRight: 15 }}>
               <View style={MyStyleSheet.petSelectCircle}>
-                 <Image source={pet.pimage ? {uri: pet.pimage} : require('../public/bluepaw.svg')} style={pet.pimage ? { width: 30, height: 30, borderRadius: 15 } : { width: 18, height: 18 }} />
+                 <Image source={pet.pimage ? {uri: pet.pimage} : require('../public/bluepaw.png')} style={pet.pimage ? { width: 30, height: 30, borderRadius: 15 } : { width: 18, height: 18 }} />
               </View>
               <Text style={MyStyleSheet.petSelectLabel}>{pet.pname}</Text>
 
@@ -100,20 +100,20 @@ export default function PetsAddedPage() {
       
       <View style={MyStyleSheet.bottomNav}>
         <TouchableOpacity style={MyStyleSheet.navItem} onPress={() => opx.navigate('dashboard')}>
-          <Image source={require('../public/HomePage.svg')} style={{ width: 22, height: 22 }} />
+          <Image source={require('../public/HomePage.png')} style={{ width: 22, height: 22 }} />
           <Text style={MyStyleSheet.navLabel}>Home</Text>
         </TouchableOpacity>
         <View style={MyStyleSheet.navItemContainer}>
            <TouchableOpacity style={MyStyleSheet.navItemActive}>
-              <Image source={require('../public/Pets.svg')} style={{ width: 22, height: 22 }} />
+              <Image source={require('../public/Pets.png')} style={{ width: 22, height: 22 }} />
            </TouchableOpacity>
         </View>
         <TouchableOpacity style={MyStyleSheet.navItem} onPress={() => opx.navigate('appointment')}>
-          <Image source={require('../public/Calendar.svg')} style={{ width: 22, height: 22 }} />
+          <Image source={require('../public/Calendar.png')} style={{ width: 22, height: 22 }} />
           <Text style={MyStyleSheet.navLabel}>Appt</Text>
         </TouchableOpacity>
         <TouchableOpacity style={MyStyleSheet.navItem} onPress={() => opx.navigate('billing')}>
-          <Image source={require('../public/Bill.svg')} style={{ width: 22, height: 22 }} />
+          <Image source={require('../public/Bill.png')} style={{ width: 22, height: 22 }} />
           <Text style={MyStyleSheet.navLabel}>Invoice</Text>
         </TouchableOpacity>
       </View>
