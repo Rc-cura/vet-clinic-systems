@@ -123,8 +123,8 @@ const { data, error } = await supabase.auth.signUp({
         setMsg("");
         
         // 5. Navigate to the next screen on success
-        Alert.alert("Success", "Account created successfully!");
-        opx.replace("otp"); 
+        Alert.alert("Success", "Account created successfully! Check your email for the OTP.");
+        opx.navigate("otp", { email: email });
       }
 
     } catch (error) {
