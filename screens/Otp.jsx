@@ -32,7 +32,7 @@ export default function Otp() {
 
   // 5. The Verification Function
   const handleVerify = async () => {
-    const token = otp.join(''); // Combine the 6 boxes into one string (e.g., "123456")
+    const token = otp.join(''); 
 
     if (token.length < 6) {
       Alert.alert("Error", "Please enter the full 6-digit code.");
@@ -51,14 +51,14 @@ export default function Otp() {
       const { data, error } = await supabase.auth.verifyOtp({
         email: email,
         token: token,
-        type: 'signup', // 'signup' because they are verifying a new account
+        type: 'signup', 
       });
 
       if (error) throw error;
 
       if (data.session || data.user) {
         Alert.alert("Success", "Account verified successfully!");
-        opx.replace('login'); // Send them to login
+        opx.replace('login'); 
       }
     } catch (error) {
       Alert.alert("Verification Failed", error.message);
@@ -82,36 +82,29 @@ export default function Otp() {
   };
 
   return (
-    <SafeAreaView style={MyStyleSheet.container}>
-
-        <View style={MyStyleSheet.regHeader}>
-          <View>
-            <Text style={MyStyleSheet.clinicName}>ST JOSEPH</Text>
-            <Text style={MyStyleSheet.clinicSub}>VETERINARY CLINIC</Text>
-          </View>
-          <View style={MyStyleSheet.logoCircleSmall}>
-            <Image source={require('../public/logo.png')} style={{width: 70, height: 70}} />
-          </View>
+    <SafeAreaView style={MyStyleSheet.landingMainContainer}>
+        
+        {/* Header Area with Logo */}
+        <View style={MyStyleSheet.landingHeaderArea}>
+          <Image source={require('../public/logo.png')} style={{width: 160, height: 160}} resizeMode="contain" />
         </View>
 
-        <View style={MyStyleSheet.formCard}>
-
-          <TouchableOpacity style={{ alignSelf: 'flex-end' }} onPress={() => opx.goBack()}>
-            <Text style={{ fontSize: 20, color: '#666' }}>✕</Text>
-          </TouchableOpacity>
-
-          <Text style={[MyStyleSheet.cardTitle, { alignSelf: 'flex-start' }]}>OTP Verification</Text>
-          <Text style={MyStyleSheet.otpInstruction}>
-            Please enter the OTP sent to {email || "your registered email"} to complete your verification.
+        {/* White Card Section */}
+        <View style={[MyStyleSheet.landingBottomCard, { flex: 2.5 }]}>
+          
+          <Text style={[MyStyleSheet.landingWelcomeText, { fontSize: 40, marginBottom: 15 }]}>OTP Verification</Text>
+          
+          <Text style={{ color: '#AAA', fontSize: 14, lineHeight: 20, marginBottom: 40 }}>
+            Please enter the OTP sent to your registered email to complete your verification. <Text style={{ color: '#AAA', fontWeight: 'bold' }}>{email}</Text>
           </Text>
 
           {/* 7. The 6 OTP Input Boxes */}
-          <View style={MyStyleSheet.otpRow}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 }}>
             {otp.map((digit, i) => (
               <TextInput 
                 key={i} 
-                ref={(el) => (inputRefs.current[i] = el)} // Attach the ref for auto-focus
-                style={MyStyleSheet.otpInput} 
+                ref={(el) => (inputRefs.current[i] = el)} 
+                style={MyStyleSheet.otpStyledInput} 
                 keyboardType="number-pad" 
                 maxLength={1} 
                 value={digit}
@@ -120,26 +113,31 @@ export default function Otp() {
             ))}
           </View>
 
-          <View style={MyStyleSheet.timerRow}>
-            <Text style={MyStyleSheet.timerText}>Remaining Time: 00:00s</Text>
-            <TouchableOpacity onPress={handleResend} disabled={loading}>
-              <Text style={MyStyleSheet.resendText}>Didn't get the code? <Text style={{fontWeight: 'bold'}}>Resend</Text></Text>
-            </TouchableOpacity>
-          </View>
-
-          <TouchableOpacity style={MyStyleSheet.cancelBtn} onPress={() => opx.goBack()} disabled={loading}>
-            <Text style={MyStyleSheet.cancelBtnText}>Cancel</Text>
-          </TouchableOpacity>
+          <Text style={{ textAlign: 'center', color: '#CCC', marginBottom: 60 }}>Remaining Time: 00:00s</Text>
 
           <TouchableOpacity 
-            style={[MyStyleSheet.regButton, { opacity: loading ? 0.7 : 1 }]} 
+            style={MyStyleSheet.landingSignUpBtn} 
             onPress={handleVerify}
             disabled={loading}
           >
-            {loading ? <ActivityIndicator color="#FFF" /> : <Text style={MyStyleSheet.buttonText}>Verify</Text>}
+            {loading ? <ActivityIndicator color="#FFF" /> : <Text style={MyStyleSheet.landingSignUpText}>Confirm</Text>}
           </TouchableOpacity>
-        </View>
 
+          <TouchableOpacity 
+            style={{ marginTop: 20, alignItems: 'center' }} 
+            onPress={() => opx.goBack()} 
+            disabled={loading}
+          >
+            <Text style={{ color: '#2E3A91', fontWeight: 'bold', fontSize: 18 }}>Cancel</Text>
+          </TouchableOpacity>
+
+          <View style={{ marginTop: 'auto', marginBottom: 20, alignItems: 'center' }}>
+             <TouchableOpacity onPress={handleResend} disabled={loading}>
+              <Text style={{ color: '#AAA' }}>Didn’t get the code? <Text style={{ color: '#2E3A91', fontWeight: 'bold' }}>Resend code</Text></Text>
+            </TouchableOpacity>
+          </View>
+
+        </View>
     </SafeAreaView>
   )
 }

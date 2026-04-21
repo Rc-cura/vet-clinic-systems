@@ -7,32 +7,45 @@ export default function LandingPage() {
   const opx = useNavigation()
 
   return (
-    <SafeAreaView style={MyStyleSheet.container}>
-
-      <View style={MyStyleSheet.header}>
-
-        <View style={MyStyleSheet.logoCircle}>
-
-          <Image source={require('../public/logo.png')} style={MyStyleSheet.logoIcon} />
-          
+    <SafeAreaView style={MyStyleSheet.landingMainContainer}>
+      
+      {/* 1. Header Area - Reduced Flex to pull card UP */}
+      <View style={MyStyleSheet.landingHeaderArea}>
+        <View style={MyStyleSheet.landingLogoContainer}>
+          <Image 
+            source={require('../public/logo.png')} 
+            style={MyStyleSheet.landingLogoImage} 
+            resizeMode="contain"
+          />
         </View>
       </View>
 
-      <View style={MyStyleSheet.content}>
-        <Image source={require('../public/landing.png')} style={{width:300, height:300, marginBottom:20}}  />
-        <Text style={MyStyleSheet.title}>Welcome to the Family!</Text>
-        <Text style={MyStyleSheet.subtitle}>Your Pet's Health in Your Pocket</Text>
-        <View style={MyStyleSheet.pagination}>
-          <View style={[MyStyleSheet.dot, MyStyleSheet.activeDot]} /><View style={MyStyleSheet.dot} /><View style={MyStyleSheet.dot} />
+      {/* 2. Bottom Card - Increased Flex to occupy more screen height */}
+      <View style={MyStyleSheet.landingBottomCard}>
+        
+        <View style={MyStyleSheet.landingTextSection}>
+          <Text style={MyStyleSheet.landingWelcomeText}>Welcome to</Text>
+          <Text style={MyStyleSheet.landingBrandText}>PawCare</Text>
+          <Text style={MyStyleSheet.landingSubText}>Your local partner in pet health.</Text>
         </View>
 
-      <View>
-        <TouchableOpacity style={MyStyleSheet.button} onPress={()=>opx.navigate('register')}><Text style={MyStyleSheet.buttonText}>Sign Up</Text></TouchableOpacity>
-        <TouchableOpacity style={MyStyleSheet.button} onPress={()=>opx.navigate('login')}><Text style={MyStyleSheet.buttonText}>Login</Text></TouchableOpacity>
-      </View>
+        <View style={MyStyleSheet.landingButtonSection}>
+          <TouchableOpacity 
+            style={MyStyleSheet.landingSignInBtn} 
+            onPress={() => opx.navigate('login')}
+          >
+            <Text style={MyStyleSheet.landingSignInText}>Sign In</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity 
+            style={MyStyleSheet.landingSignUpBtn} 
+            onPress={() => opx.navigate('register')}
+          >
+            <Text style={MyStyleSheet.landingSignUpText}>Sign Up</Text>
+          </TouchableOpacity>
+        </View>
 
       </View>
-
 
     </SafeAreaView>
   )

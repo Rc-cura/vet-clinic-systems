@@ -9,7 +9,7 @@ import { useUser } from '../context/UserContext';
 
 export default function Otplogin() {
   const opx = useNavigation();
-  const route = useRoute(); // We need this to catch the email from LoginPage
+  const route = useRoute(); 
   const { updateUser } = useUser(); 
   
   // 2. Get the email passed from the Login Page
@@ -66,7 +66,7 @@ export default function Otplogin() {
 
         if (profileError) throw profileError;
 
-        // 6. Save to global context and navigate to profilepic
+        // 6. Save to global context and navigate to dashboard
         updateUser(profileData); 
         Alert.alert("Success", "Login complete!");
         opx.replace('dashboard'); 
@@ -81,7 +81,7 @@ export default function Otplogin() {
   const handleResend = async () => {
     try {
       const { error } = await supabase.auth.resend({
-        type: 'magiclink', // Resend type for login
+        type: 'magiclink', 
         email: email,
       });
       if (error) throw error;
@@ -92,62 +92,75 @@ export default function Otplogin() {
   };
 
   return (
-    <SafeAreaView style={MyStyleSheet.container}>
+    <SafeAreaView style={MyStyleSheet.landingMainContainer}>
       
-        <View style={MyStyleSheet.regHeader}>
-          <View>
-            <Text style={MyStyleSheet.clinicName}>ST JOSEPH</Text>
-            <Text style={MyStyleSheet.clinicSub}>VETERINARY CLINIC</Text>
-          </View>
-          <View style={MyStyleSheet.logoCircleSmall}>
-            <Image source={require('../public/logo.png')} style={{width: 70, height: 70}}/>
-          </View>
+      {/* Light Blue Header with Logo */}
+      <View style={MyStyleSheet.landingHeaderArea}>
+        <Image 
+          source={require('../public/logo.png')} 
+          style={{ width: 160, height: 160 }} 
+          resizeMode="contain" 
+        />
+      </View>
+
+      {/* White Card Section */}
+      <View style={[MyStyleSheet.landingBottomCard, { flex: 2.5 }]}>
+        
+        <Text style={[MyStyleSheet.landingWelcomeText, { fontSize: 40, marginBottom: 15 }]}>OTP Verification</Text>
+        
+        <Text style={{ color: '#AAA', fontSize: 14, lineHeight: 20, marginBottom: 40 }}>
+          Please enter the verification code sent to <Text style={{ color: '#2E3A91', fontWeight: 'bold' }}>{email}</Text> to securely sign in to your account.
+        </Text>
+
+        {/* 6-Digit OTP Boxes */}
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 }}>
+          {otp.map((digit, i) => (
+            <TextInput 
+              key={i} 
+              ref={(el) => (inputRefs.current[i] = el)}
+              style={MyStyleSheet.otpStyledInput} 
+              keyboardType="number-pad" 
+              maxLength={1} 
+              value={digit}
+              onChangeText={(text) => handleChange(text, i)}
+            />
+          ))}
         </View>
 
-        <View style={MyStyleSheet.formCard}>
-          <TouchableOpacity style={{ alignSelf: 'flex-end' }} onPress={() => opx.goBack()} disabled={loading}>
-            <Text style={{ fontSize: 20, color: '#666' }}>✕</Text>
-          </TouchableOpacity>
+        <Text style={{ textAlign: 'center', color: '#CCC', marginBottom: 60 }}>Remaining Time: 00:00s</Text>
 
-          <Text style={[MyStyleSheet.cardTitle, { alignSelf: 'flex-start' }]}>OTP Verification</Text>
-          <Text style={MyStyleSheet.otpInstruction}>
-            Please enter the verification code sent to {email || "your email"} to securely sign in to your account.
-          </Text>
+        {/* Primary Confirm Button */}
+        <TouchableOpacity 
+          style={MyStyleSheet.landingSignUpBtn} 
+          onPress={handleVerify}
+          disabled={loading}
+        >
+          {loading ? (
+            <ActivityIndicator color="#FFF" />
+          ) : (
+            <Text style={MyStyleSheet.landingSignUpText}>Confirm</Text>
+          )}
+        </TouchableOpacity>
 
-          <View style={MyStyleSheet.otpRow}>
-            {otp.map((digit, i) => (
-              <TextInput 
-                key={i} 
-                ref={(el) => (inputRefs.current[i] = el)}
-                style={MyStyleSheet.otpInput} 
-                keyboardType="number-pad" 
-                maxLength={1} 
-                value={digit}
-                onChangeText={(text) => handleChange(text, i)}
-              />
-            ))}
-          </View>
+        {/* Cancel Text Button */}
+        <TouchableOpacity 
+          style={{ marginTop: 20, alignItems: 'center' }} 
+          onPress={() => opx.goBack()} 
+          disabled={loading}
+        >
+          <Text style={{ color: '#2E3A91', fontWeight: 'bold', fontSize: 18 }}>Cancel</Text>
+        </TouchableOpacity>
 
-          <View style={MyStyleSheet.timerRow}>
-            <Text style={MyStyleSheet.timerText}>Remaining Time: 00:00s</Text>
-            <TouchableOpacity onPress={handleResend} disabled={loading}>
-              <Text style={MyStyleSheet.resendText}>Didn't get the code? <Text style={{fontWeight: 'bold'}}>Resend</Text></Text>
-            </TouchableOpacity>
-          </View>
-
-          <TouchableOpacity style={MyStyleSheet.cancelBtn} onPress={() => opx.goBack()} disabled={loading}>
-            <Text style={MyStyleSheet.cancelBtnText}>Cancel</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity 
-            style={[MyStyleSheet.regButton, { opacity: loading ? 0.7 : 1 }]} 
-            onPress={handleVerify}
-            disabled={loading}
-          >
-            {loading ? <ActivityIndicator color="#FFF" /> : <Text style={MyStyleSheet.buttonText}>Verify</Text>}
+        {/* Bottom Resend Link */}
+        <View style={{ marginTop: 'auto', marginBottom: 20, alignItems: 'center' }}>
+           <TouchableOpacity onPress={handleResend} disabled={loading}>
+            <Text style={{ color: '#AAA' }}>
+              Didn’t get the code? <Text style={{ color: '#2E3A91', fontWeight: 'bold' }}>Resend code</Text>
+            </Text>
           </TouchableOpacity>
         </View>
 
+      </View>
     </SafeAreaView>
   )
 }

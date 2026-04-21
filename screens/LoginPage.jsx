@@ -8,8 +8,6 @@ import { supabase } from '../context/supabase';
 
 export default function LoginPage() {
   const opx = useNavigation();
-  
-  // We don't need useUser() here anymore because Otplogin.jsx handles it now!
   const [getLogin, setLogin] = useState({ email: "", password: "" });
   const [Msg, setMsg] = useState("");
   const [loading, setLoading] = useState(false);
@@ -23,121 +21,106 @@ export default function LoginPage() {
         setMsg("Please fill up all fields");
         return;
     }
-
     setLoading(true);
     setMsg("");
-
     try {
-      // 1. Verify the Password is correct first
       const { error: authError } = await supabase.auth.signInWithPassword({
         email: getLogin.email,
         password: getLogin.password,
       });
-
       if (authError) throw authError;
-
-      // 2. Clear the immediate session so Supabase allows an OTP to be sent
       await supabase.auth.signOut();
-
-      // 3. THIS WAS MISSING: Actually tell Supabase to send the OTP email!
       const { error: otpError } = await supabase.auth.signInWithOtp({
         email: getLogin.email,
-        options: {
-          shouldCreateUser: false, // Don't create a new account by accident
-        }
+        options: { shouldCreateUser: false }
       });
-
       if (otpError) throw otpError;
-
       Alert.alert("Password Correct!", `An OTP has been sent to ${getLogin.email}`);
-        
-      // 4. Navigate to the OTP screen to finish logging in
       opx.navigate('otplogin', { email: getLogin.email }); 
-
     } catch (error) {
       setMsg(error.message);
-      console.error("Login Error:", error.message);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#E3F2FD' }}>
+    <SafeAreaView style={MyStyleSheet.landingMainContainer}>
       <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1 }}>
-        <View style={{ position: 'absolute', top: -30, right: -30, width: 140, height: 140, borderRadius: 70, backgroundColor: '#FFC1CC', opacity: 0.3 }} />
-        <View style={{ position: 'absolute', bottom: 100, left: -40, width: 120, height: 120, borderRadius: 60, backgroundColor: '#4E5DB2', opacity: 0.1 }} />
+        
+        {/* 1. Header Area with Logo */}
+        <View style={MyStyleSheet.landingHeaderArea}>
+          <Image 
+            source={require('../public/logo.png')} 
+            style={{ width: 180, height: 180 }} 
+            resizeMode="contain"
+          />
+        </View>
 
-        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1, paddingBottom: 40 }}>
-          <View style={MyStyleSheet.regHeader}>
-            <View>
-              <Text style={MyStyleSheet.clinicName}>ST JOSEPH</Text>
-              <Text style={MyStyleSheet.clinicSub}>VETERINARY CLINIC</Text>
-            </View>
-            <View style={MyStyleSheet.logoCircleSmall}>
-              <Image source={require('../public/logo.png')} style={{ width: 70, height: 70 }} />
-            </View>
-          </View>
-
-          <View style={[MyStyleSheet.formCard, { marginHorizontal: 20, borderColor: '#FFC1CC', borderWidth: 1.5, elevation: 8 }]}>
-            <Text style={[MyStyleSheet.cardTitle]}>Login</Text>
+        {/* 2. White Login Card */}
+        <View style={[MyStyleSheet.landingBottomCard, { flex: 2.5 }]}>
+          <ScrollView showsVerticalScrollIndicator={false}>
+            
+            <Text style={[MyStyleSheet.landingWelcomeText, { marginBottom: 30, fontSize: 40 }]}>Sign In</Text>
 
             {Msg ? (
-              <Text style={{ alignSelf: "center", color: "red", marginBottom: 10, fontWeight: 'bold', textAlign: 'center' }}>{Msg}</Text>
+              <Text style={{ color: "red", marginBottom: 15, textAlign: 'center' }}>{Msg}</Text>
             ) : null}
 
-            <View style={MyStyleSheet.inputGroup}>
-              <Text style={[MyStyleSheet.label]}>Email Address</Text>
-              <TextInput 
-                style={MyStyleSheet.input} 
-                onChangeText={(e) => changeHandler("email", e)} 
-                placeholder='Enter Email' 
-                placeholderTextColor="#A9A9A9"
-                keyboardType="email-address" 
-                autoCapitalize="none" 
-              />
-            </View>
+            {/* Email Input */}
+            <TextInput 
+              style={MyStyleSheet.styledInput} 
+              onChangeText={(e) => changeHandler("email", e)} 
+              placeholder='Email' 
+              placeholderTextColor="#AAA"
+              keyboardType="email-address" 
+              autoCapitalize="none" 
+            />
 
-            <View style={MyStyleSheet.inputGroup}>
-              <Text style={[MyStyleSheet.label]}>Password</Text>
-              <TextInput 
-                style={MyStyleSheet.input} 
-                onChangeText={(e) => changeHandler("password", e)} 
-                placeholder='Enter Password' 
-                placeholderTextColor="#A9A9A9"
-                secureTextEntry 
-              />
-            </View>
+            {/* Password Input */}
+            <TextInput 
+              style={MyStyleSheet.styledInput} 
+              onChangeText={(e) => changeHandler("password", e)} 
+              placeholder='Password' 
+              placeholderTextColor="#AAA"
+              secureTextEntry 
+            />
 
-            <TouchableOpacity style={{ alignSelf: 'flex-end', marginBottom: 20 }}>
-              <Text style={[MyStyleSheet.forgotText]}>Forgot password?</Text>
+            <TouchableOpacity style={{ alignSelf: 'flex-end', marginBottom: 30 }}>
+              <Text style={{ color: '#2E3A91', fontWeight: '600' }}>Forgot Password?</Text>
             </TouchableOpacity>
 
+            {/* Sign In Button */}
             <TouchableOpacity 
-              style={[MyStyleSheet.regButton, { backgroundColor: '#4E5DB2', opacity: loading ? 0.7 : 1 }]} 
+              style={MyStyleSheet.landingSignUpBtn} 
               onPress={loginAccount}
               disabled={loading}
             >
-              <Text style={MyStyleSheet.buttonText}>{loading ? "VERIFYING..." : "LOGIN"}</Text>
+              <Text style={MyStyleSheet.landingSignUpText}>
+                {loading ? "Verifying..." : "Sign In"}
+              </Text>
             </TouchableOpacity>
-          </View>
 
-          <View style={MyStyleSheet.socialSection}>
-            <View style={MyStyleSheet.dividerRow}>
-              <View style={MyStyleSheet.line} /><Text style={MyStyleSheet.orText}>or login with</Text><View style={MyStyleSheet.line} />
-            </View>
-
-            <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginVertical: 15 }}>
-              <TouchableOpacity style={[MyStyleSheet.socialIcon, { backgroundColor: '#FFC1CC', marginHorizontal: 10 }]}><Text style={{ color: '#fff', fontWeight: 'bold' }}>FB</Text></TouchableOpacity>
-              <TouchableOpacity style={[MyStyleSheet.socialIcon, { backgroundColor: '#FFC1CC', marginHorizontal: 10 }]}><Text style={{ color: '#fff', fontWeight: 'bold' }}>G</Text></TouchableOpacity>
-              <TouchableOpacity style={[MyStyleSheet.socialIcon, { backgroundColor: '#FFC1CC', marginHorizontal: 10 }]}><Text style={{ color: '#fff', fontWeight: 'bold' }}>Ap</Text></TouchableOpacity>
-            </View>
-
-            <TouchableOpacity onPress={() => opx.navigate('register')}>
-              <Text style={MyStyleSheet.footerText}>Don't have an account? <Text style={{ fontWeight: 'bold' }}>Signup</Text></Text>
+            {/* Google Sign In Button */}
+            <TouchableOpacity style={[MyStyleSheet.landingSignInBtn, { marginTop: 15, flexDirection: 'row' }]}>
+              <Image 
+                source={{ uri: 'https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg' }} 
+                style={{ width: 20, height: 20, marginRight: 10 }} 
+              />
+              <Text style={MyStyleSheet.landingSignInText}>Sign In with google</Text>
             </TouchableOpacity>
-          </View>
-        </ScrollView>
+
+            <TouchableOpacity 
+              onPress={() => opx.navigate('register')}
+              style={{ marginTop: 40, alignItems: 'center' }}
+            >
+              <Text style={{ color: '#AAA' }}>
+                Don’t have an account? <Text style={{ color: '#2E3A91', fontWeight: 'bold' }}>Sign Up</Text>
+              </Text>
+            </TouchableOpacity>
+
+          </ScrollView>
+        </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
   )

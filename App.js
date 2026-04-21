@@ -48,17 +48,69 @@ export default function App() {
   return (
     <UserProvider>
       <NavigationContainer>
-        <MScreen.Navigator initialRouteName='viewpets'>
-          <MScreen.Screen name='landing' component={LandingPage} />
-          <MScreen.Screen name='login' component={LoginPage} />
-          <MScreen.Screen name='register' component={RegisterPage} />
-          <MScreen.Screen name='otp' component={Otp} />
-          <MScreen.Screen name='otplogin' component={Otplogin} />
+        <MScreen.Navigator initialRouteName='otp'>
+    
+   
           <MScreen.Screen name='profilepic' component={AddProfilePic} />
           <MScreen.Screen name='details' component={AddDetails} />
           <MScreen.Screen name='chat' component={ChatModule} />
 
           
+           <MScreen.Screen
+            name='landing'
+            component={LandingPage}
+            options={{
+              headerShown: false,
+              title: 'Landing',
+              headerLeft: () => null,
+              headerTitleAlign: 'left',
+            }}
+          />
+
+              <MScreen.Screen
+            name='login'
+            component={LoginPage}
+            options={{
+              headerShown: false,
+              title: 'Login',
+              headerLeft: () => null,
+              headerTitleAlign: 'left',
+            }}
+          />
+
+                  <MScreen.Screen
+            name='register'
+            component={RegisterPage}
+            options={{
+              headerShown: false,
+              title: 'Register',
+              headerLeft: () => null,
+              headerTitleAlign: 'left',
+            }}
+          />
+
+            <MScreen.Screen
+            name='otp'
+            component={Otp}
+            options={{
+              headerShown: false,
+              title: 'Otp',
+              headerLeft: () => null,
+              headerTitleAlign: 'left',
+            }}
+          />
+
+               <MScreen.Screen
+            name='otplogin'
+            component={Otplogin}
+            options={{
+              headerShown: false,
+              title: 'Otplogin',
+              headerLeft: () => null,
+              headerTitleAlign: 'left',
+            }}
+          />
+
           <MScreen.Screen
             name='dashboard'
             component={DashboardPage}

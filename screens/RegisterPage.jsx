@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native'
 import MyStyleSheet from '../styles/MyStyleSheet'
 import { useUser } from '../context/UserContext';
 
-// 1. Import your Supabase client
+// Import your Supabase client
 import { supabase } from '../context/supabase'; 
 
 export default function RegisterPage() {
@@ -21,8 +21,9 @@ export default function RegisterPage() {
   });
   
   const [Msg, setMsg] = useState("");
-  const [loading, setLoading] = useState(false); // Added a loading state
+  const [loading, setLoading] = useState(false);
 
+  // Password Strength Logic
   useEffect(() => {
     if (getUser.password.length > 0) {
       const hasUpperCase = /[A-Z]/.test(getUser.password);
@@ -52,10 +53,10 @@ export default function RegisterPage() {
     setUser({ ...getUser, [field]: filteredValue });
   };
 
- 
   const RegisteredAccs = async () => {
     const { fname, lname, email, contact, password, cpassword } = getUser;
 
+    // Validation checks
     if (!fname || !lname || !email || !contact || !password || !cpassword) {
       setMsg("Please fill up all fields");
       return;
@@ -89,13 +90,13 @@ export default function RegisterPage() {
     setMsg("Registering...");
 
     try {
-      // 3. Create the user in Supabase Auth
-const { data, error } = await supabase.auth.signUp({
+      // 1. Create the user in Supabase Auth
+      const { data, error } = await supabase.auth.signUp({
         email: email,
         password: password,
         options: {
           data: {
-            display_name: `${fname} ${lname}`, // This shows up in the Auth tab
+            display_name: `${fname} ${lname}`, 
           }
         }
       });
@@ -103,12 +104,12 @@ const { data, error } = await supabase.auth.signUp({
       if (error) throw error;
 
       if (data.user) {
-        // 4. Save extra details to your profiles table
+        // 2. Save extra details to profiles table
         const { error: profileError } = await supabase
           .from('profiles')
           .upsert([
             { 
-              id: data.user.id, // Links the profile to the auth account
+              id: data.user.id, 
               first_name: fname, 
               last_name: lname, 
               contact_number: contact,
@@ -122,112 +123,85 @@ const { data, error } = await supabase.auth.signUp({
         updateUser(getUser); 
         setMsg("");
         
-        // 5. Navigate to the next screen on success
         Alert.alert("Success", "Account created successfully! Check your email for the OTP.");
         opx.navigate("otp", { email: email });
       }
 
     } catch (error) {
       setMsg(error.message);
-      console.error("Registration Error:", error.message);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#E3F2FD' }}>
+    <SafeAreaView style={MyStyleSheet.landingMainContainer}>
       <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1 }}>
         
-        <View style={{ position: 'absolute', top: -30, right: -30, width: 140, height: 140, borderRadius: 70, backgroundColor: '#FFC1CC', opacity: 0.3 }} />
-        <View style={{ position: 'absolute', bottom: 100, left: -40, width: 120, height: 120, borderRadius: 60, backgroundColor: '#4E5DB2', opacity: 0.1 }} />
+        {/* Header Area with Logo */}
+        <View style={MyStyleSheet.landingHeaderArea}>
+          <Image source={require('../public/logo.png')} style={{ width: 160, height: 160 }} resizeMode="contain" />
+        </View>
 
-        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1, paddingBottom: 40 }}>
-          
-          <View style={MyStyleSheet.regHeader}>
-            <View>
-              <Text style={MyStyleSheet.clinicName}>ST JOSEPH</Text>
-              <Text style={MyStyleSheet.clinicSub}>VETERINARY CLINIC</Text>
-            </View>
-            <View style={MyStyleSheet.logoCircleSmall}>
-              {/* Remember to use the .png version if you converted it! */}
-              <Image source={require('../public/logo.png')} style={{ width: 60, height: 60 }} />
-            </View>
-          </View>
-
-          <View style={MyStyleSheet.formCard}>
-            <Text style={MyStyleSheet.cardTitle}>Create Account</Text>
+        {/* Registration Card Section */}
+        <View style={[MyStyleSheet.landingBottomCard, { flex: 4 }]}>
+          <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 40 }}>
             
+            <Text style={[MyStyleSheet.landingWelcomeText, { fontSize: 40, marginBottom: 20 }]}>Sign Up</Text>
+
             {Msg ? (
               <Text style={{ 
-                alignSelf: "center", 
-                color: Msg.includes("Success") || Msg.includes("Strong") ? "#2E7D32" : "#C62828", 
-                marginBottom: 15,
-                fontSize: 13,
-                fontWeight: 'bold',
-                textAlign: 'center'
+                color: Msg.includes("Weak") || Msg.includes("match") ? "red" : "#2E3A91", 
+                marginBottom: 15, textAlign: 'center', fontWeight: 'bold' 
               }}>
                 {Msg}
               </Text>
             ) : null}
 
-            <View style={MyStyleSheet.inputGroup}>
-              <Text style={MyStyleSheet.label}>First Name</Text>
-              <TextInput style={MyStyleSheet.input} value={getUser.fname} onChangeText={(e) => changeHandler("fname", e)} placeholder='Enter First Name' placeholderTextColor="#A9A9A9" />
-            </View>
-            
-            <View style={MyStyleSheet.inputGroup}>
-              <Text style={MyStyleSheet.label}>Last Name</Text>
-              <TextInput style={MyStyleSheet.input} value={getUser.lname} onChangeText={(e) => changeHandler("lname", e)} placeholder='Enter Last Name' placeholderTextColor="#A9A9A9" />
-            </View>
-            
-            <View style={MyStyleSheet.inputGroup}>
-              <Text style={MyStyleSheet.label}>Email Address</Text>
-              <TextInput style={MyStyleSheet.input} value={getUser.email} onChangeText={(e) => changeHandler("email", e)} placeholder='example@gmail.com' placeholderTextColor="#A9A9A9" keyboardType="email-address" autoCapitalize="none" />
-            </View>
-            
-            <View style={MyStyleSheet.inputGroup}>
-              <Text style={MyStyleSheet.label}>Contact Number</Text>
-              <TextInput style={MyStyleSheet.input} value={getUser.contact} onChangeText={(e) => changeHandler("contact", e)} placeholder='09123456789' placeholderTextColor="#A9A9A9" keyboardType="phone-pad" />
-            </View>
-            
-            <View style={MyStyleSheet.inputGroup}>
-              <Text style={MyStyleSheet.label}>Password</Text>
-              <TextInput style={MyStyleSheet.input} value={getUser.password} onChangeText={(e) => changeHandler("password", e)} placeholder='••••••••' placeholderTextColor="#A9A9A9" secureTextEntry />
-            </View>
-            
-            <View style={MyStyleSheet.inputGroup}>
-              <Text style={MyStyleSheet.label}>Confirm Password</Text>
-              <TextInput style={MyStyleSheet.input} value={getUser.cpassword} onChangeText={(e) => changeHandler("cpassword", e)} placeholder='••••••••' placeholderTextColor="#A9A9A9" secureTextEntry />
-            </View>
+            {/* Input Fields */}
+            <TextInput style={MyStyleSheet.styledInput} value={getUser.fname} onChangeText={(e) => changeHandler("fname", e)} placeholder='First Name' placeholderTextColor="#AAA" />
+            <TextInput style={MyStyleSheet.styledInput} value={getUser.lname} onChangeText={(e) => changeHandler("lname", e)} placeholder='Last Name' placeholderTextColor="#AAA" />
+            <TextInput style={MyStyleSheet.styledInput} value={getUser.email} onChangeText={(e) => changeHandler("email", e)} placeholder='Email Address' placeholderTextColor="#AAA" keyboardType="email-address" autoCapitalize="none" />
+            <TextInput style={MyStyleSheet.styledInput} value={getUser.contact} onChangeText={(e) => changeHandler("contact", e)} placeholder='Contact Number' placeholderTextColor="#AAA" keyboardType="phone-pad" />
+            <TextInput style={MyStyleSheet.styledInput} value={getUser.password} onChangeText={(e) => changeHandler("password", e)} placeholder='Password' placeholderTextColor="#AAA" secureTextEntry />
+            <TextInput style={MyStyleSheet.styledInput} value={getUser.cpassword} onChangeText={(e) => changeHandler("cpassword", e)} placeholder='Confirm Password' placeholderTextColor="#AAA" secureTextEntry />
 
+            {/* Main Sign Up Button */}
             <TouchableOpacity 
-              style={[MyStyleSheet.regButton, { opacity: loading ? 0.7 : 1 }]} 
+              style={[MyStyleSheet.landingSignUpBtn, { marginTop: 10, opacity: loading ? 0.7 : 1 }]} 
               onPress={RegisteredAccs}
               disabled={loading}
             >
-              <Text style={MyStyleSheet.buttonText}>
-                {loading ? "CREATING..." : "REGISTER"}
+              <Text style={MyStyleSheet.landingSignUpText}>
+                {loading ? "CREATING..." : "Sign Up"}
               </Text>
             </TouchableOpacity>
-          </View>
 
-          <View style={MyStyleSheet.socialSection}>
-            <View style={MyStyleSheet.dividerRow}>
-              <View style={MyStyleSheet.line} /><Text style={MyStyleSheet.orText}>or register with</Text><View style={MyStyleSheet.line} />
-            </View>
-            
-            <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginVertical: 15 }}>
-              <TouchableOpacity style={[MyStyleSheet.socialIcon, { marginHorizontal: 10 }]}><Text style={{ color: '#fff', fontWeight: 'bold' }}>FB</Text></TouchableOpacity>
-              <TouchableOpacity style={[MyStyleSheet.socialIcon, { marginHorizontal: 10 }]}><Text style={{ color: '#fff', fontWeight: 'bold' }}>G</Text></TouchableOpacity>
-              <TouchableOpacity style={[MyStyleSheet.socialIcon, { marginHorizontal: 10 }]}><Text style={{ color: '#fff', fontWeight: 'bold' }}>Ap</Text></TouchableOpacity>
+            {/* Social Registration Section */}
+            <View style={{ marginTop: 25, alignItems: 'center' }}>
+              <Text style={{ color: '#AAA', marginBottom: 15 }}>Or sign up with</Text>
+              <View style={{ flexDirection: 'row' }}>
+                <TouchableOpacity style={MyStyleSheet.socialIconCircle}>
+                  <Image source={{ uri: 'https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg' }} style={{ width: 25, height: 25 }} />
+                </TouchableOpacity>
+                <TouchableOpacity style={MyStyleSheet.socialIconCircle}>
+                  <Image source={{ uri: 'https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg' }} style={{ width: 25, height: 25 }} />
+                </TouchableOpacity>
+                <TouchableOpacity style={MyStyleSheet.socialIconCircle}>
+                  <Image source={{ uri: 'https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_%282019%29.png' }} style={{ width: 25, height: 25 }} />
+                </TouchableOpacity>
+              </View>
             </View>
 
-            <TouchableOpacity onPress={() => opx.navigate('login')}>
-              <Text style={MyStyleSheet.footerText}>Already have an account? <Text style={{ fontWeight: 'bold', color: '#4E5DB2' }}>Login</Text></Text>
+            {/* Login Redirect */}
+            <TouchableOpacity onPress={() => opx.navigate('login')} style={{ marginTop: 30, alignItems: 'center' }}>
+              <Text style={{ color: '#AAA' }}>
+                Already have an account? <Text style={{ color: '#2E3A91', fontWeight: 'bold' }}>Login</Text>
+              </Text>
             </TouchableOpacity>
-          </View>
-        </ScrollView>
+
+          </ScrollView>
+        </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
   )
