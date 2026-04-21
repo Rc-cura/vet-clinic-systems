@@ -5,14 +5,11 @@ import MyStyleSheet from '../styles/MyStyleSheet'
 import * as ImagePicker from 'expo-image-picker';
 import { Dropdown } from 'react-native-element-dropdown';
 
-// 1. Import Supabase and your User Context
 import { supabase } from '../context/supabase'; 
 import { useUser } from '../context/UserContext';
 
 export default function AddPets() {
   const navigation = useNavigation()
-  
-  // Matches your UserContext.jsx: { user, updateUser }
   const { user } = useUser(); 
   
   const [loading, setLoading] = useState(false);
@@ -40,6 +37,7 @@ export default function AddPets() {
     { label: 'Cat', value: 'Cat' },
   ];
 
+  // RESTORED FULL BREED LIST
   const breedData = {
     Dog: [
       { label: 'Aspin (Asong Pinoy)', value: 'Aspin' },
@@ -94,69 +92,45 @@ export default function AddPets() {
   };
 
   const changeHandler = (field, value) => {
-    let filteredValue = value;
+    // Reset breed if species changes
     if (field === "species") {
       setPet({ ...getPet, species: value, breed: "", customBreed: "" });
-      return;
+    } else {
+      setPet({ ...getPet, [field]: value });
     }
-    if (field === "pname" || field === "gender") {
-      filteredValue = value.replace(/[^a-zA-Z\s]/g, "");
-    }
-    if (field === "age" || field === "weight") {
-      filteredValue = value.replace(/[^0-9.]/g, "");
-    }
-    setPet({ ...getPet, [field]: filteredValue });
   };
 
   const handleSavePet = async () => {
-    // Safety check for existing user session
-    if (!user || !user.id) {
-      Alert.alert("Error", "No user session found. Please log in again.");
-      navigation.navigate('login');
+    if (!user?.id) {
+      Alert.alert("Error", "No user session found.");
       return;
     }
 
-    // 1. Validation
     if (!getPet.pname || !getPet.species || !getPet.breed || !getPet.gender || !getPet.age || !getPet.weight) {
       setErrorMsg("Please fill up all required fields");
       return;
     }
-    if (getPet.breed === 'Other' && !getPet.customBreed.trim()) {
-      setErrorMsg("Please specify the pet's breed");
-      return;
-    }
 
-    setErrorMsg("");
     setLoading(true);
-
     try {
       let finalImageUrl = null;
 
-      // 2. Upload to Storage if image exists
       if (getPet.pimage) {
         const fileExt = getPet.pimage.split('.').pop();
         const fileName = `${user.id}/${Date.now()}.${fileExt}`;
-        
-        // --- FIX: Convert URI to Blob to prevent "No content provided" error ---
         const response = await fetch(getPet.pimage);
         const blob = await response.blob();
 
         const { data: uploadData, error: uploadError } = await supabase.storage
-          .from('pet-images') // Matches your existing bucket
-          .upload(fileName, blob, {
-            contentType: `image/${fileExt}`
-          });
+          .from('pet-images')
+          .upload(fileName, blob, { contentType: `image/${fileExt}` });
 
         if (uploadError) throw uploadError;
 
-        const { data: urlData } = supabase.storage
-          .from('pet-images')
-          .getPublicUrl(fileName);
-        
+        const { data: urlData } = supabase.storage.from('pet-images').getPublicUrl(fileName);
         finalImageUrl = urlData.publicUrl;
       }
 
-      // 3. Insert into Table
       const { error: insertError } = await supabase
         .from('pets')
         .insert([{
@@ -175,9 +149,7 @@ export default function AddPets() {
 
       Alert.alert("Success", "Pet registered successfully!");
       navigation.replace('dashboard');
-
     } catch (error) {
-      setErrorMsg(error.message);
       Alert.alert("Error", error.message);
     } finally {
       setLoading(false);
@@ -185,80 +157,111 @@ export default function AddPets() {
   };
 
   return (
-    <SafeAreaView style={MyStyleSheet.container}>
-      <ScrollView contentContainerStyle={[MyStyleSheet.formScrollContent, { paddingTop: 20 }]} showsVerticalScrollIndicator={false}>
+    <SafeAreaView style={MyStyleSheet.whiteContainer}>
+      <View style={MyStyleSheet.formHeader}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={MyStyleSheet.backBtn}>
+          <Text style={{ fontSize: 28, color: '#2E3A91' }}>←</Text> 
+        </TouchableOpacity>
+        <Text style={MyStyleSheet.petHeaderTitle}>Add pet</Text>
+        <View style={{ width: 40 }} />
+      </View>
+
+      <ScrollView contentContainerStyle={MyStyleSheet.addPetScroll} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
         
-        <View style={MyStyleSheet.uploadContainer}>
-          <View style={MyStyleSheet.profileCircleBlack}>
+        <View style={MyStyleSheet.imagePickerContainer}>
+          <View style={MyStyleSheet.mainProfileCircle}>
             {getPet.pimage ? (
-              <Image source={{ uri: getPet.pimage }} style={{ width: 100, height: 100, borderRadius: 50 }}/>
+              <Image source={{ uri: getPet.pimage }} style={MyStyleSheet.mainProfileImage} />
             ) : (
-              <Text style={{fontSize: 40}}>🐾</Text>
+              <View style={[MyStyleSheet.mainProfileImage, { backgroundColor: '#E0E0E0', justifyContent: 'center', alignItems: 'center' }]}>
+                 <Text style={{fontSize: 40}}>🐾</Text>
+              </View>
             )}
+            <TouchableOpacity style={MyStyleSheet.plusCircle} onPress={pickImage}>
+              <Text style={MyStyleSheet.plusIcon}>+</Text>
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity style={MyStyleSheet.uploadOutlineBtn} onPress={pickImage} disabled={loading}>
-            <Text style={MyStyleSheet.uploadBtnLabel}>Upload Image</Text>
-          </TouchableOpacity>
         </View>
 
-        {errorMsg ? <Text style={{ color: 'red', textAlign: 'center', marginBottom: 10 }}>{errorMsg}</Text> : null}
+        <Text style={MyStyleSheet.formSectionTitle}>Basic information</Text>
 
         <View style={MyStyleSheet.inputGroup}>
-          <TextInput value={getPet.pname} onChangeText={(val) => changeHandler("pname", val)} style={MyStyleSheet.formInput} placeholder="Pet's name" placeholderTextColor="#AAA" editable={!loading} />
-
-          <Dropdown 
-            style={MyStyleSheet.formInput} 
-            data={speciesData} 
-            labelField="label" valueField="value" 
-            placeholder="Species" value={getPet.species} 
-            onChange={item => changeHandler("species", item.value)}
-            disable={loading}
+          <Text style={MyStyleSheet.fieldLabel}>Pet's name</Text>
+          <TextInput 
+            value={getPet.pname} 
+            onChangeText={(val) => changeHandler("pname", val)} 
+            style={MyStyleSheet.styledInput} 
+            placeholder="Enter pet's name" 
           />
 
+          <Text style={MyStyleSheet.fieldLabel}>Species</Text>
           <Dropdown 
-            style={[MyStyleSheet.formInput, !getPet.species && { opacity: 0.5 }]} 
+            style={MyStyleSheet.styledInput} 
+            data={speciesData} 
+            labelField="label" valueField="value" 
+            placeholder="Select species" 
+            value={getPet.species} 
+            onChange={item => changeHandler("species", item.value)}
+          />
+
+          <Text style={MyStyleSheet.fieldLabel}>Breed</Text>
+          <Dropdown 
+            style={MyStyleSheet.styledInput} 
             data={getPet.species ? breedData[getPet.species] : []} 
             search labelField="label" valueField="value" 
-            placeholder={getPet.species ? "Select Breed" : "Select Species first"} 
+            placeholder={getPet.species ? "Select breed" : "Select species first"} 
             value={getPet.breed} 
-            disable={!getPet.species || loading}
             onChange={item => changeHandler("breed", item.value)}
           />
 
           {getPet.breed === 'Other' && (
-            <TextInput value={getPet.customBreed} onChangeText={(val) => setPet({...getPet, customBreed: val})} style={[MyStyleSheet.formInput, { borderBottomColor: '#4A8CF7', borderBottomWidth: 2 }]} placeholder="Enter specific breed" placeholderTextColor="#AAA" editable={!loading} />
+            <TextInput 
+              value={getPet.customBreed} 
+              onChangeText={(val) => changeHandler("customBreed", val)} 
+              style={[MyStyleSheet.styledInput, { marginTop: 10 }]} 
+              placeholder="Specify breed" 
+            />
           )}
-          
+
+          <Text style={MyStyleSheet.fieldLabel}>Gender</Text>
           <Dropdown 
-            style={MyStyleSheet.formInput} 
+            style={MyStyleSheet.styledInput} 
             data={genderData} 
             labelField="label" valueField="value" 
-            placeholder="Gender" value={getPet.gender} 
+            placeholder="Select gender" 
+            value={getPet.gender} 
             onChange={item => changeHandler("gender", item.value)}
-            disable={loading}
           />
 
-          <View style={{ flexDirection: 'row', width: '100%' }}>
-            <View style={{ flex: 1, marginRight: 10 }}>
-              <TextInput value={getPet.age} onChangeText={(val) => changeHandler("age", val)} style={[MyStyleSheet.formInput, { width: '100%' }]} placeholder="Age" keyboardType="numeric" editable={!loading} />
-            </View>
-            <View style={{ flex: 1 }}>
-              <TextInput style={[MyStyleSheet.formInput, { width: '100%' }]} placeholder="Weight(kg)" value={getPet.weight} onChangeText={(val) => changeHandler("weight", val)} keyboardType="numeric" editable={!loading} />
-            </View>
-          </View>
+          <Text style={MyStyleSheet.fieldLabel}>Birthday</Text>
+          <TextInput 
+            style={MyStyleSheet.styledInput} 
+            placeholder="00/00/0000" 
+            value={getPet.age} 
+            onChangeText={(val) => changeHandler("age", val)}
+          />
 
-          <TextInput style={[MyStyleSheet.formInput, MyStyleSheet.textArea]} placeholder="Remarks" onChangeText={(val) => setPet({...getPet, remarks: val})} multiline={true} numberOfLines={4} editable={!loading} />
+          <Text style={MyStyleSheet.fieldLabel}>Weight</Text>
+          <TextInput 
+            style={MyStyleSheet.styledInput} 
+            placeholder="Kg" 
+            value={getPet.weight} 
+            onChangeText={(val) => changeHandler("weight", val)}
+            keyboardType="numeric"
+          />
         </View>
 
         <TouchableOpacity 
-          style={[MyStyleSheet.continuePrimaryBtn, { opacity: loading ? 0.6 : 1 }]} 
-          onPress={handleSavePet} 
+          style={[MyStyleSheet.primaryActionBtn, { marginTop: 40 }]} 
+          onPress={handleSavePet}
           disabled={loading}
         >
-          {loading ? <ActivityIndicator color="#FFF" /> : <Text style={MyStyleSheet.continueBtnText}>Save Pet</Text>}
+          {loading ? <ActivityIndicator color="#FFF" /> : <Text style={MyStyleSheet.primaryActionBtnText}>Save</Text>}
         </TouchableOpacity>
 
       </ScrollView>
+
+      <View style={{ height: 80 }} />
     </SafeAreaView>
-  )
+  );
 }

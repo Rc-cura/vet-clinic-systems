@@ -31,12 +31,12 @@ const MyStyleSheet = StyleSheet.create({
     textAlign: 'center',
   },
   subtitle: {
-    fontSize: 14,
-    color: '#666',
-    fontStyle: 'italic',
-    marginTop: 8,
+    fontSize: 16,
+    color: '#BDBDBD', 
     textAlign: 'center',
+    lineHeight: 22,
   },
+
   dotsRow: {
     flexDirection: 'row',
     marginTop: 25,
@@ -101,7 +101,15 @@ const MyStyleSheet = StyleSheet.create({
     shadowRadius: 10,
     alignItems: 'center',
   },
-  cardTitle: { fontSize: 22, fontWeight: 'bold', marginBottom: 20, color: '#000' },
+  
+
+  cardTitle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#2E3A91', // Deep blue from image
+    marginBottom: 30,
+  },
+
   input: {
     width: '100%',
     height: 50,
@@ -299,6 +307,28 @@ const MyStyleSheet = StyleSheet.create({
     borderTopRightRadius: 35,
     paddingBottom: 15
   },
+
+  navIcon: {
+    width: 24,
+    height: 24,
+    marginBottom: 4,
+    tintColor: '#9E9E9E', // Grey for inactive
+  },
+
+  bottomNavLight: {
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    height: 90,
+    backgroundColor: '#FFF',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    borderTopWidth: 1,
+    borderTopColor: '#F0F0F0',
+    paddingBottom: 10,
+  },
+
   navItem: { alignItems: 'center', opacity: 0.6 },
   navItemActive: { 
     backgroundColor: '#5C93E8', 
@@ -313,7 +343,11 @@ const MyStyleSheet = StyleSheet.create({
     shadowOffset: { width: 0, height: 5 },
     shadowOpacity: 0.4,
   },
-  navLabel: { fontSize: 11, fontWeight: 'bold', color: '#4468B0', marginTop: 4 },
+ 
+  navLabel: {
+    fontSize: 12,
+    color: '#9E9E9E',
+  },
 
   notifHeader: { 
     flexDirection: 'row', 
@@ -361,9 +395,24 @@ const MyStyleSheet = StyleSheet.create({
   notifBody: { fontSize: 14, color: '#555', lineHeight: 20 },
 
 
-  petHeader: { paddingHorizontal: 25, marginTop: 20 },
+  petHeaderSimple: {
+    paddingHorizontal: 25,
+    paddingTop: 50,
+    paddingBottom: 20,
+  },
+
+  petHeader: {
+    paddingHorizontal: 25,
+    paddingTop: 40,
+  },
   petHeaderText: { fontSize: 18, fontWeight: 'bold', color: '#333' },
   petHeaderDivider: { height: 1, backgroundColor: '#EEE', marginTop: 15, width: '100%' },
+
+petHeaderTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#2E3A91',
+  },
 
 
   petActionRow: { flexDirection: 'row', paddingHorizontal: 25, marginTop: 20, alignItems: 'center' },
@@ -382,8 +431,99 @@ const MyStyleSheet = StyleSheet.create({
   addNewLabel: { fontSize: 10, color: '#555', marginTop: 5, fontWeight: '600' },
 
   // Empty State
-  emptyStateContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 40 },
-  emptyImage: { width: 250, height: 180, marginBottom: 20 },
+  emptyStateContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: -100, 
+  },
+
+emptyStateCentered: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#FFF',
+  },
+
+  catIllustration: {
+    width: 280,
+    height: 180,
+    marginBottom: 20,
+  },
+
+  emptyStateSubtitle: {
+    fontSize: 16,
+    color: '#BDBDBD',
+    textAlign: 'center',
+    lineHeight: 24,
+  },
+
+floatingBottomCard: {
+    backgroundColor: '#FFF',
+    borderTopLeftRadius: 40,
+    borderTopRightRadius: 40,
+    paddingHorizontal: 25,
+    paddingTop: 15,
+    paddingBottom: 35, // Reduced padding so it doesn't push away from the nav
+    elevation: 20,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: -5 },
+    marginBottom: 85, // This creates the gap where the Nav sits
+  },
+
+bottomDrawerCard: {
+    backgroundColor: '#FFF',
+    borderTopLeftRadius: 40,
+    borderTopRightRadius: 40,
+    paddingHorizontal: 25,
+    paddingTop: 15,
+    position: 'absolute',
+    bottom: 85, // Sits exactly on top of the nav bar
+    width: '100%',
+    zIndex: 10, // Ensures it stays above the empty state text
+    elevation: 20,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: -5 },
+  },
+
+  drawerUp: {
+    bottom: 85, // Sits above the nav bar
+    height: 230, // Tall enough to show the button
+  },
+
+  drawerDown: {
+    bottom: 85, 
+    height: 100, // Short enough to only show the title and handle
+  },
+
+  dragHandleArea: {
+    width: '100%',
+    height: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+
+dragHandleBar: {
+    width: 60,
+    height: 5,
+    backgroundColor: '#E0E0E0',
+    borderRadius: 3,
+    marginBottom: 15,
+  },
+
+
+
+
+ emptyImage: {
+    width: 220,
+    height: 150,
+    marginBottom: 20,
+  },
   emptyTextMain: { fontSize: 16, textAlign: 'center', color: '#444', lineHeight: 22, fontWeight: '500' },
   
   addFirstBtn: { marginTop: 40 },
@@ -440,6 +580,55 @@ const MyStyleSheet = StyleSheet.create({
     shadowRadius: 10,
   },
 
+cardActionTitle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#2E3A91',
+    marginBottom: 20,
+    marginTop: 5,
+  },
+
+primaryActionBtn: {
+    backgroundColor: '#2E3A91',
+    height: 60,
+    borderRadius: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 30,
+    width: '100%',
+    elevation: 5,
+  },
+  primaryActionBtnText: { color: '#FFF', fontSize: 18, fontWeight: 'bold' },
+  
+minimalBottomNav: {
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    height: 85,
+    backgroundColor: '#FFF',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    borderTopWidth: 1,
+    borderTopColor: '#F0F0F0',
+    zIndex: 20, // Keeps nav bar on the very top
+  },
+  navTab: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  navTabIcon: {
+    width: 24,
+    height: 24,
+    marginBottom: 5,
+    tintColor: '#A0A0A0', // Grey for inactive tabs
+  },
+
+  navTabText: {
+    fontSize: 11,
+    color: '#A0A0A0',
+  },
 
   invoiceCard: {
     backgroundColor: '#FFF',
@@ -481,16 +670,15 @@ const MyStyleSheet = StyleSheet.create({
 
  
 
-  formHeader: {
+formHeader: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
+    justifyContent: 'space-between',
     paddingHorizontal: 20,
-    paddingVertical: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: '#F0F0F0',
-    backgroundColor: '#FFF',
+    paddingTop: 10,
+    height: 60,
   },
+
   formHeaderTitle: { fontSize: 18, fontWeight: 'bold', color: '#000' },
   backBtn: { padding: 5 },
 
@@ -653,6 +841,21 @@ const MyStyleSheet = StyleSheet.create({
   petWeightTag: { fontSize: 12, color: '#AAA', alignSelf: 'flex-start' },
   
   cardDivider: { height: 1, backgroundColor: '#F0F0F0', marginVertical: 15 },
+
+  bottomCardContainer: {
+    backgroundColor: '#FFF',
+    borderTopLeftRadius: 40,
+    borderTopRightRadius: 40,
+    paddingHorizontal: 30,
+    paddingTop: 15,
+    paddingBottom: 110, // Extra space for the bottom nav
+    // Shadow for the elevated card look
+    elevation: 20,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: -5 },
+  },
   
   petActionRow: { flexDirection: 'row', justifyContent: 'space-around' },
   petActionBtn: { alignItems: 'center', flex: 1 },
@@ -692,14 +895,14 @@ const MyStyleSheet = StyleSheet.create({
   detailValueText: { fontSize: 15, fontWeight: '500', color: '#000' },
 
  
-  primaryBlueBtn: {
+primaryBlueBtn: {
     backgroundColor: '#5C93E8',
-    height: 55,
-    borderRadius: 28,
-    justifyContent: 'center',
+    paddingVertical: 15,
+    borderRadius: 30,
     alignItems: 'center',
+    width: '100%',
   },
-  primaryBlueBtnText: { color: '#FFF', fontSize: 17, fontWeight: 'bold' },
+  primaryBlueBtnText: { color: '#FFF', fontSize: 18, fontWeight: 'bold' },
 
   detailRowWithLine: {
     flexDirection: 'row',
@@ -955,6 +1158,10 @@ const MyStyleSheet = StyleSheet.create({
     backgroundColor: '#D9D9D9', 
   },
 
+  imagePickerContainer: {
+    alignItems: 'center',
+    marginVertical: 30,
+  },
   
   serviceCard: {
     width: '60%', 
@@ -988,12 +1195,7 @@ const MyStyleSheet = StyleSheet.create({
   },
 
  
-  primaryBlueBtnText: {
-    color: '#FFF',
-    fontSize: 17,
-    fontWeight: 'bold',
-  },
-
+ 
   
   dropdownBox: {
     height: 50,
@@ -1283,18 +1485,7 @@ serviceCardText: {
   textAlign: 'center',
   color: '#333',
 },
-primaryBlueBtn: {
-  backgroundColor: '#5C93E8',
-  paddingVertical: 15,
-  borderRadius: 30,    
-  alignItems: 'center',
-  width: '100%',
-},
-primaryBlueBtnText: {
-  color: '#FFF',
-  fontSize: 18,
-  fontWeight: 'bold',
-},
+
 billingModalBox: {
     backgroundColor: '#FFF',
     width: '85%',
@@ -1581,7 +1772,87 @@ billingModalBox: {
     color: '#8E8E8E',
     fontSize: 13,
     marginTop: 2,
-  }
+  },
+
+  dragHandle: {
+    width: 60,
+    height: 6,
+    backgroundColor: '#E0E0E0',
+    borderRadius: 3,
+    alignSelf: 'center',
+    marginBottom: 25,
+  },
+
+  addPetLargeBtn: {
+    backgroundColor: '#2E3A91',
+    borderRadius: 25,
+    height: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  whiteContainer: { flex: 1, backgroundColor: '#FFF' },
+  addPetScroll: { paddingHorizontal: 25, paddingBottom: 40 },
+
+mainProfileCircle: {
+    width: 150,
+    height: 150,
+    borderRadius: 75,
+    backgroundColor: '#F0F0F0',
+    position: 'relative',
+  },
+
+
+  mainProfileImage: {
+    width: 150,
+    height: 150,
+    borderRadius: 75,
+  },
+
+
+  plusCircle: {
+    position: 'absolute',
+    bottom: 5,
+    right: 5,
+    backgroundColor: '#FFF',
+    width: 35,
+    height: 35,
+    borderRadius: 18,
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+  },
+  plusIcon: { color: '#2E3A91', fontSize: 20, fontWeight: 'bold' },
+
+  formSectionTitle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#2E3A91',
+    marginBottom: 20,
+  },
+  fieldLabel: {
+    fontSize: 14,
+    color: '#A0A0A0',
+    marginBottom: 8,
+    marginTop: 10,
+  },
+  styledInput: {
+    width: '100%',
+    height: 55,
+    borderWidth: 1,
+    borderColor: '#D0D0D0',
+    borderRadius: 15,
+    paddingHorizontal: 15,
+    marginBottom: 10,
+    fontSize: 16,
+    color: '#333',
+    justifyContent: 'center',
+  },
+  
+
   
 
 })
