@@ -1,9 +1,11 @@
-import { View, Text, TextInput, TouchableOpacity, Image, SafeAreaView, ScrollView, KeyboardAvoidingView, Platform } from 'react-native'
+import { View, Text, TextInput, TouchableOpacity, Image, SafeAreaView, ScrollView, KeyboardAvoidingView, Platform, Alert } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import MyStyleSheet from '../styles/MyStyleSheet'
-import { Registered } from '../App'
 import { useUser } from '../context/UserContext';
+
+// 1. Import your Supabase client
+import { supabase } from '../context/supabase'; 
 
 export default function RegisterPage() {
   const opx = useNavigation();
@@ -19,6 +21,7 @@ export default function RegisterPage() {
   });
   
   const [Msg, setMsg] = useState("");
+  const [loading, setLoading] = useState(false); // Added a loading state
 
   useEffect(() => {
     if (getUser.password.length > 0) {
@@ -49,7 +52,8 @@ export default function RegisterPage() {
     setUser({ ...getUser, [field]: filteredValue });
   };
 
-  const RegisteredAccs = () => {
+ 
+  const RegisteredAccs = async () => {
     const { fname, lname, email, contact, password, cpassword } = getUser;
 
     if (!fname || !lname || !email || !contact || !password || !cpassword) {
@@ -81,23 +85,60 @@ export default function RegisterPage() {
       return;
     }
 
-    const Exists = Registered.find((item) => item.email === email);
-    if (Exists) {
-      setMsg("Email already exists");
-      return;
-    }
+    setLoading(true);
+    setMsg("Registering...");
 
-    Registered.push(getUser);
-    updateUser(getUser); 
-    setMsg("");
-    opx.replace("otp");
+    try {
+      // 3. Create the user in Supabase Auth
+const { data, error } = await supabase.auth.signUp({
+        email: email,
+        password: password,
+        options: {
+          data: {
+            display_name: `${fname} ${lname}`, // This shows up in the Auth tab
+          }
+        }
+      });
+
+      if (error) throw error;
+
+      if (data.user) {
+        // 4. Save extra details to your profiles table
+        const { error: profileError } = await supabase
+          .from('profiles')
+          .upsert([
+            { 
+              id: data.user.id, // Links the profile to the auth account
+              first_name: fname, 
+              last_name: lname, 
+              contact_number: contact,
+              email: email,
+              role: 'client'
+            },
+          ]);
+
+        if (profileError) throw profileError;
+
+        updateUser(getUser); 
+        setMsg("");
+        
+        // 5. Navigate to the next screen on success
+        Alert.alert("Success", "Account created successfully! Check your email for the OTP.");
+        opx.navigate("otp", { email: email });
+      }
+
+    } catch (error) {
+      setMsg(error.message);
+      console.error("Registration Error:", error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#E3F2FD' }}>
       <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1 }}>
         
-        {/* --- CSS BACKGROUND DECORATIONS --- */}
         <View style={{ position: 'absolute', top: -30, right: -30, width: 140, height: 140, borderRadius: 70, backgroundColor: '#FFC1CC', opacity: 0.3 }} />
         <View style={{ position: 'absolute', bottom: 100, left: -40, width: 120, height: 120, borderRadius: 60, backgroundColor: '#4E5DB2', opacity: 0.1 }} />
 
@@ -109,6 +150,7 @@ export default function RegisterPage() {
               <Text style={MyStyleSheet.clinicSub}>VETERINARY CLINIC</Text>
             </View>
             <View style={MyStyleSheet.logoCircleSmall}>
+              {/* Remember to use the .png version if you converted it! */}
               <Image source={require('../public/logo.png')} style={{ width: 60, height: 60 }} />
             </View>
           </View>
@@ -119,10 +161,11 @@ export default function RegisterPage() {
             {Msg ? (
               <Text style={{ 
                 alignSelf: "center", 
-                color: Msg === "Strong Password" ? "#2E7D32" : (Msg === "Medium Password" ? "#EF6C00" : "#C62828"), 
+                color: Msg.includes("Success") || Msg.includes("Strong") ? "#2E7D32" : "#C62828", 
                 marginBottom: 15,
                 fontSize: 13,
-                fontWeight: 'bold'
+                fontWeight: 'bold',
+                textAlign: 'center'
               }}>
                 {Msg}
               </Text>
@@ -158,8 +201,14 @@ export default function RegisterPage() {
               <TextInput style={MyStyleSheet.input} value={getUser.cpassword} onChangeText={(e) => changeHandler("cpassword", e)} placeholder='••••••••' placeholderTextColor="#A9A9A9" secureTextEntry />
             </View>
 
-            <TouchableOpacity style={MyStyleSheet.regButton} onPress={RegisteredAccs}>
-              <Text style={MyStyleSheet.buttonText}>REGISTER</Text>
+            <TouchableOpacity 
+              style={[MyStyleSheet.regButton, { opacity: loading ? 0.7 : 1 }]} 
+              onPress={RegisteredAccs}
+              disabled={loading}
+            >
+              <Text style={MyStyleSheet.buttonText}>
+                {loading ? "CREATING..." : "REGISTER"}
+              </Text>
             </TouchableOpacity>
           </View>
 
@@ -168,7 +217,6 @@ export default function RegisterPage() {
               <View style={MyStyleSheet.line} /><Text style={MyStyleSheet.orText}>or register with</Text><View style={MyStyleSheet.line} />
             </View>
             
-            {/* FIXED: Social icons now sit beside each other */}
             <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginVertical: 15 }}>
               <TouchableOpacity style={[MyStyleSheet.socialIcon, { marginHorizontal: 10 }]}><Text style={{ color: '#fff', fontWeight: 'bold' }}>FB</Text></TouchableOpacity>
               <TouchableOpacity style={[MyStyleSheet.socialIcon, { marginHorizontal: 10 }]}><Text style={{ color: '#fff', fontWeight: 'bold' }}>G</Text></TouchableOpacity>
