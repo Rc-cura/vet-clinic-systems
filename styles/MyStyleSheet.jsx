@@ -2022,6 +2022,96 @@ otpStyledInput: {
     color: '#2E3A91',
     backgroundColor: '#FFF',
   },
+
+  // Stepper / Progress Bar
+ // --- SMOOTH STEPPER STYLES ---
+  stepperMainContainer: {
+    width: '100%',
+    paddingHorizontal: 10,
+    marginTop: 30,
+    position: 'relative',
+    justifyContent: 'center',
+  },
+  stepperBackgroundLine: {
+    position: 'absolute',
+    top: 15, // Half of the circle height (30/2) to be perfectly centered
+    left: 40,
+    right: 40,
+    height: 1.5,
+    backgroundColor: '#2E3A91', // Match your brand blue
+    zIndex: -1, // Ensure it stays behind the circles
+  },
+  stepperContentRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    width: '100%',
+  },
+  stepWrapper: { 
+    alignItems: 'center', 
+    width: 80, // Fixed width ensures labels don't push circles around
+  },
+  stepCircleActive: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    backgroundColor: '#2E3A91',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  stepCircleInactive: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    backgroundColor: '#FFF', // White background so the line doesn't show through
+    borderWidth: 1.5,
+    borderColor: '#2E3A91',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  stepTextActive: { color: '#FFF', fontSize: 14, fontWeight: 'bold' },
+  stepTextInactive: { color: '#2E3A91', fontSize: 14, fontWeight: 'bold' },
+  stepLabelActive: { 
+    fontSize: 9, 
+    textAlign: 'center', 
+    color: '#2E3A91', 
+    marginTop: 8,
+    fontWeight: '500' 
+  },
+  stepLabelInactive: { 
+    fontSize: 9, 
+    textAlign: 'center', 
+    color: '#A0A0A0', 
+    marginTop: 8 
+  },
+
+  // Large Profile UI
+  largeProfileCircle: {
+    width: 280,
+    height: 280,
+    borderRadius: 140,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  details_inputWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+    height: 60,
+    borderWidth: 1,
+    borderColor: '#D0D0D0',
+    borderRadius: 20,
+    paddingHorizontal: 20,
+    backgroundColor: '#FFF',
+  },
+  // Ensure fieldLabel is light gray as seen in the UI
+  fieldLabel: {
+    fontSize: 14,
+    color: '#A0A0A0',
+    marginBottom: 8,
+    marginTop: 10,
+  },
   
 
 })

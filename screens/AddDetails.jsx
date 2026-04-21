@@ -1,4 +1,4 @@
-import { View, Text, TextInput, TouchableOpacity, SafeAreaView, ScrollView } from 'react-native'
+import { View, Text, TextInput, TouchableOpacity, SafeAreaView, ScrollView, Image } from 'react-native'
 import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import MyStyleSheet from '../styles/MyStyleSheet'
@@ -8,60 +8,92 @@ export default function AddDetails() {
   const [details, setDetails] = useState({ contact: '', address: '' });
 
   return (
-    <SafeAreaView style={MyStyleSheet.profilepic_container}>
-      
-      {/* Background Decorative Paws - Fills the empty space */}
-      <Text style={{ position: 'absolute', top: 120, left: 10, fontSize: 60, color: '#FFC1CC', opacity: 0.15 }}>🐾</Text>
-      <Text style={{ position: 'absolute', top: 220, right: 10, fontSize: 80, color: '#FFC1CC', opacity: 0.15 }}>🐾</Text>
-      <Text style={{ position: 'absolute', bottom: 200, left: 30, fontSize: 50, color: '#FFC1CC', opacity: 0.1 }}>🐾</Text>
+    <SafeAreaView style={MyStyleSheet.whiteContainer}>
+      {/* Header with Back Arrow */}
+      <View style={[MyStyleSheet.formHeader, { justifyContent: 'flex-start' }]}>
+        <TouchableOpacity onPress={() => opx.goBack()} style={MyStyleSheet.backBtn}>
+          <Text style={{ fontSize: 28, color: '#2E3A91' }}>←</Text> 
+        </TouchableOpacity>
+        <Text style={[MyStyleSheet.petHeaderTitle, { marginLeft: 10 }]}>How can we reach you?</Text>
+      </View>
 
-      <ScrollView contentContainerStyle={{ alignItems: 'center', paddingBottom: 40 }}>
+      <ScrollView contentContainerStyle={{ paddingHorizontal: 30, alignItems: 'center', paddingBottom: 40 }}>
         
-        <Text style={[MyStyleSheet.profilepic_title, { marginTop: 60 }]}>How can we reach you?</Text>
+       {/* --- SMOOTH STEPPER --- */}
+<View style={MyStyleSheet.stepperMainContainer}>
+  {/* The Background Line */}
+  <View style={MyStyleSheet.stepperBackgroundLine} />
 
-        {/* Space where the image was */}
-        <View style={{ height: 50 }} /> 
+  <View style={MyStyleSheet.stepperContentRow}>
+    {/* Step 1 */}
+    <View style={MyStyleSheet.stepWrapper}>
+      <View style={MyStyleSheet.stepCircleActive}>
+        <Text style={MyStyleSheet.stepTextActive}>✓</Text>
+      </View>
+      <Text style={MyStyleSheet.stepLabelActive}>Add a profile{"\n"}picture</Text>
+    </View>
 
-        <Text style={MyStyleSheet.details_subtitle}>
-            Your contact number and address helps us provide local emergency care and ensures your pet's records are accurate. We'll only use this for clinic-related services.
-        </Text>
+    {/* Step 2 */}
+    <View style={MyStyleSheet.stepWrapper}>
+      <View style={MyStyleSheet.stepCircleActive}>
+        <Text style={MyStyleSheet.stepTextActive}>2</Text>
+      </View>
+      <Text style={MyStyleSheet.stepLabelActive}>How can we{"\n"}reach you?</Text>
+    </View>
 
-        {/* Input Fields */}
-        <View style={{ width: '85%', marginTop: 40 }}>
-            <Text style={MyStyleSheet.details_label}>Contact Number</Text>
+    {/* Step 3 */}
+    <View style={MyStyleSheet.stepWrapper}>
+      <View style={MyStyleSheet.stepCircleInactive}>
+        <Text style={MyStyleSheet.stepTextInactive}>3</Text>
+      </View>
+      <Text style={MyStyleSheet.stepLabelInactive}>Background</Text>
+    </View>
+
+    {/* Step 4 */}
+    <View style={MyStyleSheet.stepWrapper}>
+      <View style={MyStyleSheet.stepCircleInactive}>
+        <Text style={MyStyleSheet.stepTextInactive}>4</Text>
+      </View>
+      <Text style={MyStyleSheet.stepLabelInactive}>Address</Text>
+    </View>
+  </View>
+</View>
+
+        {/* Illustration */}
+        <View style={{ marginVertical: 40 }}>
+          <Image 
+            source={require('../public/catcat.png')} // Replace with your cat/bookshelf image
+            style={{ width: 280, height: 220 }}
+            resizeMode="contain"
+          />
+        </View>
+
+        {/* Input Field */}
+        <View style={{ width: '100%' }}>
+            <Text style={MyStyleSheet.fieldLabel}>Contact Number</Text>
             <View style={MyStyleSheet.details_inputWrapper}>
-                <Text style={{ marginRight: 10, fontSize: 18 }}>📞</Text>
-                <TextInput 
-                    style={{ flex: 1, color: '#000' }} 
-                    placeholder="09XX XXX XXXX" 
-                    placeholderTextColor="#B0B3B8"
-                    keyboardType="phone-pad"
-                    onChangeText={(v) => setDetails({...details, contact: v})}
+                <Image 
+                  source={require('../public/Profile.png')} // Replace with a phone icon if you have one
+                  style={{ width: 20, height: 20, marginRight: 10, tintColor: '#CCC' }} 
                 />
-            </View>
-
-            <Text style={[MyStyleSheet.details_label, { marginTop: 25 }]}>Address</Text>
-            <View style={MyStyleSheet.details_inputWrapper}>
-                <Text style={{ marginRight: 10, fontSize: 18 }}>📍</Text>
                 <TextInput 
-                    style={{ flex: 1, color: '#000' }} 
-                    placeholder="Pasay City" 
-                    placeholderTextColor="#B0B3B8"
-                    onChangeText={(v) => setDetails({...details, address: v})}
+                    style={{ flex: 1, height: 55, color: '#000' }} 
+                    placeholder="09XX XXX XXXX" 
+                    placeholderTextColor="#BDBDBD"
+                    keyboardType="phone-pad"
+                    value={details.contact}
+                    onChangeText={(v) => setDetails({...details, contact: v})}
                 />
             </View>
         </View>
 
-        {/* Action Buttons */}
-        <TouchableOpacity style={[MyStyleSheet.profilepic_addBtn, { marginTop: 60 }]}>
-            <Text style={MyStyleSheet.profilepic_btnText}>Add Details</Text>
-        </TouchableOpacity>
-
+        {/* Action Button */}
         <TouchableOpacity 
-            style={MyStyleSheet.profilepic_skipBtn}
-            onPress={() => opx.navigate('dashboard')}
+          style={[MyStyleSheet.primaryActionBtn, { flexDirection: 'row', marginTop: 50 }]}
+          onPress={() => opx.navigate('background')}
         >
-            <Text style={MyStyleSheet.profilepic_skipText}>Skip</Text>
+            <Text style={[MyStyleSheet.primaryActionBtnText, { marginRight: 10 }]}>Next</Text>
+            <Text style={{ color: '#FFF', fontSize: 20 }}>→</Text>
         </TouchableOpacity>
 
       </ScrollView>
