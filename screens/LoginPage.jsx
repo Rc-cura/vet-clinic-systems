@@ -2,14 +2,14 @@ import { View, Text, TextInput, TouchableOpacity, Image, SafeAreaView, ScrollVie
 import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import MyStyleSheet from '../styles/MyStyleSheet'
-import { useUser } from '../context/UserContext';
 
 // 1. Import Supabase
 import { supabase } from '../context/supabase'; 
 
 export default function LoginPage() {
   const opx = useNavigation();
-  const { updateUser } = useUser(); 
+  
+  // We don't need useUser() here anymore because Otplogin.jsx handles it now!
   const [getLogin, setLogin] = useState({ email: "", password: "" });
   const [Msg, setMsg] = useState("");
   const [loading, setLoading] = useState(false);
@@ -28,32 +28,31 @@ export default function LoginPage() {
     setMsg("");
 
     try {
-      // 2. Sign in with Supabase Auth
-      const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+      // 1. Verify the Password is correct first
+      const { error: authError } = await supabase.auth.signInWithPassword({
         email: getLogin.email,
         password: getLogin.password,
       });
 
       if (authError) throw authError;
 
-      if (authData.user) {
-        // 3. Fetch the 'client' role and profile data from your table
-        const { data: profileData, error: profileError } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', authData.user.id)
-          .single();
+      // 2. Clear the immediate session so Supabase allows an OTP to be sent
+      await supabase.auth.signOut();
 
-        if (profileError) throw profileError;
+      // 3. THIS WAS MISSING: Actually tell Supabase to send the OTP email!
+      const { error: otpError } = await supabase.auth.signInWithOtp({
+        email: getLogin.email,
+        options: {
+          shouldCreateUser: false, // Don't create a new account by accident
+        }
+      });
 
-        // 4. Update global context with the actual database data
-        updateUser(profileData); 
+      if (otpError) throw otpError;
+
+      Alert.alert("Password Correct!", `An OTP has been sent to ${getLogin.email}`);
         
-        Alert.alert("Welcome back!", `Logged in as ${profileData.first_name}`);
-        
-        // Navigate to your main screen (e.g., 'home' or 'dashboard')
-        opx.replace('dashboard'); 
-      }
+      // 4. Navigate to the OTP screen to finish logging in
+      opx.navigate('otplogin', { email: getLogin.email }); 
 
     } catch (error) {
       setMsg(error.message);
@@ -119,7 +118,7 @@ export default function LoginPage() {
               onPress={loginAccount}
               disabled={loading}
             >
-              <Text style={MyStyleSheet.buttonText}>{loading ? "LOGGING IN..." : "LOGIN"}</Text>
+              <Text style={MyStyleSheet.buttonText}>{loading ? "VERIFYING..." : "LOGIN"}</Text>
             </TouchableOpacity>
           </View>
 
