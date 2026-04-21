@@ -1884,6 +1884,234 @@ mainProfileCircle: {
     fontWeight: 'bold',
   },
 
+  // Backgrounds
+  landingMainContainer: {
+    flex: 1,
+    backgroundColor: '#E6F4FF', // Light blue background for the top
+  },
+  landingHeaderArea: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 60,
+  },
+
+  landingLogoContainer: {
+    width: 190,
+    height: 220,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  landingLogoImage: {
+    width: '100%',
+    height: '100%',
+  },
+
+  // The White Card
+landingBottomCard: {
+    flex: 1.2, 
+    backgroundColor: '#FFF',
+    borderTopLeftRadius: 60, 
+    borderTopRightRadius: 60,
+    paddingHorizontal: 40,
+    paddingTop: 60, // Increased padding to match image 2
+    elevation: 20, // Adds a slight shadow at the curve
+    shadowColor: '#000',
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+  },
+  // Typography
+  landingTextSection: {
+    marginBottom: 50,
+  },
+  landingWelcomeText: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: '#2E3A91', // Deep blue
+  },
+  landingBrandText: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: '#E977B3', // Pinkish/Purple color from logo
+    marginTop: -5,
+  },
+  landingSubText: {
+    fontSize: 14,
+    color: '#777',
+    marginTop: 20,
+  },
+
+  // Buttons
+ landingButtonSection: {
+    width: '100%',
+    marginTop: 'auto', 
+    paddingBottom: 40,
+  },
+
+landingSignInBtn: {
+    width: '100%',
+    height: 55,
+    borderRadius: 30,
+    borderWidth: 1,
+    borderColor: '#2E3A91',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 15, // FIX: This creates the space between the two buttons
+  },
+
+  landingSignInText: {
+    color: '#2E3A91',
+    fontSize: 18,
+    fontWeight: '500',
+  },
+landingSignUpBtn: {
+    width: '100%',
+    height: 55,
+    borderRadius: 30,
+    backgroundColor: '#2E3A91',
+    justifyContent: 'center',
+    alignItems: 'center',
+   marginTop: 15,
+  },
+
+  landingSignUpText: {
+    color: '#FFF',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+
+  landingMainContainer: { flex: 1, backgroundColor: '#E6F4FF' },
+  landingHeaderArea: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  landingBottomCard: {
+    backgroundColor: '#FFF',
+    borderTopLeftRadius: 60,
+    borderTopRightRadius: 60,
+    paddingHorizontal: 30,
+    paddingTop: 40,
+  },
+  styledInput: {
+    width: '100%',
+    height: 60,
+    borderWidth: 1,
+    borderColor: '#D0D0D0',
+    borderRadius: 20,
+    paddingHorizontal: 20,
+    marginBottom: 20,
+    fontSize: 16,
+    color: '#333',
+    backgroundColor: '#FFF'
+  },
+  landingSignUpBtn: {
+    backgroundColor: '#2E3A91',
+    height: 60,
+    borderRadius: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  landingSignUpText: { color: '#FFF', fontSize: 18, fontWeight: 'bold' },
+ 
+otpStyledInput: {
+    width: 45,
+    height: 60,
+    borderWidth: 1,
+    borderColor: '#CCC',
+    borderRadius: 12,
+    textAlign: 'center',
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#2E3A91',
+    backgroundColor: '#FFF',
+  },
+
+  // Stepper / Progress Bar
+ // --- SMOOTH STEPPER STYLES ---
+  stepperMainContainer: {
+    width: '100%',
+    paddingHorizontal: 10,
+    marginTop: 30,
+    position: 'relative',
+    justifyContent: 'center',
+  },
+  stepperBackgroundLine: {
+    position: 'absolute',
+    top: 15, // Half of the circle height (30/2) to be perfectly centered
+    left: 40,
+    right: 40,
+    height: 1.5,
+    backgroundColor: '#2E3A91', // Match your brand blue
+    zIndex: -1, // Ensure it stays behind the circles
+  },
+  stepperContentRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    width: '100%',
+  },
+  stepWrapper: { 
+    alignItems: 'center', 
+    width: 80, // Fixed width ensures labels don't push circles around
+  },
+  stepCircleActive: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    backgroundColor: '#2E3A91',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  stepCircleInactive: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    backgroundColor: '#FFF', // White background so the line doesn't show through
+    borderWidth: 1.5,
+    borderColor: '#2E3A91',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  stepTextActive: { color: '#FFF', fontSize: 14, fontWeight: 'bold' },
+  stepTextInactive: { color: '#2E3A91', fontSize: 14, fontWeight: 'bold' },
+  stepLabelActive: { 
+    fontSize: 9, 
+    textAlign: 'center', 
+    color: '#2E3A91', 
+    marginTop: 8,
+    fontWeight: '500' 
+  },
+  stepLabelInactive: { 
+    fontSize: 9, 
+    textAlign: 'center', 
+    color: '#A0A0A0', 
+    marginTop: 8 
+  },
+
+  // Large Profile UI
+  largeProfileCircle: {
+    width: 280,
+    height: 280,
+    borderRadius: 140,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  details_inputWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+    height: 60,
+    borderWidth: 1,
+    borderColor: '#D0D0D0',
+    borderRadius: 20,
+    paddingHorizontal: 20,
+    backgroundColor: '#FFF',
+  },
+  // Ensure fieldLabel is light gray as seen in the UI
+  fieldLabel: {
+    fontSize: 14,
+    color: '#A0A0A0',
+    marginBottom: 8,
+    marginTop: 10,
+  },
   
 
 })
