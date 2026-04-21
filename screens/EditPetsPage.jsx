@@ -5,7 +5,7 @@ import MyStyleSheet from '../styles/MyStyleSheet'
 import { Pets } from '../App'
 
 export default function EditPetsPage() {
-  const navigation = useNavigation()
+  const opx = useNavigation()
   const route = useRoute()
   
   const { pet } = route.params || {}
@@ -38,9 +38,9 @@ export default function EditPetsPage() {
 
   return (
     <SafeAreaView style={MyStyleSheet.whiteContainer}>
-      {/* 1. Header with Back Button and Title */}
+      {/* 1. Updated Header Section */}
       <View style={MyStyleSheet.formHeader}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={MyStyleSheet.backBtn}>
+        <TouchableOpacity onPress={() => opx.goBack()} style={MyStyleSheet.backBtn}>
           <Text style={{ fontSize: 28, color: '#2E3A91' }}>←</Text> 
         </TouchableOpacity>
         <Text style={MyStyleSheet.petHeaderTitle}>Edit pet</Text>
@@ -49,7 +49,7 @@ export default function EditPetsPage() {
 
       <ScrollView contentContainerStyle={MyStyleSheet.addPetScroll} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
 
-        {/* 2. Profile Image with Plus/Camera Overlay */}
+        {/* 2. Profile Image with Plus Overlay */}
         <View style={MyStyleSheet.imagePickerContainer}>
           <View style={MyStyleSheet.mainProfileCircle}>
             {pet?.pimage ? (
@@ -65,9 +65,9 @@ export default function EditPetsPage() {
           </View>
         </View>
 
-        {/* 3. Form Section */}
         <Text style={MyStyleSheet.formSectionTitle}>Basic information</Text>
 
+        {/* 3. Labeled Form Inputs */}
         <View style={MyStyleSheet.inputGroup}>
           <Text style={MyStyleSheet.fieldLabel}>Pet's name</Text>
           <TextInput 
@@ -75,6 +75,7 @@ export default function EditPetsPage() {
             placeholder="Enter pet's name" 
             value={pname} 
             onChangeText={setPname} 
+            placeholderTextColor="#AAA" 
           />
 
           <Text style={MyStyleSheet.fieldLabel}>Species</Text>
@@ -83,6 +84,7 @@ export default function EditPetsPage() {
             placeholder="Select species" 
             value={species} 
             onChangeText={setSpecies} 
+            placeholderTextColor="#AAA" 
           />
 
           <Text style={MyStyleSheet.fieldLabel}>Breed</Text>
@@ -91,6 +93,7 @@ export default function EditPetsPage() {
             placeholder="Select breed" 
             value={breed} 
             onChangeText={setBreed} 
+            placeholderTextColor="#AAA" 
           />
 
           <Text style={MyStyleSheet.fieldLabel}>Gender</Text>
@@ -99,6 +102,7 @@ export default function EditPetsPage() {
             placeholder="Select gender" 
             value={gender} 
             onChangeText={setGender} 
+            placeholderTextColor="#AAA" 
           />
 
           <Text style={MyStyleSheet.fieldLabel}>Birthday</Text>
@@ -107,6 +111,7 @@ export default function EditPetsPage() {
             placeholder="00/00/0000" 
             value={age} 
             onChangeText={setAge} 
+            placeholderTextColor="#AAA" 
           />
 
           <Text style={MyStyleSheet.fieldLabel}>Weight</Text>
@@ -116,28 +121,16 @@ export default function EditPetsPage() {
             value={weight} 
             onChangeText={setWeight} 
             keyboardType="numeric" 
-          />
-
-          <Text style={MyStyleSheet.fieldLabel}>Remarks</Text>
-          <TextInput 
-            style={[MyStyleSheet.styledInput, { height: 100, textAlignVertical: 'top' }]} 
-            placeholder="Remarks" 
-            value={remarks} 
-            onChangeText={setRemarks} 
-            multiline={true} 
-            numberOfLines={4}
+            placeholderTextColor="#AAA" 
           />
         </View>
 
         {/* 4. Action Buttons */}
-        <TouchableOpacity style={MyStyleSheet.primaryActionBtn} onPress={handleSave}>
+        <TouchableOpacity style={[MyStyleSheet.primaryActionBtn, { marginTop: 30 }]} onPress={handleSave}>
           <Text style={MyStyleSheet.primaryActionBtnText}>Save changes</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity 
-          style={MyStyleSheet.deleteBtn} 
-          onPress={() => {/* Add Delete Logic here */}}
-        >
+        <TouchableOpacity style={MyStyleSheet.deleteBtn} onPress={() => {/* Delete Logic */}}>
           <Text style={MyStyleSheet.deleteBtnText}>Delete</Text>
         </TouchableOpacity>
 
@@ -152,7 +145,7 @@ export default function EditPetsPage() {
               style={MyStyleSheet.modalViewProfileBtn} 
               onPress={() => {
                 setModalVisible(false);
-                navigation.navigate('viewpets', { 
+                opx.navigate('viewpets', { 
                   pet: { ...pet, pname, species, breed, gender, age, weight, remarks } 
                 });
               }}

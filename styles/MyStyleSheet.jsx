@@ -599,7 +599,7 @@ primaryActionBtn: {
     elevation: 5,
   },
   primaryActionBtnText: { color: '#FFF', fontSize: 18, fontWeight: 'bold' },
-  
+
 minimalBottomNav: {
     position: 'absolute',
     bottom: 0,
@@ -1852,6 +1852,37 @@ mainProfileCircle: {
     justifyContent: 'center',
   },
   
+  deleteBtn: {
+    backgroundColor: 'transparent',
+    height: 60,
+    borderRadius: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 15,
+    borderWidth: 1,
+    borderColor: '#FF5252', // Red border for the delete action
+  },
+  deleteBtnText: {
+    color: '#FF5252', // Red text matching the border
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+
+  outlineActionBtn: {
+    backgroundColor: 'transparent',
+    height: 60,
+    borderRadius: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 15,
+    borderWidth: 1,
+    borderColor: '#2E3A91',
+  },
+  outlineActionBtnText: {
+    color: '#2E3A91',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
 
   
 
