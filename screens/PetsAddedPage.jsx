@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, SafeAreaView, FlatList, ScrollView, Image } from 'react-native'
+import { View, Text, TouchableOpacity, SafeAreaView, FlatList, Image } from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native'
 import MyStyleSheet from '../styles/MyStyleSheet'
@@ -10,8 +10,8 @@ export default function PetsAddedPage() {
   const renderPetCard = ({ item }) => (
     <View style={MyStyleSheet.petCardMain}>
       <View style={MyStyleSheet.petCardHeader}>
+        {/* Rounded Image on the Left */}
         <View style={MyStyleSheet.petCardCircle}>
-     
           {item.pimage ? (
             <Image source={{ uri: item.pimage }} style={{ width: '100%', height: '100%', borderRadius: 25 }} />
           ) : (
@@ -19,102 +19,84 @@ export default function PetsAddedPage() {
           )}
         </View>
 
+        {/* Text Details Section */}
         <View style={{ flex: 1, marginLeft: 15 }}>
           <Text style={MyStyleSheet.petCardName}>{item.pname}</Text>
+          <Text style={MyStyleSheet.petCardSubBreed}>{item.breed}</Text>
+          <Text style={MyStyleSheet.petCardGenderText}>{item.gender}</Text>
 
-          <Text style={MyStyleSheet.petCardSub}>{item.species} - {item.breed} - {item.gender}</Text>
+          {/* Action Buttons Row */}
+          <View style={MyStyleSheet.petActionRow}>
+            <TouchableOpacity 
+              style={MyStyleSheet.viewProfileOutlineBtn} 
+              onPress={() => opx.navigate('viewpets', { pet: item })}
+            >
+              <Text style={MyStyleSheet.viewProfileOutlineText}>View Profile</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity 
+              style={MyStyleSheet.bookApptSolidBtn} 
+              onPress={() => opx.navigate('service', { 
+                petName: item.pname, 
+                petImage: item.pimage,
+                petDetails: `${item.species} | ${item.breed}` 
+              })}
+            >
+              <Text style={MyStyleSheet.bookApptSolidText}>Book appointment</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-
-        <Text style={MyStyleSheet.petWeightTag}>{item.weight} kg</Text>
-
       </View>
-      
-      <View style={MyStyleSheet.cardDivider} />
-
-      <View style={MyStyleSheet.petActionRow}>
-
-        <TouchableOpacity  style={MyStyleSheet.petActionBtn} onPress={() => opx.navigate('service', {  petName: item.pname,  petImage: item.pimage,
-            petDetails: `${item.species} | ${item.breed}`  })} >
-          <Image source={require('../public/addcalendar.png')} style={{ width: 20, height: 20, marginRight: 5 }} />
-          <Text style={MyStyleSheet.petActionLabel}>Add Appointment</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity  style={MyStyleSheet.petActionBtn}  onPress={() => opx.navigate('viewpets', { pet: item })}>
-
-          <Image source={require('../public/bluepaw.png')} style={{ width: 20, height: 20, marginRight: 5 }} />
-
-          <Text style={MyStyleSheet.petActionLabel}>View Profile</Text>
-
-        </TouchableOpacity>
-
-      </View>
-
     </View>
   )
 
   return (
-    <SafeAreaView style={MyStyleSheet.container}>
-      <View style={{ padding: 25 }}>
-
-        <Text style={MyStyleSheet.sectionTitle}>Your Pets</Text>
-        
-
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginVertical: 20 }}>
-
-          <TouchableOpacity style={MyStyleSheet.petSelectActive}>
-
-            <Text style={MyStyleSheet.petSelectTextActive}>All{"\n"}Pets</Text>
-
-          </TouchableOpacity>
-          
-
-          {Pets.map((pet, index) => (
-            <View key={index} style={{ alignItems: 'center', marginRight: 15 }}>
-              <View style={MyStyleSheet.petSelectCircle}>
-                 <Image source={pet.pimage ? {uri: pet.pimage} : require('../public/bluepaw.png')} style={pet.pimage ? { width: 30, height: 30, borderRadius: 15 } : { width: 18, height: 18 }} />
-              </View>
-              <Text style={MyStyleSheet.petSelectLabel}>{pet.pname}</Text>
-
-            </View>
-          ))}
-
-          <TouchableOpacity onPress={() => opx.navigate('addpets')} style={{ alignItems: 'center' }}>
-            <View style={[MyStyleSheet.petSelectCircle, { backgroundColor: '#D1E3FF' }]}>
-
-              <Text style={{ fontSize: 24, color: '#5C93E8' }}>+</Text>
-
-            </View>
-            <Text style={MyStyleSheet.petSelectLabel}>Add New</Text>
-
-          </TouchableOpacity>
-        </ScrollView>
+    <SafeAreaView style={MyStyleSheet.whiteContainer}>
+      <View style={MyStyleSheet.petHeaderSimple}>
+        <Text style={MyStyleSheet.petHeaderTitle}>Pets</Text>
       </View>
 
-      
-      <FlatList data={Pets} renderItem={renderPetCard} keyExtractor={(item, index) => index.toString()} contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 100 }}
+      <FlatList 
+        data={Pets} 
+        renderItem={renderPetCard} 
+        keyExtractor={(item, index) => index.toString()} 
+        contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 200 }}
         ListEmptyComponent={() => (
-            <Text style={{ textAlign: 'center', marginTop: 50, color: '#AAA' }}>No pets found.</Text>
+          <Text style={{ textAlign: 'center', marginTop: 50, color: '#AAA' }}>No pets found.</Text>
         )}
       />
 
-      
-      <View style={MyStyleSheet.bottomNav}>
-        <TouchableOpacity style={MyStyleSheet.navItem} onPress={() => opx.navigate('dashboard')}>
-          <Image source={require('../public/HomePage.png')} style={{ width: 22, height: 22 }} />
-          <Text style={MyStyleSheet.navLabel}>Home</Text>
+      {/* Floating Sliding Drawer */}
+      <View style={MyStyleSheet.bottomDrawerCard}>
+        <View style={MyStyleSheet.dragHandleBar} />
+        <Text style={MyStyleSheet.cardActionTitle}>Add a pet now</Text>
+      </View>
+
+      {/* Professional Bottom Navigation */}
+      <View style={MyStyleSheet.minimalBottomNav}>
+        <TouchableOpacity style={MyStyleSheet.navTab} onPress={() => opx.navigate('dashboard')}>
+          <Image source={require('../public/HomePage.png')} style={MyStyleSheet.navTabIcon} />
+          <Text style={MyStyleSheet.navTabText}>Home</Text>
         </TouchableOpacity>
-        <View style={MyStyleSheet.navItemContainer}>
-           <TouchableOpacity style={MyStyleSheet.navItemActive}>
-              <Image source={require('../public/Pets.png')} style={{ width: 22, height: 22 }} />
-           </TouchableOpacity>
-        </View>
-        <TouchableOpacity style={MyStyleSheet.navItem} onPress={() => opx.navigate('appointment')}>
-          <Image source={require('../public/Calendar.png')} style={{ width: 22, height: 22 }} />
-          <Text style={MyStyleSheet.navLabel}>Appt</Text>
+
+        <TouchableOpacity style={MyStyleSheet.navTab}>
+          <Image source={require('../public/Pets.png')} style={[MyStyleSheet.navTabIcon, { tintColor: '#2E3A91' }]} />
+          <Text style={[MyStyleSheet.navTabText, { color: '#2E3A91' }]}>Pets</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={MyStyleSheet.navItem} onPress={() => opx.navigate('billing')}>
-          <Image source={require('../public/Bill.png')} style={{ width: 22, height: 22 }} />
-          <Text style={MyStyleSheet.navLabel}>Invoice</Text>
+
+        <TouchableOpacity style={MyStyleSheet.navTab} onPress={() => opx.navigate('service')}>
+          <Image source={require('../public/Book.png')} style={MyStyleSheet.navTabIcon} />
+          <Text style={MyStyleSheet.navTabText}>Book</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={MyStyleSheet.navTab} onPress={() => opx.navigate('appointment')}>
+          <Image source={require('../public/Calendar.png')} style={MyStyleSheet.navTabIcon} />
+          <Text style={MyStyleSheet.navTabText}>Appointments</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={MyStyleSheet.navTab}>
+          <Image source={require('../public/Profile.png')} style={MyStyleSheet.navTabIcon} />
+          <Text style={MyStyleSheet.navTabText}>Profile</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

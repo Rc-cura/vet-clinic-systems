@@ -8,34 +8,20 @@ export default function EditPetsPage() {
   const opx = useNavigation()
   const route = useRoute()
   
-
   const { pet } = route.params || {}
 
-
   const [pname, setPname] = useState(pet?.pname || '')
-
   const [species, setSpecies] = useState(pet?.species || '')
-
   const [breed, setBreed] = useState(pet?.breed || '')
-
-
   const [gender, setGender] = useState(pet?.gender || '')
-
   const [age, setAge] = useState(pet?.age || '')
-
   const [weight, setWeight] = useState(pet?.weight || '')
-
   const [remarks, setRemarks] = useState(pet?.remarks || '')
-
   const [modalVisible, setModalVisible] = useState(false)
 
-
   const handleSave = () => {
-
     const index = Pets.findIndex(item => item.pname === pet?.pname);
-
     if (index !== -1) {
-
       Pets[index] = {
         ...Pets[index],
         pname,
@@ -47,90 +33,131 @@ export default function EditPetsPage() {
         remarks,
       };
     }
-
     setModalVisible(true)
   }
 
   return (
-    <SafeAreaView style={MyStyleSheet.container}>
+    <SafeAreaView style={MyStyleSheet.whiteContainer}>
+      {/* 1. Updated Header Section */}
+      <View style={MyStyleSheet.formHeader}>
+        <TouchableOpacity onPress={() => opx.goBack()} style={MyStyleSheet.backBtn}>
+          <Text style={{ fontSize: 28, color: '#2E3A91' }}>←</Text> 
+        </TouchableOpacity>
+        <Text style={MyStyleSheet.petHeaderTitle}>Edit pet</Text>
+        <View style={{ width: 40 }} />
+      </View>
 
-      <ScrollView contentContainerStyle={{ paddingHorizontal: 30, paddingBottom: 40, paddingTop: 20 }}>
+      <ScrollView contentContainerStyle={MyStyleSheet.addPetScroll} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
 
-
-        <View style={MyStyleSheet.editPhotoContainer}>
-
-          <View style={MyStyleSheet.sumBigCircle}>
-
-             {pet?.pimage ? (
-                <Image  source={{ uri: pet.pimage }}  style={{ width: '100%', height: '100%', borderRadius: 50 }} />
-             ) : (
-                <Image source={require('../public/blackpaw.png')}style={{ width: 80, height: 80 }} resizeMode="contain"/>
-             )}
+        {/* 2. Profile Image with Plus Overlay */}
+        <View style={MyStyleSheet.imagePickerContainer}>
+          <View style={MyStyleSheet.mainProfileCircle}>
+            {pet?.pimage ? (
+              <Image source={{ uri: pet.pimage }} style={MyStyleSheet.mainProfileImage} />
+            ) : (
+              <View style={[MyStyleSheet.mainProfileImage, { backgroundColor: '#E0E0E0', justifyContent: 'center', alignItems: 'center' }]}>
+                 <Text style={{fontSize: 40}}>🐾</Text>
+              </View>
+            )}
+            <TouchableOpacity style={MyStyleSheet.plusCircle}>
+              <Text style={MyStyleSheet.plusIcon}>+</Text>
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity style={MyStyleSheet.cameraIconOverlay}>
-            <Image source={require('../public/camera.png')} style={{ width: 20, height: 20 }} resizeMode='contain'/>
-          </TouchableOpacity>
         </View>
 
+        <Text style={MyStyleSheet.formSectionTitle}>Basic information</Text>
+
+        {/* 3. Labeled Form Inputs */}
         <View style={MyStyleSheet.inputGroup}>
+          <Text style={MyStyleSheet.fieldLabel}>Pet's name</Text>
+          <TextInput 
+            style={MyStyleSheet.styledInput} 
+            placeholder="Enter pet's name" 
+            value={pname} 
+            onChangeText={setPname} 
+            placeholderTextColor="#AAA" 
+          />
 
-          <TextInput style={MyStyleSheet.formInput}  placeholder="Pet's name"  value={pname} onChangeText={setPname} placeholderTextColor="#AAA" />
-          <TextInput style={MyStyleSheet.formInput} placeholder="Species" value={species} onChangeText={setSpecies} placeholderTextColor="#AAA" />
-          <TextInput style={MyStyleSheet.formInput}  placeholder="Breed"  value={breed} onChangeText={setBreed}  placeholderTextColor="#AAA" />
-          <TextInput  style={MyStyleSheet.formInput} placeholder="Gender"  value={gender} onChangeText={setGender} placeholderTextColor="#AAA" />
+          <Text style={MyStyleSheet.fieldLabel}>Species</Text>
+          <TextInput 
+            style={MyStyleSheet.styledInput} 
+            placeholder="Select species" 
+            value={species} 
+            onChangeText={setSpecies} 
+            placeholderTextColor="#AAA" 
+          />
 
+          <Text style={MyStyleSheet.fieldLabel}>Breed</Text>
+          <TextInput 
+            style={MyStyleSheet.styledInput} 
+            placeholder="Select breed" 
+            value={breed} 
+            onChangeText={setBreed} 
+            placeholderTextColor="#AAA" 
+          />
 
-          <View style={[MyStyleSheet.inlineInputs, { flexDirection: 'row', width: '100%' }]}>
+          <Text style={MyStyleSheet.fieldLabel}>Gender</Text>
+          <TextInput 
+            style={MyStyleSheet.styledInput} 
+            placeholder="Select gender" 
+            value={gender} 
+            onChangeText={setGender} 
+            placeholderTextColor="#AAA" 
+          />
 
-            <View style={{ flex: 1, marginRight: 10 }}>
+          <Text style={MyStyleSheet.fieldLabel}>Birthday</Text>
+          <TextInput 
+            style={MyStyleSheet.styledInput} 
+            placeholder="00/00/0000" 
+            value={age} 
+            onChangeText={setAge} 
+            placeholderTextColor="#AAA" 
+          />
 
-              <TextInput style={[MyStyleSheet.formInput, { width: '100%' }]} placeholder="Age" value={age} onChangeText={setAge} keyboardType="numeric" placeholderTextColor="#AAA"/>
-            </View>
-
-            <View style={{ flex: 1 }}>
-
-              <TextInput style={[MyStyleSheet.formInput, { width: '100%' }]} placeholder="Weight" value={weight}  onChangeText={setWeight} keyboardType="numeric" placeholderTextColor="#AAA" />
-            </View>
-
-          </View>
-
-          <TextInput style={[MyStyleSheet.formInput, MyStyleSheet.textArea]}  placeholder="Remarks" value={remarks} onChangeText={setRemarks}  placeholderTextColor="#AAA" multiline={true} numberOfLines={4}/>
+          <Text style={MyStyleSheet.fieldLabel}>Weight</Text>
+          <TextInput 
+            style={MyStyleSheet.styledInput} 
+            placeholder="Kg" 
+            value={weight} 
+            onChangeText={setWeight} 
+            keyboardType="numeric" 
+            placeholderTextColor="#AAA" 
+          />
         </View>
 
-    
-        <TouchableOpacity style={[MyStyleSheet.primaryBlueBtn, { marginTop: 30 }]} onPress={handleSave}>
-          <Text style={MyStyleSheet.primaryBlueBtnText}>Save</Text>
+        {/* 4. Action Buttons */}
+        <TouchableOpacity style={[MyStyleSheet.primaryActionBtn, { marginTop: 30 }]} onPress={handleSave}>
+          <Text style={MyStyleSheet.primaryActionBtnText}>Save changes</Text>
+        </TouchableOpacity>
 
+        <TouchableOpacity style={MyStyleSheet.deleteBtn} onPress={() => {/* Delete Logic */}}>
+          <Text style={MyStyleSheet.deleteBtnText}>Delete</Text>
         </TouchableOpacity>
 
       </ScrollView>
 
-
+      {/* Success Modal */}
       <Modal animationType="fade" transparent={true} visible={modalVisible}>
-
         <View style={MyStyleSheet.modalOverlay}>
-
           <View style={MyStyleSheet.modalContainer}>
-
             <Text style={MyStyleSheet.modalTitle}>Successfully Edited Pet Profile</Text>
-
-            <TouchableOpacity style={MyStyleSheet.modalViewProfileBtn}  onPress={() => {
-
+            <TouchableOpacity 
+              style={MyStyleSheet.modalViewProfileBtn} 
+              onPress={() => {
                 setModalVisible(false);
-
                 opx.navigate('viewpets', { 
                   pet: { ...pet, pname, species, breed, gender, age, weight, remarks } 
                 });
               }}
             >
               <Text style={MyStyleSheet.modalViewText}>View Profile</Text>
-
             </TouchableOpacity>
-            
           </View>
         </View>
       </Modal>
 
+      {/* Bottom Spacer */}
+      <View style={{ height: 80 }} />
     </SafeAreaView>
   )
 }

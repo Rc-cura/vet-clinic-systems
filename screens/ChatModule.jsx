@@ -27,16 +27,10 @@ export default function MessageHub() {
   return (
     <SafeAreaView style={MyStyleSheet.messageHub_container}>
       
-      {/* Top Navigation Bar */}
-      <View style={MyStyleSheet.messageHub_header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Text style={{ fontSize: 24, fontWeight: 'bold' }}>←</Text>
-        </TouchableOpacity>
-        <Text style={MyStyleSheet.messageHub_title}>Message Hub</Text>
-      </View>
+
 
       {/* Search Input */}
-      <View style={MyStyleSheet.searchContainer}>
+      <View style={[MyStyleSheet.searchContainer, { marginTop: 20 }]}>
         <Text style={{ marginRight: 10 }}>🔍</Text>
         <TextInput 
           placeholder="Search Chat" 
