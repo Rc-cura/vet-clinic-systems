@@ -55,13 +55,84 @@ export default function App() {
         <MScreen.Navigator initialRouteName='landing'>
     
    
-          <MScreen.Screen name='profilepic' component={AddProfilePic} />
+          {/* <MScreen.Screen name='profilepic' component={AddProfilePic} />
           <MScreen.Screen name='details' component={AddDetails} />
           <MScreen.Screen name='background' component={BackgroundPage} />
           <MScreen.Screen name='address' component={AddressPage} />
           <MScreen.Screen name='chat' component={ChatModule} />
           <MScreen.Screen name='auth' component={AuthCheck} />
-          <MScreen.Screen name='healthcard' component={HealthCard} />
+          <MScreen.Screen name='healthcard' component={HealthCard} /> */}
+
+          <MScreen.Screen
+            name='profilepic'
+            component={AddProfilePic}
+            options={{
+              headerShown: false,
+              title: 'Profile Pic',
+              headerLeft: () => null,
+              headerTitleAlign: 'left',
+            }}
+          />
+          <MScreen.Screen
+            name='details'
+            component={AddDetails}
+            options={{
+              headerShown: false,
+              title: 'Details',
+              headerLeft: () => null,
+              headerTitleAlign: 'left',
+            }}
+          />
+          <MScreen.Screen
+            name='background'
+            component={BackgroundPage}
+            options={{
+              headerShown: false,
+              title: 'Background',
+              headerLeft: () => null,
+              headerTitleAlign: 'left',
+            }}
+          />
+          <MScreen.Screen
+            name='address'
+            component={AddressPage}
+            options={{
+              headerShown: false,
+              title: 'Address',
+              headerLeft: () => null,
+              headerTitleAlign: 'left',
+            }}
+          />
+          <MScreen.Screen
+            name='chat'
+            component={ChatModule}
+            options={{
+              headerShown: false,
+              title: 'Chat',
+              headerLeft: () => null,
+              headerTitleAlign: 'left',
+            }}
+          />
+          <MScreen.Screen
+            name='auth'
+            component={AuthCheck}
+            options={{
+              headerShown: false,
+              title: 'Auth',
+              headerLeft: () => null,
+              headerTitleAlign: 'left',
+            }}
+          />
+          <MScreen.Screen
+            name='healthcard'
+            component={HealthCard}
+            options={{
+              headerShown: false,
+              title: 'Health Card',
+              headerLeft: () => null,
+              headerTitleAlign: 'left',
+            }}
+          />
 
           
            <MScreen.Screen
@@ -163,7 +234,7 @@ export default function App() {
             }}
           />
           
-          <MScreen.Screen name='notification' component={Notification} />
+          {/* <MScreen.Screen name='notification' component={Notification} />
           <MScreen.Screen name='addpets' component={AddPets} />
           <MScreen.Screen name='viewpets' component={ViewPetsPage} />
           <MScreen.Screen name='editpets' component={EditPetsPage} />
@@ -176,7 +247,148 @@ export default function App() {
           <MScreen.Screen name='completed' component={AppointmentStatusCompleted} />
           <MScreen.Screen name='pending' component={AppointmentStatusPending} />
           <MScreen.Screen name='approved' component={AppointmentStatusApproved} />
-          <MScreen.Screen name='cancelled' component={AppointmentStatusCancelled} />
+          <MScreen.Screen name='cancelled' component={AppointmentStatusCancelled} /> */}
+
+          <MScreen.Screen
+            name='notification'
+            component={Notification}
+            options={{
+              headerShown: false,
+              title: 'Notification',
+              headerLeft: () => null,
+              headerTitleAlign: 'left',
+            }}
+          />
+          <MScreen.Screen
+            name='addpets'
+            component={AddPets}
+            options={{
+              headerShown: false,
+              title: 'Add Pets',
+              headerLeft: () => null,
+              headerTitleAlign: 'left',
+            }}
+          />
+          <MScreen.Screen
+            name='viewpets'
+            component={ViewPetsPage}
+            options={{
+              headerShown: false,
+              title: 'View Pets',
+              headerLeft: () => null,
+              headerTitleAlign: 'left',
+            }}
+          />
+          <MScreen.Screen
+            name='editpets'
+            component={EditPetsPage}
+            options={{
+              headerShown: false,
+              title: 'Edit Pets',
+              headerLeft: () => null,
+              headerTitleAlign: 'left',
+            }}
+          />
+          <MScreen.Screen
+            name='editprofile'
+            component={EditProfilePage}
+            options={{
+              headerShown: false,
+              title: 'Edit Profile',
+              headerLeft: () => null,
+              headerTitleAlign: 'left',
+            }}
+          />
+          <MScreen.Screen
+            name='userprofile'
+            component={UserProfilePage}
+            options={{
+              headerShown: false,
+              title: 'User Profile',
+              headerLeft: () => null,
+              headerTitleAlign: 'left',
+            }}
+          />
+          <MScreen.Screen
+            name='selectpet'
+            component={BookAppointmentPets}
+            options={{
+              headerShown: false,
+              title: 'Select Pet',
+              headerLeft: () => null,
+              headerTitleAlign: 'left',
+            }}
+          />
+          <MScreen.Screen
+            name='service'
+            component={BookAppointmentService}
+            options={{
+              headerShown: false,
+              title: 'Service',
+              headerLeft: () => null,
+              headerTitleAlign: 'left',
+            }}
+          />
+          <MScreen.Screen
+            name='datetime'
+            component={BookAppointmentDateTime}
+            options={{
+              headerShown: false,
+              title: 'Date Time',
+              headerLeft: () => null,
+              headerTitleAlign: 'left',
+            }}
+          />
+          <MScreen.Screen
+            name='summary'
+            component={BookAppointmentSummary}
+            options={{
+              headerShown: false,
+              title: 'Summary',
+              headerLeft: () => null,
+              headerTitleAlign: 'left',
+            }}
+          />
+          <MScreen.Screen
+            name='completed'
+            component={AppointmentStatusCompleted}
+            options={{
+              headerShown: false,
+              title: 'Completed',
+              headerLeft: () => null,
+              headerTitleAlign: 'left',
+            }}
+          />
+          <MScreen.Screen
+            name='pending'
+            component={AppointmentStatusPending}
+            options={{
+              headerShown: false,
+              title: 'Pending',
+              headerLeft: () => null,
+              headerTitleAlign: 'left',
+            }}
+          />
+          <MScreen.Screen
+            name='approved'
+            component={AppointmentStatusApproved}
+            options={{
+              headerShown: false,
+              title: 'Approved',
+              headerLeft: () => null,
+              headerTitleAlign: 'left',
+            }}
+          />
+          <MScreen.Screen
+            name='cancelled'
+            component={AppointmentStatusCancelled}
+            options={{
+              headerShown: false,
+              title: 'Cancelled',
+              headerLeft: () => null,
+              headerTitleAlign: 'left',
+            }}
+          />
         </MScreen.Navigator>
       </NavigationContainer>
     </UserProvider>
