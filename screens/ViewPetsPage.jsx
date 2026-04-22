@@ -6,7 +6,45 @@ import MyStyleSheet from '../styles/MyStyleSheet'
 export default function ViewPetsPage() {
   const opx = useNavigation()
   const route = useRoute()
+  
+  // Dito kukunin ang 'pet' object na ipinasa mula sa PetManagementPage
   const { pet } = route.params || {}
+
+  // ================= AGE CALCULATOR FUNCTION =================
+  const calculateAge = (birthdayString) => {
+    if (!birthdayString) return 'N/A';
+
+    // Sinusubukan nitong lagyan ng slashes kung 6 digits lang (hal: 072705 -> 07/27/05)
+    let formattedDate = birthdayString;
+    if (birthdayString.length === 6 && !birthdayString.includes('/')) {
+      formattedDate = `${birthdayString.slice(0, 2)}/${birthdayString.slice(2, 4)}/${birthdayString.slice(4)}`;
+    } 
+    // Kung 8 digits naman (hal: 07272005 -> 07/27/2005)
+    else if (birthdayString.length === 8 && !birthdayString.includes('/')) {
+      formattedDate = `${birthdayString.slice(0, 2)}/${birthdayString.slice(2, 4)}/${birthdayString.slice(4)}`;
+    }
+
+    const birthDate = new Date(formattedDate);
+    
+    // Kung hindi valid na date ang na-input, ibalik na lang ang original string
+    if (isNaN(birthDate.getTime())) return birthdayString; 
+
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const m = today.getMonth() - birthDate.getMonth();
+
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+
+    // Kung less than 1 year old, months ang ipakita natin
+    if (age < 1) {
+      let months = (today.getFullYear() - birthDate.getFullYear()) * 12 + today.getMonth() - birthDate.getMonth();
+      return months > 0 ? `${months} months` : 'Just born';
+    }
+
+    return `${age} yrs old`;
+  };
 
   return (
     <SafeAreaView style={MyStyleSheet.whiteContainer}>
@@ -15,7 +53,10 @@ export default function ViewPetsPage() {
         <TouchableOpacity onPress={() => opx.goBack()} style={MyStyleSheet.backBtn}>
           <Text style={{ fontSize: 28, color: '#2E3A91' }}>←</Text> 
         </TouchableOpacity>
-        <Text style={MyStyleSheet.petHeaderTitle}>{pet?.pname ? `${pet.pname}’s profile` : "Pet's profile"}</Text>
+        
+        <Text style={MyStyleSheet.petHeaderTitle}>
+          {pet?.pet_name ? `${pet.pet_name}’s profile` : "Pet's profile"}
+        </Text>
         <View style={{ width: 40 }} />
       </View>
 
@@ -41,7 +82,8 @@ export default function ViewPetsPage() {
 
           <View style={MyStyleSheet.detailRow}>
             <Text style={MyStyleSheet.detailLabelText}>Age</Text>
-            <Text style={MyStyleSheet.detailValueTextGray}>{pet?.age || '0'}</Text>
+            {/* 🔴 IN-UPDATE: Dito na gagamitin yung calculateAge function */}
+            <Text style={MyStyleSheet.detailValueTextGray}>{calculateAge(pet?.age)}</Text>
           </View>
 
           <View style={MyStyleSheet.detailRow}>
@@ -62,7 +104,7 @@ export default function ViewPetsPage() {
 
           <TouchableOpacity 
             style={MyStyleSheet.outlineActionBtn} 
-            onPress={() => {/* Health card logic */}}
+            onPress={() => opx.navigate('healthcard', { pet: pet })}
           >
             <Text style={MyStyleSheet.outlineActionBtnText}>Health card</Text>
           </TouchableOpacity>

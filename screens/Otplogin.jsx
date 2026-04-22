@@ -69,7 +69,7 @@ export default function Otplogin() {
         // 6. Save to global context and navigate to dashboard
         updateUser(profileData); 
         Alert.alert("Success", "Login complete!");
-        opx.replace('dashboard'); 
+        opx.replace('auth'); 
       }
     } catch (error) {
       Alert.alert("Verification Failed", error.message);
