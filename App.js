@@ -16,8 +16,8 @@ import AppointmentPage from './screens/AppointmentPage';
 import BillingPage from './screens/BillingPage';
 import Notification from './screens/Notification';
 import AddPets from './screens/AddPets';
-import AddPetsCont from './screens/AddPetsCont';
-import PetsAddedPage from './screens/PetsAddedPage';
+
+
 import ViewPetsPage from './screens/ViewPetsPage';
 import EditPetsPage from './screens/EditPetsPage';
 import UserProfilePage from './screens/UserProfilePage';
@@ -165,8 +165,6 @@ export default function App() {
           
           <MScreen.Screen name='notification' component={Notification} />
           <MScreen.Screen name='addpets' component={AddPets} />
-          <MScreen.Screen name='addpetscont' component={AddPetsCont} />
-          <MScreen.Screen name='petsadded' component={PetsAddedPage} />
           <MScreen.Screen name='viewpets' component={ViewPetsPage} />
           <MScreen.Screen name='editpets' component={EditPetsPage} />
           <MScreen.Screen name='editprofile' component={EditProfilePage} />
