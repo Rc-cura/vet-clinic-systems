@@ -52,7 +52,7 @@ export default function App() {
   return (
     <UserProvider>
       <NavigationContainer>
-        <MScreen.Navigator initialRouteName='landing'>
+        <MScreen.Navigator initialRouteName='appointment'>
     
    
           {/* <MScreen.Screen name='profilepic' component={AddProfilePic} />
@@ -157,7 +157,7 @@ export default function App() {
             }}
           />
 
-                  <MScreen.Screen
+            <MScreen.Screen
             name='register'
             component={RegisterPage}
             options={{
@@ -194,7 +194,7 @@ export default function App() {
             name='dashboard'
             component={DashboardPage}
             options={{
-              headerShown: true,
+              headerShown: false,
               title: 'Home',
               headerLeft: () => null,
               headerTitleAlign: 'left',
@@ -205,7 +205,7 @@ export default function App() {
             name='pet'
             component={PetManagementPage}
             options={{
-              headerShown: true,
+              headerShown: false,
               title: 'Pets',
               headerLeft: () => null,
               headerTitleAlign: 'left',
@@ -216,7 +216,7 @@ export default function App() {
             name='appointment'
             component={AppointmentPage}
             options={{
-              headerShown: true,
+              headerShown: false,
               title: 'Appointment',
               headerLeft: () => null,
               headerTitleAlign: 'left',
