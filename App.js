@@ -52,7 +52,7 @@ export default function App() {
   return (
     <UserProvider>
       <NavigationContainer>
-        <MScreen.Navigator initialRouteName='appointment'>
+        <MScreen.Navigator initialRouteName='userprofile'>
     
    
           {/* <MScreen.Screen name='profilepic' component={AddProfilePic} />
@@ -227,7 +227,7 @@ export default function App() {
             name='billing'
             component={BillingPage}
             options={{
-              headerShown: true,
+              headerShown: false,
               title: 'Invoice',
               headerLeft: () => null,
               headerTitleAlign: 'left',

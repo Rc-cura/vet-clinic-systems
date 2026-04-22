@@ -2582,6 +2582,49 @@ otpStyledInput: {
     fontWeight: 'bold',
   },
 
+  profileAvatarLarge: {
+    width: 150,
+    height: 150,
+    borderRadius: 75,
+    borderWidth: 4,
+    borderColor: '#FFF',
+    elevation: 10,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    marginBottom: 20,
+  },
+  profileUserName: { fontSize: 28, fontWeight: 'bold', color: '#2E3A91' },
+  profileUserEmail: { fontSize: 16, color: '#AAA', marginTop: 5 },
+  profileBottomCard: {
+    flex: 1,
+    backgroundColor: '#FFF',
+    borderTopLeftRadius: 60,
+    borderTopRightRadius: 60,
+    paddingHorizontal: 30,
+    paddingTop: 40,
+    elevation: 20,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 20,
+  },
+  profileMenuOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 15,
+  },
+  profileMenuIconWrapper: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: '#F7F9FC',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  profileMenuTitle: { fontSize: 18, fontWeight: 'bold', color: '#2E3A91' },
+  profileMenuSub: { fontSize: 12, color: '#AAA' },
+  profileDivider: { height: 1, backgroundColor: '#F0F0F0', marginVertical: 5 },
+
 })
 
 export default MyStyleSheet;
