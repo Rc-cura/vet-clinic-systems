@@ -506,6 +506,210 @@ bottomDrawerCard: {
     justifyContent: 'center',
     alignItems: 'center',
   },
+  healthCardContainer: {
+  backgroundColor: '#FFF',
+  borderRadius: 25,
+  marginHorizontal: 20,
+  padding: 20,
+  marginBottom: 30,
+  // Shadow for iOS
+  shadowColor: '#000',
+  shadowOffset: { width: 0, height: 5 },
+  shadowOpacity: 0.1,
+  shadowRadius: 10,
+  // Shadow for Android
+  elevation: 5,
+},
+
+  // --- DASHBOARD UI STYLES ---
+  dashScrollContent: {
+    padding: 20,
+    paddingBottom: 100,
+  },
+  dashTopHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+    marginTop: 10,
+  },
+  dashHeaderTitle: {
+    fontSize: 24,
+    fontWeight: '900',
+    color: '#2A3072',
+  },
+  dashHeaderIcons: {
+    flexDirection: 'row',
+  },
+  dashIconBtn: {
+    marginLeft: 15,
+  },
+  dashApptCard: {
+    backgroundColor: '#FFF',
+    borderRadius: 20,
+    overflow: 'hidden',
+    marginBottom: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+    elevation: 3,
+  },
+  dashApptHeader: {
+    backgroundColor: '#343A73',
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+  },
+  dashApptHeaderText: {
+    color: '#FFF',
+    fontSize: 16,
+    fontWeight: '700',
+  },
+  dashApptBody: {
+    padding: 20,
+    alignItems: 'center',
+  },
+  dashApptBodyTitle: {
+    color: '#343A73',
+    fontSize: 16,
+    fontWeight: '700',
+    marginBottom: 5,
+  },
+  dashApptBodySub: {
+    color: '#A9A9A9',
+    fontSize: 12,
+  },
+  dashBannerContainer: {
+    height: 120,
+    borderRadius: 20,
+    marginBottom: 25,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  dashBanner: {
+    flex: 1,
+    justifyContent: 'flex-end',
+  },
+  dashBannerOverlay: {
+    padding: 15,
+    backgroundColor: 'rgba(255,255,255,0.7)',
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end'
+  },
+  dashBannerText: {
+    color: '#343A73',
+    fontWeight: '800',
+    fontSize: 14,
+  },
+  dashDotsRow: {
+    flexDirection: 'row',
+    marginBottom: 5,
+  },
+  dashDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: '#CCC',
+    marginHorizontal: 2,
+  },
+  dashDotActive: {
+    width: 16,
+    backgroundColor: '#343A73',
+  },
+  dashSectionTitle: {
+    fontSize: 18,
+    fontWeight: '800',
+    color: '#343A73',
+    marginBottom: 15,
+    marginTop: 5,
+  },
+  dashPetProfilesRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 25,
+  },
+  dashPetAvatarBtn: {
+    marginRight: 10,
+  },
+  dashPetAvatar: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    borderWidth: 2,
+    borderColor: '#FFF',
+  },
+  dashEmptyPetCircle: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: '#E0E0E0',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  dashArrowBtn: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#EEEEEE',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 10,
+  },
+  dashOverviewCard: {
+    backgroundColor: '#FFF',
+    padding: 20,
+    borderRadius: 20,
+    marginBottom: 15,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    elevation: 2,
+  },
+  dashOverviewCardTitle: {
+    fontSize: 16,
+    fontWeight: '800',
+    color: '#343A73',
+    marginBottom: 8,
+  },
+  dashOverviewCardSub: {
+    fontSize: 12,
+    color: '#A9A9A9',
+  },
+  dashBillingAmount: {
+    fontSize: 24,
+    fontWeight: '900',
+    color: '#343A73',
+    marginTop: 10,
+  },
+  dashBottomNav: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    backgroundColor: '#FFF',
+    paddingVertical: 15,
+    paddingBottom: 25, 
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    borderTopWidth: 1,
+    borderTopColor: '#F0F0F0',
+  },
+  dashNavItem: {
+    alignItems: 'center',
+  },
+  dashNavLabel: {
+    fontSize: 10,
+    color: '#A9A9A9',
+    marginTop: 4,
+    fontWeight: '600'
+  },
 
 
 dragHandleBar: {

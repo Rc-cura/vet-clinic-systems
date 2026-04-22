@@ -35,6 +35,8 @@ import AddDetails from './screens/AddDetails';
 import ChatModule from './screens/ChatModule';
 import BackgroundPage from './screens/BackgroundPage';
 import AddressPage from './screens/AddressPage';
+import AuthCheck from './screens/AuthCheck';
+import HealthCard from './screens/HealthCard';
 
 
 
@@ -50,7 +52,7 @@ export default function App() {
   return (
     <UserProvider>
       <NavigationContainer>
-        <MScreen.Navigator initialRouteName='profilepic'>
+        <MScreen.Navigator initialRouteName='landing'>
     
    
           <MScreen.Screen name='profilepic' component={AddProfilePic} />
@@ -58,6 +60,8 @@ export default function App() {
           <MScreen.Screen name='background' component={BackgroundPage} />
           <MScreen.Screen name='address' component={AddressPage} />
           <MScreen.Screen name='chat' component={ChatModule} />
+          <MScreen.Screen name='auth' component={AuthCheck} />
+          <MScreen.Screen name='healthcard' component={HealthCard} />
 
           
            <MScreen.Screen

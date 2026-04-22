@@ -57,7 +57,7 @@ export default function RegisterPage() {
     const { fname, lname, email, contact, password, cpassword } = getUser;
 
     // Validation checks
-    if (!fname || !lname || !email || !contact || !password || !cpassword) {
+    if (!fname || !lname || !email || !password || !cpassword) {
       setMsg("Please fill up all fields");
       return;
     }
@@ -162,7 +162,6 @@ export default function RegisterPage() {
             <TextInput style={MyStyleSheet.styledInput} value={getUser.fname} onChangeText={(e) => changeHandler("fname", e)} placeholder='First Name' placeholderTextColor="#AAA" />
             <TextInput style={MyStyleSheet.styledInput} value={getUser.lname} onChangeText={(e) => changeHandler("lname", e)} placeholder='Last Name' placeholderTextColor="#AAA" />
             <TextInput style={MyStyleSheet.styledInput} value={getUser.email} onChangeText={(e) => changeHandler("email", e)} placeholder='Email Address' placeholderTextColor="#AAA" keyboardType="email-address" autoCapitalize="none" />
-            <TextInput style={MyStyleSheet.styledInput} value={getUser.contact} onChangeText={(e) => changeHandler("contact", e)} placeholder='Contact Number' placeholderTextColor="#AAA" keyboardType="phone-pad" />
             <TextInput style={MyStyleSheet.styledInput} value={getUser.password} onChangeText={(e) => changeHandler("password", e)} placeholder='Password' placeholderTextColor="#AAA" secureTextEntry />
             <TextInput style={MyStyleSheet.styledInput} value={getUser.cpassword} onChangeText={(e) => changeHandler("cpassword", e)} placeholder='Confirm Password' placeholderTextColor="#AAA" secureTextEntry />
 

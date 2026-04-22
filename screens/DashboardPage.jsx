@@ -1,167 +1,177 @@
-  import { View, Text, TouchableOpacity, Image, ScrollView, SafeAreaView } from 'react-native'
-  import React from 'react'
-  import { useNavigation } from '@react-navigation/native'
-  import MyStyleSheet from '../styles/MyStyleSheet'
-  import { useUser } from '../context/UserContext'
-  import { Pets } from '../App' 
+import { View, Text, TouchableOpacity, Image, ScrollView, SafeAreaView, ImageBackground, ActivityIndicator } from 'react-native'
+import React, { useEffect, useState } from 'react' // 1. Added useEffect and useState
+import { useNavigation } from '@react-navigation/native'
+import { useUser } from '../context/UserContext'
+import { supabase } from '../context/supabase' // 2. Ensure your supabase client is imported
+import { Ionicons } from '@expo/vector-icons'; 
+import MyStyleSheet from '../styles/MyStyleSheet';
 
-  export default function DashboardPage() {
-    const opx = useNavigation()
-    const { user } = useUser()
+export default function DashboardPage() {
+  const opx = useNavigation()
+  const { user } = useUser()
 
-    const displayPet = Pets.length > 0 ? Pets[0] : null;
+  // 3. State to hold the pets from database
+  const [userPets, setUserPets] = useState([])
+  const [loading, setLoading] = useState(true)
 
-    return (
-      <SafeAreaView style={MyStyleSheet.container}>
+  // 4. Fetch pets on component mount
+  useEffect(() => {
+    const fetchPets = async () => {
+      if (!user?.id) return;
 
-        <View style={MyStyleSheet.dashHeader}>
-          <Text style={MyStyleSheet.welcomeText}>Hi, {user?.fname || 'User'}!</Text>
-          
-          <View style={MyStyleSheet.headerIcons}>
-            <TouchableOpacity onPress={() => opx.navigate('userprofile')}>
-              <View style={MyStyleSheet.profileCircle}>
+      try {
+        setLoading(true)
+        const { data, error } = await supabase
+          .from('pets')
+          .select('*')
+          .eq('owner_id', user.id) // Filter by the logged-in user
+
+        if (error) throw error
+        setUserPets(data || [])
+      } catch (error) {
+        console.error("Error fetching pets:", error.message)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchPets()
+  }, [user])
+
+  return (
+    <SafeAreaView style={[MyStyleSheet.container, { backgroundColor: '#F7F7F7' }]}>
       
-                <Text style={{color: '#5C93E8', fontWeight: 'bold'}}>{user?.fname?.charAt(0)}</Text>
-              </View>
+      {/* Scrollable Content */}
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={MyStyleSheet.dashScrollContent}>
+        
+        {/* HEADER */}
+        <View style={MyStyleSheet.dashTopHeader}>
+          <Text style={MyStyleSheet.dashHeaderTitle}>Home</Text>
+          <View style={MyStyleSheet.dashHeaderIcons}>
+            <TouchableOpacity onPress={() => opx.navigate('notification')} style={MyStyleSheet.dashIconBtn}>
+              <Ionicons name="notifications-outline" size={24} color="#666" />
             </TouchableOpacity>
-
-            <TouchableOpacity style={MyStyleSheet.notifBtn} onPress={() => { opx.navigate('notification') }}>
-              <Image source={require('../public/Doorbell.png')} style={{ width: 22, height: 22 }} />
+            <TouchableOpacity onPress={() => opx.navigate('settings')} style={MyStyleSheet.dashIconBtn}>
+              <Ionicons name="settings-outline" size={24} color="#666" />
             </TouchableOpacity>
           </View>
         </View>
 
-        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{paddingBottom: 120}}>
-
-          <View style={MyStyleSheet.sectionRow}>
-
-            <Text style={MyStyleSheet.sectionTitle}>Active Pet Profiles</Text>
-
-            <View style={MyStyleSheet.badge}>
-
-              <Text style={MyStyleSheet.badgeText}>{Pets.length}</Text>
-            </View>
+        {/* TODAY'S APPOINTMENT CARD */}
+        <View style={MyStyleSheet.dashApptCard}>
+          <View style={MyStyleSheet.dashApptHeader}>
+            <Text style={MyStyleSheet.dashApptHeaderText}>Today's Appointment</Text>
           </View>
+          <View style={MyStyleSheet.dashApptBody}>
+            <Text style={MyStyleSheet.dashApptBodyTitle}>No appointments today</Text>
+            <Text style={MyStyleSheet.dashApptBodySub}>You're all set for today!</Text>
+          </View>
+        </View>
 
-
-          <View style={MyStyleSheet.petCardContainer}>
-            <TouchableOpacity style={MyStyleSheet.petCard}  onPress={() => opx.navigate('pet')}>
-                <View style={{ flex: 1 }}>
-                  <Text style={MyStyleSheet.petName}>{displayPet ? displayPet.pname : "No Pets Added"}</Text>
-                  <Text style={MyStyleSheet.petDetails}>
-                    {displayPet 
-                      ? `${displayPet.species} | ${displayPet.breed} | ${displayPet.age} yrs | ${displayPet.gender}`
-                      : "Tap the Pets tab to add one!"}
-
-                  </Text>
-
-                </View>
-                
-                <View style={MyStyleSheet.petPhotoCircle}>
-
-                  {displayPet?.pimage ? ( <Image source={{ uri: displayPet.pimage }} style={{ width: '100%', height: '100%', borderRadius: 40 }} />
-                  ) : (
-                    <Image source={require('../public/bluepaw.png')}  style={{ width: 30, height: 30 }}  resizeMode="contain"/> )}
-                </View>
-              </TouchableOpacity>
-
-
+        {/* BANNER */}
+        <View style={MyStyleSheet.dashBannerContainer}>
+          <ImageBackground 
+            source={{ uri: 'https://images.unsplash.com/photo-1543466835-00a7907e9de1?q=80&w=1000&auto=format&fit=crop' }} 
+            style={MyStyleSheet.dashBanner}
+            imageStyle={{ borderRadius: 20 }}
+          >
+            <View style={MyStyleSheet.dashBannerOverlay}>
+              <Text style={MyStyleSheet.dashBannerText}>Caring for your pets,{'\n'}made easy.</Text>
               <View style={MyStyleSheet.dashDotsRow}>
-
-                  {Pets.length > 0 ? Pets.slice(0, 3).map((_, index) => (
-                    <View key={index} style={index === 0 ? MyStyleSheet.dashDotActive : MyStyleSheet.dashDot} />
-                  )) : <View style={MyStyleSheet.dashDotActive} />}
+                <View style={[MyStyleSheet.dashDot, MyStyleSheet.dashDotActive]} />
+                <View style={MyStyleSheet.dashDot} />
+                <View style={MyStyleSheet.dashDot} />
               </View>
-          </View>
-
-          <TouchableOpacity style={MyStyleSheet.bookBtn} onPress={()=>{opx.navigate('appointment')}}>
-
-            <View style={MyStyleSheet.bookIconContainer}>
-
-                <Image source={require('../public/bookapp.png')} style={{ width: 20, height: 20 }} />
-
             </View>
+          </ImageBackground>
+        </View>
 
-            <View style={{marginLeft: 12}}>
-
-              <Text style={MyStyleSheet.bookBtnTitle}>Book Appointment</Text>
-
-              <Text style={MyStyleSheet.bookBtnSub}>Consultation • Vaccine • Grooming</Text>
-
-            </View>
-
+        {/* ACTIVE PET PROFILES */}
+        <Text style={MyStyleSheet.dashSectionTitle}>Active Pet Profiles</Text>
+        <View style={MyStyleSheet.dashPetProfilesRow}>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ flex: 1 }}>
+            {loading ? (
+              <ActivityIndicator color="#343A73" style={{ padding: 20 }} />
+            ) : userPets.length > 0 ? (
+              userPets.map((pet, index) => (
+                <TouchableOpacity 
+                  key={pet.id || index} 
+                  style={MyStyleSheet.dashPetAvatarBtn} 
+                  onPress={() => opx.navigate('viewpets', { pet })} // Corrected navigation to viewpets
+                >
+                  <Image 
+                    source={pet.pimage ? { uri: pet.pimage } : require('../public/bluepaw.png')} 
+                    style={MyStyleSheet.dashPetAvatar} 
+                  />
+                  <Text style={{ fontSize: 10, textAlign: 'center', marginTop: 5, color: '#666' }}>
+                    {pet.pet_name}
+                  </Text>
+                </TouchableOpacity>
+              ))
+            ) : (
+              <TouchableOpacity style={MyStyleSheet.dashEmptyPetCircle} onPress={() => opx.navigate('pet')}>
+                <Text style={{fontSize: 20}}>🐾</Text>
+              </TouchableOpacity>
+            )}
+          </ScrollView>
+          <TouchableOpacity style={MyStyleSheet.dashArrowBtn} onPress={() => opx.navigate('pet')}>
+            <Ionicons name="chevron-forward" size={20} color="#999" />
           </TouchableOpacity>
+        </View>
 
+        {/* OVERVIEW SECTION */}
+        <Text style={MyStyleSheet.dashSectionTitle}>Overview</Text>
 
-          <View style={MyStyleSheet.infoCard}>
-            <Text style={MyStyleSheet.cardHeading}>Health Alerts & Reminders</Text>
-
-            <View style={MyStyleSheet.alertItem}>
-
-              <Image source={require('../public/point.png')} style={{ width: 16, height: 16, marginRight: 8 }} />
-
-              <Text style={MyStyleSheet.alertText}>
-
-                {displayPet ? `Check-up reminder for ${displayPet.pname}` : "No upcoming alerts"}
-              </Text>
-            </View>
-          </View>
-
-          <View style={MyStyleSheet.infoCard}>
-
-            <Text style={MyStyleSheet.cardHeading}>Recent Activity</Text>
-
-            <View style={MyStyleSheet.activityItem}>
-
-              <Image source={require('../public/medical_icon.png')} style={{ width: 18, height: 18, marginRight: 8 }} />
-
-              <Text style={MyStyleSheet.activityText}>January 12 - Vet Consultation</Text>
-            </View>
-          </View>
-        </ScrollView>
-
-        <TouchableOpacity style={MyStyleSheet.fab} onPress={()=>{opx.navigate('chat')}}>
-            <Image source={require('../public/message.png')} style={{ width: 24, height: 24, tintColor: '#fff' }} />
+        <TouchableOpacity style={MyStyleSheet.dashOverviewCard}>
+          <Text style={MyStyleSheet.dashOverviewCardTitle}>Upcoming{'\n'}Appointments</Text>
+          <Text style={MyStyleSheet.dashOverviewCardSub}>You have 1 upcoming appointment</Text>
         </TouchableOpacity>
 
-        <View style={MyStyleSheet.bottomNav}>
+        <TouchableOpacity style={MyStyleSheet.dashOverviewCard}>
+          <Text style={MyStyleSheet.dashOverviewCardTitle}>Health Alerts &{'\n'}Reminders</Text>
+          <Text style={MyStyleSheet.dashOverviewCardSub}>You have 3 health alert/reminder</Text>
+        </TouchableOpacity>
 
-          <View style={MyStyleSheet.navItemContainer}>
+        <TouchableOpacity style={MyStyleSheet.dashOverviewCard}>
+          <Text style={MyStyleSheet.dashOverviewCardTitle}>Recent Activity</Text>
+          <Text style={MyStyleSheet.dashOverviewCardSub}>Your recent activities for this month</Text>
+        </TouchableOpacity>
 
-            <TouchableOpacity style={MyStyleSheet.navItemActive}>
+        <TouchableOpacity style={MyStyleSheet.dashOverviewCard} onPress={() => opx.navigate('billing')}>
+          <Text style={MyStyleSheet.dashOverviewCardTitle}>Billing</Text>
+          <Text style={MyStyleSheet.dashBillingAmount}>₱1,400.00</Text>
+        </TouchableOpacity>
 
-              <Image source={require('../public/HomePage.png')} style={{ width: 22, height: 22 }} />
+      </ScrollView>
 
-            </TouchableOpacity>
-
-          </View>
-          
-          <TouchableOpacity style={MyStyleSheet.navItem} onPress={()=>{opx.navigate('pet')}}>
-
-            <Image source={require('../public/Pets.png')} style={{ width: 22, height: 22 }} />
-
-            <Text style={MyStyleSheet.navLabel}>Pets</Text>
-
-          </TouchableOpacity>
-
-          <TouchableOpacity style={MyStyleSheet.navItem} onPress={()=>{opx.navigate('appointment')}}>
-
-            <Image source={require('../public/Calendar.png')} style={{ width: 22, height: 22 }} />
-
-            <Text style={MyStyleSheet.navLabel}>Appointment</Text>
-
-          </TouchableOpacity>
-
-          <TouchableOpacity style={MyStyleSheet.navItem} onPress={()=>{opx.navigate('billing')}}>
-
-            <Image source={require('../public/Bill.png')} style={{ width: 22, height: 22 }} />
-
-            <Text style={MyStyleSheet.navLabel}>Invoice</Text>
-
-          </TouchableOpacity>
-
-        </View>
+      {/* BOTTOM NAVIGATION */}
+      <View style={MyStyleSheet.dashBottomNav}>
+        <TouchableOpacity style={MyStyleSheet.dashNavItem}>
+          <Ionicons name="home" size={24} color="#343A73" />
+          <Text style={[MyStyleSheet.dashNavLabel, { color: '#343A73' }]}>Home</Text>
+        </TouchableOpacity>
         
-      </SafeAreaView>
-    )
-  }
+        <TouchableOpacity style={MyStyleSheet.dashNavItem} onPress={() => opx.navigate('pet')}>
+          <Ionicons name="paw-outline" size={24} color="#A9A9A9" />
+          <Text style={MyStyleSheet.dashNavLabel}>Pets</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={MyStyleSheet.dashNavItem} onPress={() => opx.navigate('appointment')}>
+          <Ionicons name="calendar-outline" size={24} color="#A9A9A9" />
+          <Text style={MyStyleSheet.dashNavLabel}>Book</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={MyStyleSheet.dashNavItem} onPress={() => opx.navigate('appointment')}>
+          <Ionicons name="reader-outline" size={24} color="#A9A9A9" />
+          <Text style={MyStyleSheet.dashNavLabel}>Appointments</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={MyStyleSheet.dashNavItem} onPress={() => opx.navigate('userprofile')}>
+          <Ionicons name="person-outline" size={24} color="#A9A9A9" />
+          <Text style={MyStyleSheet.dashNavLabel}>Profile</Text>
+        </TouchableOpacity>
+      </View>
+      
+    </SafeAreaView>
+  )
+}
