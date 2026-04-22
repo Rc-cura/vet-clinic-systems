@@ -10,7 +10,7 @@ import { useUser } from '../context/UserContext';
 export default function PetManagementPage() {
   const navigation = useNavigation();
   const { user } = useUser();
-  const isFocused = useIsFocused(); // Para ma-detect kung binuksan ang tab na ito
+  const isFocused = useIsFocused(); 
   
   // State for Drawer
   const [isExpanded, setIsExpanded] = useState(false);
@@ -41,36 +41,41 @@ export default function PetManagementPage() {
   useEffect(() => {
     if (isFocused) {
       fetchPets();
-      setIsExpanded(false); // Itago ang add pet button by default pagka-load
+      setIsExpanded(false); 
     }
   }, [isFocused, user]);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#F7F7F7' }}>
+    /* CHANGED: Switched background to pure white to match Pic 1 */
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#FFF' }}>
       <View style={{ flex: 1 }}>
         
         {/* Header Section */}
-        <View style={MyStyleSheet.petHeaderSimple}>
+        <View style={[MyStyleSheet.petHeaderSimple, { backgroundColor: '#FFF' }]}>
           <Text style={MyStyleSheet.petHeaderTitle}>Pets</Text>
         </View>
 
-        {/* Main Content Area (List or Empty State) */}
-        <ScrollView contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 150 }} showsVerticalScrollIndicator={false}>
+        {/* Main Content Area */}
+        <ScrollView 
+          /* CHANGED: Ensuring the ScrollView itself doesn't have a gray background */
+          style={{ backgroundColor: '#FFF' }}
+          contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 200 }} 
+          showsVerticalScrollIndicator={false}
+        >
           
           {loadingList ? (
-            
-            <ActivityIndicator size="large" color="#2E3A91" style={{ marginTop: 50 }} />
-            
+            <ActivityIndicator size="large" color="#2E3A91" style={{ marginTop: 100 }} />
           ) : userPets.length === 0 ? (
             
             /* EMPTY STATE */
-            <View style={[MyStyleSheet.emptyStateCentered, { marginTop: 60 }]}>
+            <View style={[MyStyleSheet.emptyStateCentered, { marginTop: 100 }]}>
               <Image 
                 source={require('../public/cat.png')} 
                 style={MyStyleSheet.catIllustration} 
                 resizeMode="contain" 
               />
-              <Text style={MyStyleSheet.emptyStateSubtitle}>
+              {/* Pic 1 has very light, clean text */}
+              <Text style={[MyStyleSheet.emptyStateSubtitle, { color: '#BDBDBD', marginTop: 30 }]}>
                 There are no pets listed here.{"\n"}Create their profiles now!
               </Text>
             </View>
@@ -87,11 +92,12 @@ export default function PetManagementPage() {
                     <Text style={styles.petBreed}>{pet.breed}</Text>
                     <Text style={styles.petGender}>{pet.gender}</Text>
                     <View style={styles.cardActions}>
-                      <TouchableOpacity style={styles.outlineBtn} onPress={() => navigation.navigate('viewpets', { pet: pet })} 
->
-  <Text style={styles.outlineBtnText}>View Profile</Text>
-</TouchableOpacity>
-                      <TouchableOpacity style={styles.solidBtn}><Text style={styles.solidBtnText}>Book appointment</Text></TouchableOpacity>
+                      <TouchableOpacity style={styles.outlineBtn} onPress={() => navigation.navigate('viewpets', { pet: pet })}>
+                        <Text style={styles.outlineBtnText}>View Profile</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity style={styles.solidBtn}>
+                        <Text style={styles.solidBtnText}>Book appointment</Text>
+                      </TouchableOpacity>
                     </View>
                   </View>
                 </View>
@@ -104,10 +110,9 @@ export default function PetManagementPage() {
         {/* Floating Drawer Card */}
         <View style={[
           MyStyleSheet.bottomDrawerCard, 
-          isExpanded ? { height: 250 } : { height: 110 }
+          isExpanded ? { height: 280 } : { height: 110 }
         ]}>
           
-          {/* Tappable Area to Pull Up/Down */}
           <TouchableOpacity 
             activeOpacity={0.8}
             onPress={() => setIsExpanded(!isExpanded)}
@@ -117,10 +122,9 @@ export default function PetManagementPage() {
             <Text style={MyStyleSheet.cardActionTitle}>Add a pet now</Text>
           </TouchableOpacity>
           
-          {/* Show Button only when expanded - PUPUNTA SA AddPets.jsx */}
           {isExpanded && (
             <TouchableOpacity 
-              style={MyStyleSheet.primaryActionBtn} 
+              style={[MyStyleSheet.primaryActionBtn, { marginTop: 20 }]} 
               onPress={() => navigation.navigate('addpets')} 
             >
               <Text style={MyStyleSheet.primaryActionBtnText}>Add pet</Text>
@@ -128,7 +132,7 @@ export default function PetManagementPage() {
           )}
         </View>
 
-        {/* Navigation Bar at the very bottom */}
+        {/* Navigation Bar at bottom */}
         <View style={MyStyleSheet.minimalBottomNav}>
           <TouchableOpacity style={MyStyleSheet.navTab} onPress={() => navigation.navigate('dashboard')}>
             <Image source={require('../public/HomePage.png')} style={MyStyleSheet.navTabIcon} />
@@ -161,7 +165,6 @@ export default function PetManagementPage() {
   );
 }
 
-// Kailangan natin ilagay ang styles para sa cards dito para hindi masira ang design mo
 const styles = StyleSheet.create({
   petsList: { marginTop: 10 },
   petCard: {

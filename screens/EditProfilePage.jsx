@@ -9,7 +9,6 @@ export default function EditUserProfilePage() {
   const opx = useNavigation()
   const { user, updateUser } = useUser() 
   
- 
   const [formData, setFormData] = useState({
     fname: user?.fname || '',
     lname: user?.lname || '',
@@ -25,62 +24,90 @@ export default function EditUserProfilePage() {
   }
 
   const saveProfile = () => {
-
     const userIndex = Registered.findIndex(item => item.email === user?.email);
-    
     if (userIndex !== -1) {
- 
       Registered[userIndex] = { ...formData };
     }
-
- 
     updateUser(formData); 
-    
-
     setSuccessVisible(true);
   }
 
   return (
-    <SafeAreaView style={MyStyleSheet.container}>
-      <ScrollView contentContainerStyle={{ paddingHorizontal: 30, paddingBottom: 40, paddingTop: 20 }}>
-        <Text style={MyStyleSheet.profileMainTitle}>Edit Profile</Text>
+    <SafeAreaView style={[MyStyleSheet.whiteContainer, { backgroundColor: '#FFF' }]}>
+      {/* Header with Back Button */}
+      <View style={[MyStyleSheet.formHeader, { justifyContent: 'flex-start', paddingHorizontal: 20 }]}>
+        <TouchableOpacity onPress={() => opx.goBack()} style={MyStyleSheet.backBtn}>
+          <Text style={{ fontSize: 28, color: '#2E3A91' }}>←</Text> 
+        </TouchableOpacity>
+        <Text style={[MyStyleSheet.petHeaderTitle, { marginLeft: 10 }]}>Edit Profile</Text>
+      </View>
 
-        <View style={{ marginTop: 10 }}>
-          <Text style={MyStyleSheet.inputLabel}>First Name</Text>
-          <TextInput style={MyStyleSheet.inputBox}  value={formData.fname} onChangeText={(text) => handleInputChange('fname', text)} />
+      <ScrollView contentContainerStyle={{ paddingHorizontal: 30, paddingBottom: 40, paddingTop: 10 }}>
+        
+        <View style={{ marginTop: 20 }}>
+          <Text style={MyStyleSheet.fieldLabel}>First Name</Text>
+          <TextInput 
+            style={MyStyleSheet.styledInput} 
+            value={formData.fname} 
+            placeholder="Enter first name"
+            onChangeText={(text) => handleInputChange('fname', text)} 
+          />
 
+          <Text style={MyStyleSheet.fieldLabel}>Last Name</Text>
+          <TextInput 
+            style={MyStyleSheet.styledInput} 
+            value={formData.lname} 
+            placeholder="Enter last name"
+            onChangeText={(text) => handleInputChange('lname', text)}
+          />
 
-          <Text style={MyStyleSheet.inputLabel}>Last Name</Text>
+          <Text style={MyStyleSheet.fieldLabel}>Email</Text>
+          <TextInput 
+            style={MyStyleSheet.styledInput} 
+            keyboardType="email-address" 
+            value={formData.email} 
+            placeholder="example@gmail.com"
+            onChangeText={(text) => handleInputChange('email', text)}
+          />
 
-          <TextInput  style={MyStyleSheet.inputBox}   value={formData.lname}  onChangeText={(text) => handleInputChange('lname', text)}/>
+          <Text style={MyStyleSheet.fieldLabel}>Contact Number</Text>
+          <TextInput 
+            style={MyStyleSheet.styledInput} 
+            keyboardType="phone-pad" 
+            value={formData.contact} 
+            placeholder="09123456789"
+            onChangeText={(text) => handleInputChange('contact', text)}
+          />
 
-          <Text style={MyStyleSheet.inputLabel}>Email</Text>
-
-          <TextInput style={MyStyleSheet.inputBox}  keyboardType="email-address"  value={formData.email} onChangeText={(text) => handleInputChange('email', text)}/>
-
-
-          <Text style={MyStyleSheet.inputLabel}>Contact Number</Text>
-
-          <TextInput  style={MyStyleSheet.inputBox}  keyboardType="phone-pad"   value={formData.contact} onChangeText={(text) => handleInputChange('contact', text)}/>
-
-          <Text style={MyStyleSheet.inputLabel}>Password</Text>
-
-          <TextInput  style={MyStyleSheet.inputBox}  secureTextEntry={true}  value={formData.password}  onChangeText={(text) => handleInputChange('password', text)}/>
+          <Text style={MyStyleSheet.fieldLabel}>Password</Text>
+          <TextInput 
+            style={MyStyleSheet.styledInput} 
+            secureTextEntry={true} 
+            value={formData.password} 
+            placeholder="********"
+            onChangeText={(text) => handleInputChange('password', text)}
+          />
         </View>
 
-        <TouchableOpacity  style={[MyStyleSheet.primaryBlueBtn, { marginTop: 30 }]} onPress={saveProfile} >
-          <Text style={MyStyleSheet.primaryBlueBtnText}>Save</Text>
+        {/* Primary Action Button (Matches Pet Edit Style) */}
+        <TouchableOpacity 
+          style={[MyStyleSheet.primaryActionBtn, { marginTop: 40 }]} 
+          onPress={saveProfile} 
+        >
+          <Text style={MyStyleSheet.primaryActionBtnText}>Save Changes</Text>
         </TouchableOpacity>
       </ScrollView>
 
+      {/* Success Modal */}
       <Modal animationType="fade" transparent={true} visible={successVisible}>
         <View style={MyStyleSheet.modalOverlay}>
           <View style={MyStyleSheet.successModalSmall}>
             <Text style={MyStyleSheet.successModalText}>Successfully Edited User Profile</Text>
-            
-            <TouchableOpacity  style={MyStyleSheet.viewProfileModalBtn} onPress={() => { setSuccessVisible(false); opx.navigate('userprofile');  }} >
+            <TouchableOpacity 
+              style={MyStyleSheet.viewProfileModalBtn} 
+              onPress={() => { setSuccessVisible(false); opx.navigate('userprofile'); }} 
+            >
               <Text style={MyStyleSheet.viewProfileModalText}>View Profile</Text>
-              
             </TouchableOpacity>
           </View>
         </View>

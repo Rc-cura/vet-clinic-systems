@@ -2316,7 +2316,314 @@ otpStyledInput: {
     marginBottom: 8,
     marginTop: 10,
   },
+
+  // Today's Appointment Card
+  dashApptCardMain: {
+    backgroundColor: '#FFF',
+    borderRadius: 40,
+    marginHorizontal: 20,
+    marginTop: 20,
+    overflow: 'hidden',
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+  },
+  dashApptHeaderBlue: {
+    backgroundColor: '#2E3A91',
+    paddingVertical: 15,
+    alignItems: 'center',
+  },
+  dashApptHeaderTextWhite: { color: '#FFF', fontSize: 18, fontWeight: 'bold' },
+  dashApptBodyCenter: { padding: 30, alignItems: 'center' },
+  dashApptBodyTitleBlue: { color: '#2E3A91', fontSize: 18, fontWeight: 'bold' },
+  dashApptBodySubGray: { color: '#AAA', fontSize: 14, marginTop: 5 },
+
+  // Banner Section
+  dashBannerWrapper: { marginHorizontal: 20, marginVertical: 20 },
+  dashBannerImage: { width: '100%', height: 180, justifyContent: 'flex-end' },
+  dashBannerContent: { padding: 25 },
+  dashBannerTextBold: { color: '#2E3A91', fontSize: 20, fontWeight: 'bold' },
+  dashBannerDots: { flexDirection: 'row', marginTop: 10 },
+  dashBannerDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: '#DDD', marginRight: 5 },
+  dashBannerDotActive: { width: 25, backgroundColor: '#2E3A91' },
+
+  // Section Labels
+  dashSectionLabel: { fontSize: 20, fontWeight: 'bold', color: '#2E3A91', marginHorizontal: 25, marginTop: 10 },
+
+  // Overview Cards
+  dashOverviewCleanCard: {
+    backgroundColor: '#FFF',
+    borderRadius: 35,
+    padding: 25,
+    marginHorizontal: 20,
+    marginBottom: 15,
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOpacity: 0.05,
+    shadowRadius: 5,
+  },
+  dashOverviewTitleText: { color: '#2E3A91', fontSize: 18, fontWeight: 'bold' },
+  dashOverviewSubText: { color: '#AAA', fontSize: 12, marginTop: 5 },
+  dashOverviewBillingText: { color: '#2E3A91', fontSize: 24, fontWeight: 'bold', marginTop: 10 },
   
+  dashPetRowContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 25, // Side padding for the pets row
+    marginVertical: 15,
+  },
+  dashCircleArrowBtn: {
+    width: 45,
+    height: 45,
+    borderRadius: 22.5,
+    backgroundColor: '#F0F0F0', // Gray circle background
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 10,
+  },
+  dashPetCircleAvatar: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    marginRight: 15,
+  },
+
+  // --- HEADER PADDING ---
+  dashTopHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 25, // Side padding for the Home title and icons
+    paddingTop: 20,
+    paddingBottom: 10,
+    backgroundColor: '#FFF',
+  },
+
+  // --- GLOBAL CONTAINER PADDING ---
+  dashScrollContent: {
+    paddingBottom: 120,
+    paddingHorizontal: 15, // Adds small gutter for all cards
+  },
+
+  // --- SECTION TITLES ---
+  dashSectionLabel: { 
+    fontSize: 20, 
+    fontWeight: 'bold', 
+    color: '#2E3A91', 
+    paddingHorizontal: 25, // Aligns titles with the header padding
+    marginTop: 20, 
+    marginBottom: 10 
+  },
+
+  // --- CARD INTERNAL PADDING ---
+  dashOverviewCleanCard: {
+    backgroundColor: '#FFF',
+    borderRadius: 35,
+    padding: 25, // Internal spacing for the text inside cards
+    marginHorizontal: 10,
+    marginBottom: 15,
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOpacity: 0.05,
+    shadowRadius: 5,
+  },
+
+  dashBannerWrapper: { 
+    marginHorizontal: 20, 
+    marginVertical: 20,
+    position: 'relative', 
+  },
+  dashBannerImage: { 
+    width: '100%', 
+    height: 180,
+  },
+  dashBannerDotsFloating: { 
+    flexDirection: 'row', 
+    position: 'absolute', 
+    bottom: 25, 
+    alignSelf: 'center' 
+  },
+  dashBannerDot: { 
+    width: 8, 
+    height: 8, 
+    borderRadius: 4, 
+    backgroundColor: '#D1D1D1', 
+    marginHorizontal: 4 
+  },
+  dashBannerDotActive: { 
+    width: 25, 
+    backgroundColor: '#2E3A91',
+    borderRadius: 4,
+  },
+
+  // Empty State
+  emptyApptContainer: { 
+    flex: 1, 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    marginTop: 80 
+  },
+  emptyApptImage: { width: 250, height: 250, opacity: 0.8 },
+  emptyApptText: { color: '#BDBDBD', fontSize: 16, marginTop: 20 },
+
+  // Bottom Drawer / Bottom Sheet
+  bottomDrawerCard: {
+    backgroundColor: '#FFF',
+    borderTopLeftRadius: 50,
+    borderTopRightRadius: 50,
+    paddingHorizontal: 30,
+    paddingTop: 15,
+    paddingBottom: 110, // Extra space for Nav
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    elevation: 20,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 15,
+  },
+  dragHandleBar: {
+    width: 60,
+    height: 5,
+    backgroundColor: '#DDD',
+    borderRadius: 5,
+    alignSelf: 'center',
+    marginBottom: 25,
+  },
+  cardActionTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#2E3A91',
+    textAlign: 'center',
+    marginBottom: 30,
+  },
+
+  // Appointment Cards (Matching Dashboard Overview Style)
+  apptOverviewCard: {
+    backgroundColor: '#FFF',
+    borderRadius: 35,
+    padding: 25,
+    marginBottom: 15,
+    flexDirection: 'row',
+    alignItems: 'center',
+    elevation: 3,
+  },
+
+  // --- MINI FILTER TABS ---
+  tabContainerRow: {
+    flexDirection: 'row',
+    paddingHorizontal: 30,
+    marginBottom: 20,
+    marginTop: 10,
+  },
+  miniTabButton: {
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 20,
+    backgroundColor: '#F5F5F5',
+    marginRight: 10,
+  },
+  miniTabActive: {
+    backgroundColor: '#E6F4FF', // Soft blue for active tab
+  },
+  miniTabText: {
+    fontSize: 13,
+    color: '#AAA',
+    fontWeight: '500',
+  },
+  miniTabTextActive: {
+    color: '#2E3A91', // Dark blue for active text
+    fontWeight: 'bold',
+  },
+
+  // --- BOTTOM SHEET UI ---
+  bottomSheetContainer: {
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    backgroundColor: '#FFF',
+    borderTopLeftRadius: 50, // High rounding
+    borderTopRightRadius: 50,
+    paddingBottom: 110, // Higher padding so it clears the Bottom Nav
+    elevation: 25, // Shadow for Android
+    shadowColor: '#000', // Shadow for iOS
+    shadowOffset: { width: 0, height: -10 },
+    shadowOpacity: 0.1,
+    shadowRadius: 15,
+  },
+  dragHandle: {
+    width: 60,
+    height: 5,
+    backgroundColor: '#E0E0E0', // Slim centered grey handle
+    borderRadius: 5,
+    alignSelf: 'center',
+    marginTop: 15,
+    marginBottom: 20,
+  },
+  bottomSheetHeader: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#2E3A91',
+    textAlign: 'center',
+    marginBottom: 25,
+  },
+
+  // Status Badge for Cards
+  statusBadge: {
+    backgroundColor: '#E6F4FF',
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    borderRadius: 10,
+  },
+  statusBadgeText: {
+    color: '#2E3A91',
+    fontSize: 10,
+    fontWeight: 'bold',
+  },
+
+  profileAvatarLarge: {
+    width: 150,
+    height: 150,
+    borderRadius: 75,
+    borderWidth: 4,
+    borderColor: '#FFF',
+    elevation: 10,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    marginBottom: 20,
+  },
+  profileUserName: { fontSize: 28, fontWeight: 'bold', color: '#2E3A91' },
+  profileUserEmail: { fontSize: 16, color: '#AAA', marginTop: 5 },
+  profileBottomCard: {
+    flex: 1,
+    backgroundColor: '#FFF',
+    borderTopLeftRadius: 60,
+    borderTopRightRadius: 60,
+    paddingHorizontal: 30,
+    paddingTop: 40,
+    elevation: 20,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 20,
+  },
+  profileMenuOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 15,
+  },
+  profileMenuIconWrapper: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: '#F7F9FC',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  profileMenuTitle: { fontSize: 18, fontWeight: 'bold', color: '#2E3A91' },
+  profileMenuSub: { fontSize: 12, color: '#AAA' },
+  profileDivider: { height: 1, backgroundColor: '#F0F0F0', marginVertical: 5 },
 
 })
 
