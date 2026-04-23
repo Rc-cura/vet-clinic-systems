@@ -159,13 +159,10 @@ export default function AppointmentPage() {
           <Image source={require('../public/Pets.png')} style={MyStyleSheet.navTabIcon} />
           <Text style={MyStyleSheet.navTabText}>Pets</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={MyStyleSheet.navTab} onPress={() => opx.navigate('selectpet')}>
-          <Image source={require('../public/Book.png')} style={MyStyleSheet.navTabIcon} />
-          <Text style={MyStyleSheet.navTabText}>Book</Text>
-        </TouchableOpacity>
+      
         <TouchableOpacity style={MyStyleSheet.navTab}>
           <Image source={require('../public/Calendar.png')} style={[MyStyleSheet.navTabIcon, { tintColor: '#2E3A91' }]} />
-          <Text style={[MyStyleSheet.navTabText, { color: '#2E3A91' }]}>Appt</Text>
+          <Text style={[MyStyleSheet.navTabText, { color: '#2E3A91' }]}>Appointments</Text>
         </TouchableOpacity>
         <TouchableOpacity style={MyStyleSheet.navTab} onPress={() => opx.navigate('userprofile')}>
           <Image source={require('../public/Profile.png')} style={MyStyleSheet.navTabIcon} />

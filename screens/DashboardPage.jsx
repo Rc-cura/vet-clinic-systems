@@ -188,13 +188,10 @@ export default function DashboardPage() {
           <Image source={require('../public/Pets.png')} style={MyStyleSheet.navTabIcon} />
           <Text style={MyStyleSheet.navTabText}>Pets</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={MyStyleSheet.navTab} onPress={() => opx.navigate('appointment')}>
-          <Image source={require('../public/Book.png')} style={MyStyleSheet.navTabIcon} />
-          <Text style={MyStyleSheet.navTabText}>Book</Text>
-        </TouchableOpacity>
+      
         <TouchableOpacity style={MyStyleSheet.navTab} onPress={() => opx.navigate('appointment')}>
           <Image source={require('../public/Calendar.png')} style={MyStyleSheet.navTabIcon} />
-          <Text style={MyStyleSheet.navTabText}>Appt</Text>
+          <Text style={MyStyleSheet.navTabText}>Apppointments</Text>
         </TouchableOpacity>
         <TouchableOpacity style={MyStyleSheet.navTab} onPress={() => opx.navigate('userprofile')}>
           <Image source={require('../public/Profile.png')} style={MyStyleSheet.navTabIcon} />

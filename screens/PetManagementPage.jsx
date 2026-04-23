@@ -144,10 +144,7 @@ export default function PetManagementPage() {
             <Text style={[MyStyleSheet.navTabText, { color: '#2E3A91' }]}>Pets</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={MyStyleSheet.navTab} onPress={() => navigation.navigate('service')}>
-            <Image source={require('../public/Book.png')} style={MyStyleSheet.navTabIcon} />
-            <Text style={MyStyleSheet.navTabText}>Book</Text>
-          </TouchableOpacity>
+       
 
           <TouchableOpacity style={MyStyleSheet.navTab} onPress={() => navigation.navigate('appointment')}>
             <Image source={require('../public/Calendar.png')} style={MyStyleSheet.navTabIcon} />

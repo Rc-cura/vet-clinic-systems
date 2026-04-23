@@ -152,13 +152,10 @@ export default function UserProfilePage() {
           <Image source={require('../public/Pets.png')} style={MyStyleSheet.navTabIcon} />
           <Text style={MyStyleSheet.navTabText}>Pets</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={MyStyleSheet.navTab} onPress={() => opx.navigate('selectpet')}>
-          <Image source={require('../public/Book.png')} style={MyStyleSheet.navTabIcon} />
-          <Text style={MyStyleSheet.navTabText}>Book</Text>
-        </TouchableOpacity>
+    
         <TouchableOpacity style={MyStyleSheet.navTab} onPress={() => opx.navigate('appointment')}>
           <Image source={require('../public/Calendar.png')} style={MyStyleSheet.navTabIcon} />
-          <Text style={MyStyleSheet.navTabText}>Appt</Text>
+          <Text style={MyStyleSheet.navTabText}>Appointments</Text>
         </TouchableOpacity>
         <TouchableOpacity style={MyStyleSheet.navTab}>
           <Image source={require('../public/Profile.png')} style={[MyStyleSheet.navTabIcon, { tintColor: '#2E3A91' }]} />
