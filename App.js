@@ -38,6 +38,15 @@ import AddressPage from './screens/AddressPage';
 import AuthCheck from './screens/AuthCheck';
 import HealthCard from './screens/HealthCard';
 
+import TotalPending from './screens/TotalPending';
+import TotalPaid from './screens/TotalPaid';
+import AllInvoice from './screens/AllInvoice';
+import FullInvoice from './screens/FullInvoice';
+import Paid from './screens/Paid';
+import Unpaid from './screens/Unpaid';
+import Overdue from './screens/Overdue';
+import PayTotalPending from './screens/PayTotalPending';
+
 
 
 
@@ -389,6 +398,95 @@ export default function App() {
               headerTitleAlign: 'left',
             }}
           />
+
+           <MScreen.Screen
+            name='totalpending'
+            component={TotalPending}
+            options={{
+              headerShown: false,
+              title: 'Total Pending',
+              headerLeft: () => null,
+              headerTitleAlign: 'left',
+            }}
+          />
+
+              <MScreen.Screen
+            name='totalpaid'
+            component={TotalPaid}
+            options={{
+              headerShown: false,
+              title: 'Total Paid',
+              headerLeft: () => null,
+              headerTitleAlign: 'left',
+            }}
+          />
+
+                <MScreen.Screen
+            name='allinvoice'
+            component={AllInvoice}
+            options={{
+              headerShown: false,
+              title: 'All Invoice',
+              headerLeft: () => null,
+              headerTitleAlign: 'left',
+            }}
+          />
+
+                  <MScreen.Screen
+            name='fullinvoice'
+            component={FullInvoice}
+            options={{
+              headerShown: false,
+              title: 'Full Invoice',
+              headerLeft: () => null,
+              headerTitleAlign: 'left',
+            }}
+          />
+
+           <MScreen.Screen
+            name='paid'
+            component={Paid}
+            options={{
+              headerShown: false,
+              title: 'Paid',
+              headerLeft: () => null,
+              headerTitleAlign: 'left',
+            }}
+          />
+
+            <MScreen.Screen
+            name='unpaid'
+            component={Unpaid}
+            options={{
+              headerShown: false,
+              title: 'Unpaid',
+              headerLeft: () => null,
+              headerTitleAlign: 'left',
+            }}
+          />
+
+            <MScreen.Screen
+            name='overdue'
+            component={Overdue}
+            options={{
+              headerShown: false,
+              title: 'Overdue',
+              headerLeft: () => null,
+              headerTitleAlign: 'left',
+            }}
+          />
+
+              <MScreen.Screen
+            name='paytotalpending'
+            component={PayTotalPending}
+            options={{
+              headerShown: false,
+              title: 'Overdue',
+              headerLeft: () => null,
+              headerTitleAlign: 'left',
+            }}
+          />
+          
         </MScreen.Navigator>
       </NavigationContainer>
     </UserProvider>

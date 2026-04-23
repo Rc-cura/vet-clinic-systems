@@ -2625,6 +2625,54 @@ otpStyledInput: {
   profileMenuSub: { fontSize: 12, color: '#AAA' },
   profileDivider: { height: 1, backgroundColor: '#F0F0F0', marginVertical: 5 },
 
+  // Add these inside your MyStyleSheet = StyleSheet.create({ ... })
+
+  // The main container for the payment methods (The part with the shadow)
+  paymentFloatingContainer: {
+    backgroundColor: '#FFF',
+    flex: 1,
+    marginTop: 20,
+    borderTopLeftRadius: 40,
+    borderTopRightRadius: 40,
+    paddingHorizontal: 25,
+    paddingTop: 30,
+    // Shadow/Elevation for the bottom container only
+    elevation: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: -5 },
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+  },
+
+  // Individual payment method rows
+  paymentMethodRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 18,
+    borderRadius: 15,
+    marginBottom: 15,
+    backgroundColor: '#F0F5FF', // Light blue background
+    borderWidth: 1.5,
+    borderColor: 'transparent',
+  },
+
+  // Style for when a method is selected
+  paymentMethodSelected: {
+    borderColor: '#2E3A91', // Your deep blue brand color
+  },
+  
+  paymentMethodName: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#2E3A91',
+    flex: 1,
+  },
+
+  paymentMethodSub: {
+    fontSize: 10,
+    color: '#667085',
+  },
+
 })
 
 export default MyStyleSheet;
