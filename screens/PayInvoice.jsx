@@ -1,11 +1,17 @@
 import { View, Text, TouchableOpacity, SafeAreaView, ScrollView } from 'react-native'
 import React, { useState } from 'react'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import MyStyleSheet from '../styles/MyStyleSheet'
 
-export default function PayTotalPending() {
+export default function PayInvoice() {
   const opx = useNavigation()
+  const route = useRoute()
   
+  // Get data passed from Unpaid/Overdue/AllInvoices
+  const { invoice } = route.params || { 
+    invoice: { code: 'SJVC-2026-03-0001', price: '5,300.00' } 
+  }
+
   const [step, setStep] = useState(1); // 1 = Method, 2 = Type
   const [selectedMethod, setSelectedMethod] = useState('Credit Card');
   const [selectedType, setSelectedType] = useState('Full Payment');
@@ -28,23 +34,24 @@ export default function PayTotalPending() {
         >
           <Text style={{ fontSize: 28, color: '#2E3A91' }}>←</Text> 
         </TouchableOpacity>
-        <Text style={[MyStyleSheet.petHeaderTitle, { marginLeft: 10 }]}>Pay Total Pending</Text>
+        <Text style={[MyStyleSheet.petHeaderTitle, { marginLeft: 10 }]}>Pay Invoice</Text>
       </View>
 
-      {/* TOP SECTION: Only shows in Step 1 */}
+      {/* TOP SECTION: Invoice Specific Amount Card (Shadowed per Screenshot) */}
       {step === 1 && (
-        <View style={{ paddingHorizontal: 30, paddingVertical: 20 }}>
-          <Text style={{ fontSize: 16, color: '#2E3A91', fontWeight: '500' }}>Total Pending</Text>
-          <Text style={{ fontSize: 42, fontWeight: 'bold', color: '#2E3A91', marginTop: 10 }}>₱30,900.00</Text>
+        <View style={[MyStyleSheet.dashOverviewCleanCard, { marginHorizontal: 25, marginTop: 10 }]}>
+          <Text style={{ fontSize: 14, color: '#2E3A91', fontWeight: '600' }}>Total Amount</Text>
+          <Text style={{ fontSize: 12, color: '#2E3A91', marginTop: 2 }}>{invoice.code}</Text>
+          <Text style={{ fontSize: 36, fontWeight: 'bold', color: '#2E3A91', marginTop: 10 }}>₱{invoice.price}</Text>
         </View>
       )}
 
-      {/* FLOATING CONTAINER */}
+      {/* FLOATING SELECTION CONTAINER */}
       <View style={[MyStyleSheet.paymentFloatingContainer, step === 2 && { marginTop: 50 }]}>
         <ScrollView showsVerticalScrollIndicator={false}>
           
           {step === 1 ? (
-            /* --- STEP 1: SELECT PAYMENT METHOD --- */
+            /* STEP 1: METHOD */
             <>
               <Text style={[MyStyleSheet.profileMenuTitle, { marginBottom: 25, fontSize: 18 }]}>Select payment method</Text>
               {paymentMethods.map((method) => (
@@ -59,10 +66,9 @@ export default function PayTotalPending() {
               ))}
             </>
           ) : (
-            /* --- STEP 2: SELECT PAYMENT TYPE --- */
+            /* STEP 2: TYPE */
             <>
               <Text style={[MyStyleSheet.profileMenuTitle, { marginBottom: 25, fontSize: 18 }]}>Payment type</Text>
-              
               <TouchableOpacity 
                 style={[MyStyleSheet.paymentMethodRow, selectedType === 'Full Payment' && MyStyleSheet.paymentMethodSelected]}
                 onPress={() => setSelectedType('Full Payment')}
@@ -79,17 +85,17 @@ export default function PayTotalPending() {
             </>
           )}
 
-          {/* DYNAMIC ACTION BUTTON - Height remains consistent via primaryActionBtn */}
+          {/* ACTION BUTTON */}
           <TouchableOpacity 
             style={[MyStyleSheet.primaryActionBtn, { marginTop: 30 }]}
-            onPress={() => step === 1 ? setStep(2) : console.log("Proceeding...")}
+            onPress={() => step === 1 ? setStep(2) : console.log("Proceeding to PayMongo")}
           >
             <Text style={MyStyleSheet.primaryActionBtnText}>
               {step === 1 ? "Next" : "Proceed to Payment"}
             </Text>
           </TouchableOpacity>
 
-          {/* CANCEL OPTION */}
+          {/* CANCEL (Step 2 Only) */}
           {step === 2 && (
             <TouchableOpacity onPress={() => opx.goBack()} style={{ marginTop: 20, marginBottom: 20, alignItems: 'center' }}>
               <Text style={{ color: '#2E3A91', fontWeight: 'bold' }}>Cancel</Text>

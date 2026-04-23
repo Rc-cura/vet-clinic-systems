@@ -77,15 +77,19 @@ export default function FullInvoice() {
         <Text style={{ fontSize: 18, color: '#2E3A91', fontWeight: 'bold' }}>Total Amount</Text>
         <Text style={{ fontSize: 42, fontWeight: 'bold', color: '#2E3A91', marginTop: 5 }}>₱{invoice.price}</Text>
 
-        {/* Buttons - Conditional based on Status */}
+        {/* Buttons */}
         <View style={{ marginTop: 50 }}>
           {invoice.status !== 'Paid' && (
-            <TouchableOpacity style={[MyStyleSheet.primaryActionBtn, { marginBottom: 15 }]}>
+            /* --- ADDED NAVIGATION HERE --- */
+            <TouchableOpacity 
+              style={[MyStyleSheet.primaryActionBtn, { marginBottom: 15 }]}
+              onPress={() => opx.navigate('payinvoice', { invoice: invoice })}
+            >
               <Text style={MyStyleSheet.primaryActionBtnText}>Pay now</Text>
             </TouchableOpacity>
           )}
           
-          <TouchableOpacity style={[MyStyleSheet.secondaryOutlineBtn, { borderRadius: 25 }]}>
+          <TouchableOpacity style={[MyStyleSheet.secondaryOutlineBtn, { borderRadius: 25, marginBottom: 40 }]}>
             <Text style={MyStyleSheet.secondaryOutlineText}>Download</Text>
           </TouchableOpacity>
         </View>

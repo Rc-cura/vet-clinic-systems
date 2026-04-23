@@ -112,33 +112,7 @@ export default function ViewPetsPage() {
 
       </ScrollView>
 
-      {/* 4. Navigation Bar */}
-      <View style={MyStyleSheet.minimalBottomNav}>
-        <TouchableOpacity style={MyStyleSheet.navTab} onPress={() => opx.navigate('dashboard')}>
-          <Image source={require('../public/HomePage.png')} style={MyStyleSheet.navTabIcon} />
-          <Text style={MyStyleSheet.navTabText}>Home</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={MyStyleSheet.navTab} onPress={() => opx.navigate('petsadded')}>
-          <Image source={require('../public/Pets.png')} style={[MyStyleSheet.navTabIcon, { tintColor: '#2E3A91' }]} />
-          <Text style={[MyStyleSheet.navTabText, { color: '#2E3A91' }]}>Pets</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={MyStyleSheet.navTab}>
-          <Image source={require('../public/Book.png')} style={MyStyleSheet.navTabIcon} />
-          <Text style={MyStyleSheet.navTabText}>Book</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={MyStyleSheet.navTab}>
-          <Image source={require('../public/Calendar.png')} style={MyStyleSheet.navTabIcon} />
-          <Text style={MyStyleSheet.navTabText}>Appointments</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={MyStyleSheet.navTab}>
-          <Image source={require('../public/Profile.png')} style={MyStyleSheet.navTabIcon} />
-          <Text style={MyStyleSheet.navTabText}>Profile</Text>
-        </TouchableOpacity>
-      </View>
+      
 
     </SafeAreaView>
   )

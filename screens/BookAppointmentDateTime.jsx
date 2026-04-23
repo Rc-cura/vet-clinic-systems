@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, SafeAreaView, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, SafeAreaView, ScrollView, TextInput, Image } from 'react-native';
 import { Calendar } from 'react-native-calendars';
-import { Dropdown } from 'react-native-element-dropdown'; 
 import { useNavigation, useRoute } from '@react-navigation/native';
 import MyStyleSheet from '../styles/MyStyleSheet';
 
@@ -12,93 +11,121 @@ export default function BookAppointmentDateTime() {
   const { appointmentId, petName, petImage, petDetails, petWeight, service } = route.params || {};
 
   const [selectedDate, setSelectedDate] = useState('');
-  const [selectedTime, setSelectedTime] = useState(null);
-  const [selectedVet, setSelectedVet] = useState(null); 
-
+  const [selectedTime, setSelectedTime] = useState('9:41 AM'); // Default like screenshot
+  const [selectedVet, setSelectedVet] = useState('Dr. Leonarda Belchez'); 
 
   const today = new Date().toISOString().split('T')[0];
 
-  const vetData = [
-    { label: 'Dr. Smith', value: 'Dr. Smith' },
-    { label: 'Dr. Garcia', value: 'Dr. Garcia' },
-    { label: 'Dr. Santos', value: 'Dr. Santos' },
+  const vets = [
+    { id: '1', name: 'Dr. Leonarda Belchez', role: 'General Veterinarian', image: require('../public/bluepaw.png') },
+    { id: '2', name: 'Dr. Pauline Chua', role: 'General Veterinarian', image: require('../public/bluepaw.png') },
+    { id: '3', name: 'Dr. RC Cura', role: 'General Veterinarian', image: require('../public/bluepaw.png') },
   ];
 
-  const generateTimeSlots = () => {
-    const slots = [];
-    let start = 7.5; 
-    let end = 17;    
-    for (let time = start; time <= end; time += 0.5) {
-
-      let hour = Math.floor(time);
-
-      let minutes = (time % 1 === 0) ? '00' : '30';
-
-      let ampm = hour >= 12 ? 'PM' : 'AM';
-
-      let displayHour = hour > 12 ? hour - 12 : hour;
-
-      if (displayHour === 0) displayHour = 12;
-
-      const timeString = `${displayHour}:${minutes} ${ampm}`;
-
-      slots.push({ label: timeString, value: timeString });
-    }
-    return slots;
-  };
-
-  const timeData = generateTimeSlots();
-
   return (
-    <SafeAreaView style={MyStyleSheet.container}>
+    <SafeAreaView style={[MyStyleSheet.whiteContainer, { backgroundColor: '#FFF' }]}>
+      
+      {/* HEADER */}
+      <View style={[MyStyleSheet.formHeader, { justifyContent: 'flex-start', paddingHorizontal: 20, marginBottom: 10 }]}>
+        <TouchableOpacity onPress={() => opx.goBack()} style={MyStyleSheet.backBtn}>
+          <Text style={{ fontSize: 28, color: '#2E3A91' }}>←</Text> 
+        </TouchableOpacity>
+        <Text style={[MyStyleSheet.petHeaderTitle, { marginLeft: 10 }]}>
+            Book an appointment ({service})
+        </Text>
+      </View>
 
-      <ScrollView contentContainerStyle={{ paddingHorizontal: 25, paddingBottom: 40, paddingTop: 20 }}>
-        
-        <Text style={[MyStyleSheet.selectPetLabel, { textAlign: 'center' }]}>Select Veterinarian</Text>
+      {/* MAIN SHADOWED CONTAINER */}
+      <View style={MyStyleSheet.paymentFloatingContainer}>
+        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 40 }}>
+          
+          <Text style={[MyStyleSheet.profileMenuTitle, { fontSize: 20 }]}>Select Veterinarian and Date & Time</Text>
+          <Text style={{ color: '#AAA', fontSize: 12, marginBottom: 20 }}>
+            This appointment includes initial assessment for the requested procedure.
+          </Text>
 
-        
-        <View style={[MyStyleSheet.progressBarBg, { alignSelf: 'center', marginTop: 20, marginBottom: 20 }]}>
+          {/* SEARCH BAR */}
+          <View style={[MyStyleSheet.searchContainer, { marginBottom: 15 }]}>
+            <Image 
+                source={require('../public/search_icon.png')} 
+                style={{ width: 16, height: 16, marginRight: 10, tintColor: '#AAA' }} 
+                resizeMode="contain"
+            />
+            <TextInput placeholder="Search" placeholderTextColor="#AAA" style={{ flex: 1 }} />
+          </View>
 
-           <View style={{ width: '75%', backgroundColor: '#5C93E8', height: '100%', borderRadius: 2 }} />
+          {/* VET SELECTION LIST */}
+          <View style={{ marginBottom: 20 }}>
+            {vets.map((vet) => (
+              <TouchableOpacity 
+                key={vet.id}
+                onPress={() => setSelectedVet(vet.name)}
+                style={[
+                  MyStyleSheet.paymentMethodRow,
+                  { backgroundColor: '#FFF', paddingVertical: 10 },
+                  selectedVet === vet.name && MyStyleSheet.paymentMethodSelected
+                ]}
+              >
+                <Image source={vet.image} style={{ width: 45, height: 45, borderRadius: 25, marginRight: 15 }} />
+                <View>
+                    <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#2E3A91' }}>{vet.name}</Text>
+                    <Text style={{ fontSize: 12, color: '#667085' }}>{vet.role}</Text>
+                </View>
+              </TouchableOpacity>
+            ))}
+          </View>
 
-        </View>
+          <View style={{ height: 1, backgroundColor: '#EEE', marginBottom: 20 }} />
 
-        <View style={{ marginBottom: 20 }}>
-
-          <Text style={{ fontSize: 14, color: '#333', marginBottom: 5, fontWeight: '600' }}>Attending Vet</Text>
-
-          <Dropdown style={MyStyleSheet.dropdown}  placeholderStyle={MyStyleSheet.placeholderStyle} selectedTextStyle={MyStyleSheet.selectedTextStyle} data={vetData}
-            maxHeight={300} labelField="label" valueField="value" placeholder="Select a veterinarian"value={selectedVet}onChange={item => setSelectedVet(item.value)}/>
-        </View>
-        
-
-        <Text style={[MyStyleSheet.selectPetLabel, { marginBottom: 15, textAlign: 'center' }]}>Select Date & Time</Text>
-        <View style={MyStyleSheet.calendarCard}>
-
-          <Calendar minDate={today} onDayPress={day => setSelectedDate(day.dateString)} markedDates={{[selectedDate]: { selected: true, selectedColor: '#5C93E8' }}}
-            theme={{todayTextColor: '#5C93E8', selectedDayBackgroundColor: '#5C93E8', textDayHeaderFontWeight: 'bold', textDisabledColor: '#d9e1e8'
+          {/* CALENDAR SECTION */}
+          <Calendar 
+            minDate={today} 
+            onDayPress={day => setSelectedDate(day.dateString)} 
+            markedDates={{
+                [selectedDate]: { selected: true, selectedColor: '#2E3A91' }
+            }}
+            theme={{
+                calendarBackground: '#FFF',
+                textSectionTitleColor: '#2E3A91',
+                selectedDayBackgroundColor: '#2E3A91',
+                selectedDayTextColor: '#ffffff',
+                todayTextColor: '#5C93E8',
+                dayTextColor: '#2d4150',
+                textDisabledColor: '#d9e1e8',
+                arrowColor: '#2E3A91',
+                monthTextColor: '#2E3A91',
+                textDayFontWeight: '400',
+                textMonthFontWeight: 'bold',
+                textDayHeaderFontWeight: 'bold',
             }}
           />
 
-          <View style={{ marginTop: 20, paddingHorizontal: 10 }}>
+          <View style={{ height: 1, backgroundColor: '#EEE', marginVertical: 20 }} />
 
-            <Text style={{ fontSize: 14, marginBottom: 10, fontWeight: '600' }}>Select Time Slot</Text>
-
-            <Dropdown style={MyStyleSheet.dropdown} placeholderStyle={MyStyleSheet.placeholderStyle} selectedTextStyle={MyStyleSheet.selectedTextStyle}  data={timeData} 
-              maxHeight={200} labelField="label" valueField="value" placeholder="Select time" value={selectedTime}
-              onChange={item => setSelectedTime(item.value)} />
+          {/* TIME PICKER SECTION */}
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 5 }}>
+            <Text style={{ fontSize: 16, color: '#2E3A91', fontWeight: '500' }}>Time</Text>
+            <TouchableOpacity style={{ backgroundColor: '#E8E8E8', paddingHorizontal: 20, paddingVertical: 8, borderRadius: 20 }}>
+                <Text style={{ fontSize: 16, color: '#2E3A91', fontWeight: 'bold' }}>{selectedTime}</Text>
+            </TouchableOpacity>
           </View>
 
-        </View>
+        </ScrollView>
+      </View>
 
-        <TouchableOpacity style={[ MyStyleSheet.primaryBlueBtn, { marginTop: 30, opacity: (selectedDate && selectedTime && selectedVet) ? 1 : 0.6 }]}
-          disabled={!(selectedDate && selectedTime && selectedVet)} onPress={() => opx.navigate('summary', { 
-            appointmentId, petName, petImage, petDetails, petWeight, service,  selectedDate, formattedTime: selectedTime, vet: selectedVet})}>
-          <Text style={MyStyleSheet.primaryBlueBtnText}>Continue</Text>
-
+      {/* FOOTER BUTTON */}
+      <View style={{ paddingHorizontal: 20, paddingBottom: 20, backgroundColor: '#FFF' }}>
+        <TouchableOpacity 
+            style={[MyStyleSheet.primaryActionBtn, { opacity: (selectedDate && selectedVet) ? 1 : 0.6 }]}
+            disabled={!(selectedDate && selectedVet)} 
+            onPress={() => opx.navigate('remarks', { 
+                appointmentId, petName, petImage, petDetails, petWeight, service,  
+                selectedDate, formattedTime: selectedTime, vet: selectedVet
+            })}
+        >
+          <Text style={MyStyleSheet.primaryActionBtnText}>Next</Text>
         </TouchableOpacity>
-
-      </ScrollView>
+      </View>
       
     </SafeAreaView>
   );

@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, SafeAreaView, FlatList, Image } from 'react-native'
+import { View, Text, TouchableOpacity, SafeAreaView, FlatList, Image, TextInput } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { useNavigation, useIsFocused } from '@react-navigation/native'
 import MyStyleSheet from '../styles/MyStyleSheet'
@@ -11,8 +11,6 @@ export default function AppointmentPage() {
   const { user } = useUser() 
   const [activeTab, setActiveTab] = useState('Upcoming')
   const [refreshTrigger, setRefreshTrigger] = useState(0)
-  
-  // Toggle for the manual bottom drawer
   const [isExpanded, setIsExpanded] = useState(false)
 
   useEffect(() => {
@@ -21,18 +19,21 @@ export default function AppointmentPage() {
     }
   }, [isFocused])
 
-  const formatDisplayDate = (dateString) => {
-    if (!dateString) return "Date TBA";
-    const date = new Date(dateString);
-    const weekday = new Intl.DateTimeFormat('en-GB', { weekday: 'long' }).format(date);
-    const day = new Intl.DateTimeFormat('en-GB', { day: '2-digit' }).format(date);
-    const month = new Intl.DateTimeFormat('en-GB', { month: 'long' }).format(date);
-    return `${weekday}, ${day} ${month}`;
-  };
+  
+  const getFilteredData = () => {
+    const todayStr = new Date().toISOString().split('T')[0];
+    let baseData = [...Appointments];
 
-  const filteredData = activeTab === 'See All' 
-    ? [...Appointments].reverse() 
-    : [...Appointments].filter(item => item.type === activeTab).reverse()
+    if (activeTab === 'Today') {
+      return baseData.filter(item => item.date === todayStr).reverse();
+    } else if (activeTab === 'Pending') {
+      return baseData.filter(item => item.status === 'Pending Confirmation').reverse();
+    } else {
+      return baseData.filter(item => item.type === activeTab).reverse();
+    }
+  }
+
+  const filteredData = getFilteredData();
 
   const handleCardPress = (item) => {
     if (item.status === 'Pending Confirmation') {
@@ -46,61 +47,78 @@ export default function AppointmentPage() {
     }
   }
 
-  // --- RESTORED: Your original appointment card design ---
-  const renderAppointmentCard = ({ item }) => (
-    <TouchableOpacity 
-      style={MyStyleSheet.apptCard} 
-      activeOpacity={0.7} 
-      onPress={() => handleCardPress(item)}
-    >
-      <View style={MyStyleSheet.apptCardContent}>
-        <View style={{ flex: 1 }}>
-          <Text style={MyStyleSheet.apptDateText}>
-            {formatDisplayDate(item.date)}   <Text style={{fontWeight: '400'}}>{item.time}</Text>
-          </Text>
-          
-          <View style={MyStyleSheet.apptServiceRow}>
-            <Image source={require('../public/medical_icon.png')} style={{ width: 18, height: 18 }} />
-            <Text style={MyStyleSheet.apptServiceName}>{item.service}</Text>
-          </View>
-          
-          <View style={[
-            MyStyleSheet.apptStatusTag, 
-            { 
-              backgroundColor: item.status === 'Pending Confirmation' ? '#FFE8D1' : 
-                               item.status === 'Cancelled' ? '#FFBDBD' : 
-                               item.status === 'Approved' || item.status === 'Scheduled' ? '#D1E3FF' : '#D1FFD7' 
-            }
-          ]}>
-            <Text style={MyStyleSheet.apptStatusText}>{item.status}</Text>
-          </View>
-        </View>
+  const renderAppointmentCard = ({ item }) => {
+    const isPending = activeTab === 'Pending' || item.status === 'Pending Confirmation';
+    const isPast = activeTab === 'Past' || item.status === 'Completed';
 
-        <View style={{ alignItems: 'center' }}>
-          <View style={MyStyleSheet.apptPetCircle}>
-             {item.petImage ? (
-                <Image source={{ uri: item.petImage }} style={{ width: 40, height: 40, borderRadius: 20 }} />
-             ) : (
-                <Image source={require('../public/bluepaw.png')} style={{ width: 40, height: 40, borderRadius: 20 }} resizeMode="contain"/>
-             )}
-          </View>
-          <Text style={MyStyleSheet.apptPetNameText}>{item.pet}</Text>
-        </View>
+    return (
+      <View style={isPending ? MyStyleSheet.orangeApptCard : MyStyleSheet.blueApptCard}>
+        <Text style={MyStyleSheet.apptPetNameLarge}>{item.pet}</Text>
+        <Text style={MyStyleSheet.apptServiceTextSub}>{item.service}</Text>
+        
+        <View style={MyStyleSheet.apptDividerHalf} />
+        
+        {/* Date/Time info changes based on tab */}
+        <Text style={MyStyleSheet.apptInfoText}>
+          {isPending 
+            ? `Requested Date: ${item.date}` 
+            : isPast 
+              ? `Completed on ${item.date}` 
+              : `${item.date} • ${item.time} (Due soon)`}
+        </Text>
+
+        {/* Buttons logic matches your screenshots */}
+        {!isPast ? (
+          <>
+            <TouchableOpacity style={[MyStyleSheet.primaryActionBtn, { height: 42, borderRadius: 12 }]}>
+              <Text style={MyStyleSheet.primaryActionBtnText}>Reschedule</Text>
+            </TouchableOpacity>
+
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
+              {isPending ? (
+                <TouchableOpacity 
+                  style={[MyStyleSheet.secondaryOutlineBtn, { flex: 1, height: 40, borderRadius: 12 }]}
+                  onPress={() => handleCardPress(item)}
+                >
+                  <Text style={MyStyleSheet.secondaryOutlineText}>Cancel</Text>
+                </TouchableOpacity>
+              ) : (
+                <>
+                  <TouchableOpacity 
+                    style={[MyStyleSheet.secondaryOutlineBtn, { flex: 0.48, height: 40, borderRadius: 12 }]}
+                    onPress={() => handleCardPress(item)}
+                  >
+                    <Text style={MyStyleSheet.secondaryOutlineText}>View details</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={[MyStyleSheet.secondaryOutlineBtn, { flex: 0.48, height: 40, borderRadius: 12 }]}>
+                    <Text style={MyStyleSheet.secondaryOutlineText}>Cancel</Text>
+                  </TouchableOpacity>
+                </>
+              )}
+            </View>
+          </>
+        ) : (
+          <TouchableOpacity 
+            style={[MyStyleSheet.secondaryOutlineBtn, { height: 42, borderRadius: 20 }]}
+            onPress={() => handleCardPress(item)}
+          >
+            <Text style={MyStyleSheet.secondaryOutlineText}>View details</Text>
+          </TouchableOpacity>
+        )}
       </View>
-    </TouchableOpacity>
-  )
+    );
+  }
 
   return (
     <SafeAreaView style={MyStyleSheet.whiteContainer}>
       
-      {/* Header Area */}
-      <View style={{ paddingHorizontal: 30, paddingTop: 40 }}>
+      <View style={{ paddingHorizontal: 30, paddingTop: 30 }}>
         <Text style={MyStyleSheet.landingWelcomeText}>Appointments</Text>
       </View>
 
-      {/* Filter Tabs */}
+      {/* Pill Styled Filter Tabs */}
       <View style={MyStyleSheet.tabContainerRow}>
-        {['Upcoming', 'Past', 'See All'].map((tab) => (
+        {['Upcoming', 'Today', 'Past', 'Pending'].map((tab) => (
           <TouchableOpacity 
             key={tab} 
             style={[MyStyleSheet.miniTabButton, activeTab === tab && MyStyleSheet.miniTabActive]}
@@ -111,45 +129,56 @@ export default function AppointmentPage() {
         ))}
       </View>
 
-      <FlatList 
-        data={filteredData} 
-        renderItem={renderAppointmentCard} 
-        keyExtractor={item => item.id}
-        extraData={refreshTrigger} 
-        contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 280 }}
-        ListEmptyComponent={() => (
-          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 50 }}>
-            <Image source={require('../public/appointmentcalendar.png')} style={{ width: 220, height: 220 }} resizeMode="contain" />
-            <Text style={{ fontSize: 14, color: '#AAA', marginTop: 15 }}>No appointments found.</Text>
-          </View>
-        )}
-      />
+      <View style={{ paddingHorizontal: 25, marginTop: 20 }}>
+          <Text style={[MyStyleSheet.landingWelcomeText, { fontSize: 22, color: '#2E3A91' }]}>
+            {activeTab === 'Today' ? "Today's Appointments" : `${activeTab} Appointments`}
+          </Text>
+      </View>
 
-      {/* --- Floating Drawer Card (Manual Toggle) --- */}
-      <View style={[
-          MyStyleSheet.bottomDrawerCard, 
-          isExpanded ? { height: 280 } : { height: 110 }
-      ]}>
-        <TouchableOpacity 
-          activeOpacity={0.8}
-          onPress={() => setIsExpanded(!isExpanded)}
-          style={{ alignItems: 'center', width: '100%' }}
-        >
+      {/* Main Container Card */}
+      <View style={MyStyleSheet.appointmentMainContainer}>
+        <View style={MyStyleSheet.searchContainer}>
+          <Image source={require('../public/search_icon.png')} style={{ width: 16, height: 16, marginRight: 10, tintColor: '#AAA' }} />
+          <TextInput placeholder="Search" placeholderTextColor="#AAA" style={{ flex: 1 }} />
+        </View>
+
+        
+          <FlatList 
+            data={filteredData} 
+            renderItem={renderAppointmentCard} 
+            keyExtractor={(item, index) => index.toString()}
+            extraData={refreshTrigger} 
+            showsVerticalScrollIndicator={false}
+            ListEmptyComponent={() => (
+              <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 80 }}>
+                {/* RESTORED: Your original empty state illustration */}
+                <Image 
+                  source={require('../public/appointmentcalendar.png')} 
+                  style={{ width: 250, height: 250 }} 
+                  resizeMode="contain" 
+                />
+                <Text style={{ fontSize: 14, color: '#AAA', marginTop: 10 }}>
+                  You currently have no appointments.
+                </Text>
+              </View>
+            )}
+          />
+      </View>
+
+      {/* Floating Drawer Logic stays the same */}
+      <View style={[MyStyleSheet.bottomDrawerCard, isExpanded ? { height: 260 } : { height: 100 }]}>
+        <TouchableOpacity onPress={() => setIsExpanded(!isExpanded)} style={{ alignItems: 'center' }}>
           <View style={MyStyleSheet.dragHandleBar} />
           <Text style={MyStyleSheet.cardActionTitle}>Book appointment now</Text>
         </TouchableOpacity>
-        
         {isExpanded && (
-          <TouchableOpacity 
-            style={[MyStyleSheet.primaryActionBtn, { marginTop: 20 }]} 
-            onPress={() => opx.navigate('selectpet')} 
-          >
+          <TouchableOpacity style={[MyStyleSheet.primaryActionBtn, { marginTop: 5 }]} onPress={() => opx.navigate('service')}>
             <Text style={MyStyleSheet.primaryActionBtnText}>Book appointment</Text>
           </TouchableOpacity>
         )}
       </View>
 
-      {/* Minimalist Bottom Navigation */}
+      {/* Bottom Nav */}
       <View style={MyStyleSheet.minimalBottomNav}>
         <TouchableOpacity style={MyStyleSheet.navTab} onPress={() => opx.navigate('dashboard')}>
           <Image source={require('../public/HomePage.png')} style={MyStyleSheet.navTabIcon} />
@@ -159,13 +188,9 @@ export default function AppointmentPage() {
           <Image source={require('../public/Pets.png')} style={MyStyleSheet.navTabIcon} />
           <Text style={MyStyleSheet.navTabText}>Pets</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={MyStyleSheet.navTab} onPress={() => opx.navigate('selectpet')}>
-          <Image source={require('../public/Book.png')} style={MyStyleSheet.navTabIcon} />
-          <Text style={MyStyleSheet.navTabText}>Book</Text>
-        </TouchableOpacity>
         <TouchableOpacity style={MyStyleSheet.navTab}>
           <Image source={require('../public/Calendar.png')} style={[MyStyleSheet.navTabIcon, { tintColor: '#2E3A91' }]} />
-          <Text style={[MyStyleSheet.navTabText, { color: '#2E3A91' }]}>Appt</Text>
+          <Text style={[MyStyleSheet.navTabText, { color: '#2E3A91' }]}>Appointments</Text>
         </TouchableOpacity>
         <TouchableOpacity style={MyStyleSheet.navTab} onPress={() => opx.navigate('userprofile')}>
           <Image source={require('../public/Profile.png')} style={MyStyleSheet.navTabIcon} />
