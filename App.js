@@ -47,6 +47,10 @@ import Unpaid from './screens/Unpaid';
 import Overdue from './screens/Overdue';
 import PayTotalPending from './screens/PayTotalPending';
 import PayInvoice from './screens/PayInvoice';
+import BookVaccine from './screens/BookVaccine';
+import BookSurgery from './screens/BookSurgery';
+import BookGrooming from './screens/BookGromming';
+import BookAppointmentRemarks from './screens/BookAppointmentRemarks';
 
 
 
@@ -62,7 +66,7 @@ export default function App() {
   return (
     <UserProvider>
       <NavigationContainer>
-        <MScreen.Navigator initialRouteName='userprofile'>
+        <MScreen.Navigator initialRouteName='datetime'>
     
    
           {/* <MScreen.Screen name='profilepic' component={AddProfilePic} />
@@ -494,6 +498,51 @@ export default function App() {
             options={{
               headerShown: false,
               title: 'Pay Invoice',
+              headerLeft: () => null,
+              headerTitleAlign: 'left',
+            }}
+          />
+
+           <MScreen.Screen
+            name='bookvaccine'
+            component={BookVaccine}
+            options={{
+              headerShown: false,
+              title: 'Book Vaccine',
+              headerLeft: () => null,
+              headerTitleAlign: 'left',
+            }}
+          />
+
+              <MScreen.Screen
+            name='booksurgery'
+            component={BookSurgery}
+            options={{
+              headerShown: false,
+              title: 'Book Surgery',
+              headerLeft: () => null,
+              headerTitleAlign: 'left',
+            }}
+          />
+
+           <MScreen.Screen
+            name='bookgrooming'
+            component={BookGrooming}
+            options={{
+              headerShown: false,
+              title: 'Book Grooming',
+              headerLeft: () => null,
+              headerTitleAlign: 'left',
+            }}
+          />
+
+          
+           <MScreen.Screen
+            name='remarks'
+            component={BookAppointmentRemarks}
+            options={{
+              headerShown: false,
+              title: 'Remarks',
               headerLeft: () => null,
               headerTitleAlign: 'left',
             }}

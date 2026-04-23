@@ -2673,6 +2673,134 @@ otpStyledInput: {
     color: '#667085',
   },
 
+  // Add/Update in MyStyleSheet.jsx
+tabContainerRow: {
+  flexDirection: 'row',
+  backgroundColor: '#FFF', // White inside
+  borderWidth: 1,
+  borderColor: '#2E3A91', // Blue outline
+  borderRadius: 30, // Pill shape
+  marginHorizontal: 20,
+  marginTop: 20,
+  overflow: 'hidden', // Ensures background colors don't bleed out
+},
+miniTabButton: {
+  flex: 1, // Equally distributes space for all 4 tabs
+  paddingVertical: 12,
+  alignItems: 'center',
+  justifyContent: 'center',
+},
+miniTabActive: {
+  backgroundColor: '#2E3A91', // Fill the active tab with blue
+  borderRadius: 28, // Slightly smaller than container to look clean
+},
+miniTabText: {
+  fontSize: 14,
+  color: '#2E3A91', // Blue text for inactive
+  fontWeight: '500',
+},
+miniTabTextActive: {
+  color: '#FFF', // White text for active
+},
+
+// Add to MyStyleSheet.jsx
+
+  todayCard: {
+    backgroundColor: '#EDF4FF', // Light blue fill
+    borderRadius: 30,
+    padding: 20,
+    marginBottom: 20,
+  },
+  todayPetName: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#2E3A91',
+  },
+  todayServiceText: {
+    fontSize: 16,
+    color: '#2E3A91',
+    marginTop: 5,
+  },
+  todayDivider: {
+    height: 1,
+    backgroundColor: '#B0C4DE',
+    width: '50%',
+    marginVertical: 15,
+  },
+  todayTimeText: {
+    fontSize: 16,
+    color: '#2E3A91',
+    marginBottom: 20,
+  },
+  searchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFF',
+    borderWidth: 1,
+    borderColor: '#CCC',
+    borderRadius: 25,
+    paddingHorizontal: 15,
+    height: 50,
+    marginBottom: 20,
+  },
+
+  // Add/Update in MyStyleSheet.jsx
+
+  appointmentMainContainer: {
+    backgroundColor: '#F8F9FA', // Light gray background behind the white container
+    borderRadius: 30,
+    marginHorizontal: 15,
+    padding: 15,
+    marginTop: 10,
+    flex: 1,
+  },
+  // Upcoming & Past Card (Light Blue)
+  blueApptCard: {
+    backgroundColor: '#EDF4FF',
+    borderRadius: 25,
+    padding: 20,
+    marginBottom: 15,
+  },
+  // Pending Approval Card (Light Orange)
+  orangeApptCard: {
+    backgroundColor: '#FFF1E0',
+    borderRadius: 25,
+    padding: 20,
+    marginBottom: 15,
+  },
+  apptPetNameLarge: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#2E3A91',
+  },
+  apptServiceTextSub: {
+    fontSize: 15,
+    color: '#2E3A91',
+    marginTop: 4,
+  },
+  apptDividerHalf: {
+    height: 1,
+    backgroundColor: '#B0C4DE',
+    width: '50%',
+    marginVertical: 12,
+  },
+  apptInfoText: {
+    fontSize: 14,
+    color: '#2E3A91',
+    marginBottom: 15,
+  },
+  searchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFF',
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+    borderRadius: 25,
+    paddingHorizontal: 15,
+    height: 45,
+    marginBottom: 15,
+  },
+
 })
 
 export default MyStyleSheet;

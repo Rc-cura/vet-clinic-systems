@@ -1,75 +1,120 @@
-import { View, Text, TouchableOpacity, SafeAreaView, FlatList, Image } from 'react-native'
-import React from 'react'
-import { useNavigation } from '@react-navigation/native'
+import { View, Text, TouchableOpacity, SafeAreaView, FlatList, Image, TextInput } from 'react-native'
+import React, { useState } from 'react'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import MyStyleSheet from '../styles/MyStyleSheet'
 import { Pets } from '../App'
 
 export default function BookAppointmentPets() {
   const opx = useNavigation()
+  const route = useRoute()
+
+  // Dynamic header title based on which service was picked
+  const { service } = route.params || { service: 'Consultation / Routine Check-up' }
+  
+  const [selectedPet, setSelectedPet] = useState(null)
 
   const renderPetItem = ({ item }) => {
-
-    if (item.empty) {
-
-      return <View style={[MyStyleSheet.gridItem, { backgroundColor: 'transparent' }]} />;
-    }
+    const isSelected = selectedPet?.id === item.id;
 
     return (
-      <TouchableOpacity style={MyStyleSheet.gridItem} onPress={() => opx.navigate('service', { petName: item.pname,  petImage: item.pimage, 
-          petDetails: `${item.species} - ${item.breed} - ${item.gender}`, petWeight: item.weight })} 
+      <TouchableOpacity 
+        activeOpacity={0.9}
+        style={[
+          MyStyleSheet.dashOverviewCleanCard, 
+          { 
+            flexDirection: 'row', 
+            padding: 0, 
+            overflow: 'hidden', 
+            height: 130, 
+            marginBottom: 20,
+            borderWidth: isSelected ? 2 : 0,
+            borderColor: '#2E3A91'
+          }
+        ]} 
+        onPress={() => setSelectedPet(item)} 
       >
-        <View style={MyStyleSheet.gridImagePlaceholder}>
-
-          {item.pimage ? (<Image source={{ uri: item.pimage }} style={{ width: '100%', height: '100%', borderRadius: 10 }} />
+        {/* Left Side: Pet Image */}
+        <View style={{ width: 130, height: '100%' }}>
+          {item.pimage ? (
+            <Image source={{ uri: item.pimage }} style={{ width: '100%', height: '100%' }} />
           ) : (
-            <Image source={require('../public/bluepaw.png')} style={{ width: 40, height: 40 }} resizeMode="contain" />
+            <View style={{ flex: 1, backgroundColor: '#F0F5FF', justifyContent: 'center', alignItems: 'center' }}>
+                <Image source={require('../public/bluepaw.png')} style={{ width: 60, height: 60 }} resizeMode="contain" />
+            </View>
           )}
-
         </View>
 
-        <Text style={{ textAlign: 'center', marginTop: 8, fontWeight: '500' }}>{item.pname}</Text>
-
+        {/* Right Side: Pet Info (Centered vertically like your screenshot) */}
+        <View style={{ flex: 1, paddingLeft: 20, justifyContent: 'center' }}>
+          <Text style={{ fontSize: 24, fontWeight: 'bold', color: '#2E3A91' }}>{item.pname}</Text>
+          <Text style={{ fontSize: 14, color: '#2E3A91', marginTop: 2 }}>{item.breed}</Text>
+          
+          <Text style={{ fontSize: 12, color: '#2E3A91', marginTop: 20 }}>{item.gender}</Text>
+        </View>
       </TouchableOpacity>
-
     );
   }
 
-  const formatData = (data, numColumns) => {
-
-    const dataCopy = [...data];
-
-    const numberOfFullRows = Math.floor(dataCopy.length / numColumns);
-
-    let numberOfElementsLastRow = dataCopy.length - (numberOfFullRows * numColumns);
-
-    while (numberOfElementsLastRow !== numColumns && numberOfElementsLastRow !== 0) {
-
-      dataCopy.push({ id: `blank-${numberOfElementsLastRow}`, empty: true });
-
-      numberOfElementsLastRow++;
-    }
-    return dataCopy;
-  };
-
   return (
-    <SafeAreaView style={MyStyleSheet.container}>
+    <SafeAreaView style={[MyStyleSheet.whiteContainer, { backgroundColor: '#FFF' }]}>
+      
+      {/* HEADER */}
+      <View style={[MyStyleSheet.formHeader, { justifyContent: 'flex-start', paddingHorizontal: 20, marginBottom: 10 }]}>
+        <TouchableOpacity onPress={() => opx.goBack()} style={MyStyleSheet.backBtn}>
+          <Text style={{ fontSize: 28, color: '#2E3A91' }}>←</Text> 
+        </TouchableOpacity>
+        <Text style={[MyStyleSheet.petHeaderTitle, { marginLeft: 10, flex: 1 }]}>
+            Book an appointment ( {service} )
+        </Text>
+      </View>
 
-      <View style={{ paddingHorizontal: 25, paddingTop: 20 }}>
+      <View style={{ paddingHorizontal: 25, flex: 1 }}>
+        
+        <Text style={[MyStyleSheet.profileMenuTitle, { marginTop: 20, marginBottom: 15 }]}>Select your pet</Text>
 
-        <Text style={MyStyleSheet.selectPetLabel}>Select Pet</Text>
-
-        <View style={[MyStyleSheet.progressBarBg, { marginTop: 20 }]}>
-
-          <View style={[MyStyleSheet.progressBarActive, { width: '25%' }]} />
-
+        {/* SEARCH BAR WITH YOUR ICON */}
+        <View style={[MyStyleSheet.searchContainer, { marginBottom: 25 }]}>
+            <Image 
+                source={require('../public/search_icon.png')} 
+                style={{ width: 18, height: 18, marginRight: 10, tintColor: '#AAA' }} 
+                resizeMode="contain"
+            />
+            <TextInput 
+                placeholder="Search" 
+                placeholderTextColor="#AAA"
+                style={{ flex: 1, height: '100%', color: '#2E3A91' }} 
+            />
         </View>
 
-        <FlatList data={formatData(Pets, 2)}  renderItem={renderPetItem} keyExtractor={(item, index) => index.toString()}  numColumns={2}
-          columnWrapperStyle={{ justifyContent: 'space-between' }} style={{ marginTop: 20 }} showsVerticalScrollIndicator={false}/> 
+        <FlatList 
+          data={Pets} 
+          renderItem={renderPetItem} 
+          keyExtractor={(item, index) => index.toString()} 
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 20 }}
+        /> 
 
       </View>
 
+      {/* FOOTER ACTION BUTTON */}
+      <View style={{ paddingHorizontal: 25, paddingBottom: 20 }}>
+        <TouchableOpacity 
+            style={[
+                MyStyleSheet.primaryActionBtn, 
+                !selectedPet && { backgroundColor: '#F0F0F0' }
+            ]}
+            disabled={!selectedPet}
+            onPress={() => opx.navigate('datetime', { 
+                petName: selectedPet.pname, 
+                petImage: selectedPet.pimage,
+                petWeight: selectedPet.weight,
+                service: service 
+            })}
+        >
+            <Text style={[MyStyleSheet.primaryActionBtnText, !selectedPet && { color: '#CCC' }]}>Next</Text>
+        </TouchableOpacity>
+      </View>
+
     </SafeAreaView>
-    
   )
 }
