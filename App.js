@@ -46,6 +46,7 @@ import Paid from './screens/Paid';
 import Unpaid from './screens/Unpaid';
 import Overdue from './screens/Overdue';
 import PayTotalPending from './screens/PayTotalPending';
+import PayInvoice from './screens/PayInvoice';
 
 
 
@@ -482,6 +483,17 @@ export default function App() {
             options={{
               headerShown: false,
               title: 'Overdue',
+              headerLeft: () => null,
+              headerTitleAlign: 'left',
+            }}
+          />
+
+           <MScreen.Screen
+            name='payinvoice'
+            component={PayInvoice}
+            options={{
+              headerShown: false,
+              title: 'Pay Invoice',
               headerLeft: () => null,
               headerTitleAlign: 'left',
             }}

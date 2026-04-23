@@ -47,8 +47,11 @@ export default function AllInvoice() {
         <View style={{ marginTop: 20 }}>
           {item.status !== 'Paid' ? (
             <>
-              {/* Only show "Pay now" if NOT Paid */}
-              <TouchableOpacity style={MyStyleSheet.primaryActionBtn}>
+              {/* --- ADDED NAVIGATION TO PAYINVOICE HERE --- */}
+              <TouchableOpacity 
+                style={MyStyleSheet.primaryActionBtn}
+                onPress={() => opx.navigate('payinvoice', { invoice: item })}
+              >
                 <Text style={MyStyleSheet.primaryActionBtnText}>Pay now</Text>
               </TouchableOpacity>
               

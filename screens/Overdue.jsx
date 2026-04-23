@@ -9,50 +9,59 @@ export default function Overdue() {
   // Sample data based on your screenshot
   const overdueInvoices = [
     { id: '1', code: 'SJVC-2026-03-0001', invDate: 'Jan. 23, 2025', dueDate: 'Jan. 24, 2025', service: '5-in-1 Vaccine + 3 more services', price: '5,300' },
-    { id: '2', code: 'SJVC-2026-03-0001', invDate: 'Jan. 23, 2025', dueDate: 'Jan. 24, 2025', service: '5-in-1 Vaccine + 3 more services', price: '5,300' },
-    { id: '3', code: 'SJVC-2026-03-0001', invDate: 'Jan. 23, 2025', dueDate: 'Jan. 24, 2025', service: '5-in-1 Vaccine + 3 more services', price: '5,300' },
+    { id: '2', code: 'SJVC-2026-03-0002', invDate: 'Jan. 23, 2025', dueDate: 'Jan. 24, 2025', service: '5-in-1 Vaccine + 3 more services', price: '5,300' },
+    { id: '3', code: 'SJVC-2026-03-0003', invDate: 'Jan. 23, 2025', dueDate: 'Jan. 24, 2025', service: '5-in-1 Vaccine + 3 more services', price: '5,300' },
   ]
 
-  const renderItem = ({ item, index }) => (
-    <View style={MyStyleSheet.dashOverviewCleanCard}>
-      {/* Header: Code and Red Overdue Tag */}
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#2E3A91' }}>{item.code}</Text>
-        <View style={{ backgroundColor: '#FFBDBD', paddingHorizontal: 15, paddingVertical: 4, borderRadius: 12 }}>
-          <Text style={{ color: '#FF4D4D', fontSize: 10, fontWeight: 'bold' }}>Overdue</Text>
+  const renderItem = ({ item, index }) => {
+    // Determine the status background and text color based on logic
+    const statusStyle = { bg: '#FFBDBD', text: '#FF4D4D' };
+
+    return (
+      <View style={MyStyleSheet.dashOverviewCleanCard}>
+        {/* Header: Code and Red Overdue Tag */}
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#2E3A91' }}>{item.code}</Text>
+          <View style={{ backgroundColor: statusStyle.bg, paddingHorizontal: 15, paddingVertical: 4, borderRadius: 12 }}>
+            <Text style={{ color: statusStyle.text, fontSize: 10, fontWeight: 'bold' }}>Overdue</Text>
+          </View>
+        </View>
+        
+        {/* Dates */}
+        <Text style={{ color: '#AAA', fontSize: 12, marginTop: 5 }}>Invoice Date : {item.invDate}</Text>
+        <Text style={{ color: '#AAA', fontSize: 12 }}>Due Date : {item.dueDate}</Text>
+        
+        {/* Service and Price */}
+        <Text style={{ color: '#667085', fontSize: 14, marginTop: 15 }}>{item.service}</Text>
+        <Text style={{ fontSize: 22, fontWeight: 'bold', color: '#2E3A91', marginTop: 5 }}>₱{item.price}</Text>
+
+        {/* Action Buttons */}
+        <View style={{ marginTop: 20 }}>
+          {/* Third item has "Download" while others have "Pay now" per your screenshot logic */}
+          {index === 2 ? (
+            <TouchableOpacity style={MyStyleSheet.primaryActionBtn}>
+              <Text style={MyStyleSheet.primaryActionBtnText}>Download</Text>
+            </TouchableOpacity>
+          ) : (
+            /* --- ADDED NAVIGATION TO PAYINVOICE --- */
+            <TouchableOpacity 
+              style={MyStyleSheet.primaryActionBtn}
+              onPress={() => opx.navigate('payinvoice', { invoice: item })}
+            >
+              <Text style={MyStyleSheet.primaryActionBtnText}>Pay now</Text>
+            </TouchableOpacity>
+          )}
+
+          <TouchableOpacity 
+            style={[MyStyleSheet.secondaryOutlineBtn, { marginTop: 10, borderRadius: 25 }]}
+            onPress={() => opx.navigate('fullinvoice', { invoice: { ...item, status: 'Overdue' } })}
+          >
+            <Text style={MyStyleSheet.secondaryOutlineText}>See full invoice</Text>
+          </TouchableOpacity>
         </View>
       </View>
-      
-      {/* Dates */}
-      <Text style={{ color: '#AAA', fontSize: 12, marginTop: 5 }}>Invoice Date : {item.invDate}</Text>
-      <Text style={{ color: '#AAA', fontSize: 12 }}>Due Date : {item.dueDate}</Text>
-      
-      {/* Service and Price */}
-      <Text style={{ color: '#667085', fontSize: 14, marginTop: 15 }}>{item.service}</Text>
-      <Text style={{ fontSize: 22, fontWeight: 'bold', color: '#2E3A91', marginTop: 5 }}>₱{item.price}</Text>
-
-      {/* Action Buttons */}
-      <View style={{ marginTop: 20 }}>
-        {/* Screenshot shows third item has "Download" instead of "Pay now" */}
-        {index === 2 ? (
-          <TouchableOpacity style={MyStyleSheet.primaryActionBtn}>
-            <Text style={MyStyleSheet.primaryActionBtnText}>Download</Text>
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity style={MyStyleSheet.primaryActionBtn}>
-            <Text style={MyStyleSheet.primaryActionBtnText}>Pay now</Text>
-          </TouchableOpacity>
-        )}
-
-        <TouchableOpacity 
-          style={[MyStyleSheet.secondaryOutlineBtn, { marginTop: 10, borderRadius: 25 }]}
-          onPress={() => opx.navigate('fullinvoice', { invoice: { ...item, status: 'Overdue' } })}
-        >
-          <Text style={MyStyleSheet.secondaryOutlineText}>See full invoice</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-  )
+    );
+  }
 
   return (
     <SafeAreaView style={[MyStyleSheet.whiteContainer, { backgroundColor: '#FFF' }]}>
@@ -69,7 +78,7 @@ export default function Overdue() {
       <FlatList
         data={overdueInvoices}
         renderItem={renderItem}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(item) => item.id}
         contentContainerStyle={{ paddingHorizontal: 15, paddingTop: 10, paddingBottom: 40 }}
         showsVerticalScrollIndicator={false}
       />
