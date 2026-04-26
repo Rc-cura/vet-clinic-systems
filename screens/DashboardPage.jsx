@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Image, ScrollView, SafeAreaView, ImageBackground, ActivityIndicator, FlatList, Dimensions } from 'react-native'
+import { View, Text, TouchableOpacity, Image, ScrollView, SafeAreaView, ImageBackground, ActivityIndicator, FlatList, Dimensions, StyleSheet } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { useUser } from '../context/UserContext'
@@ -26,7 +26,7 @@ export default function DashboardPage() {
     { id: '3', image: require('../public/banner_image.png'), text: "Health tracking\nat your fingertips." },
   ];
 
-  // --- Supabase Fetching Logic (UNCHANGED) ---
+  // --- Supabase Fetching Logic ---
   useEffect(() => {
     const fetchPets = async () => {
       if (!user?.id) return;
@@ -76,7 +76,8 @@ export default function DashboardPage() {
       <View style={MyStyleSheet.dashTopHeader}>
         <Text style={MyStyleSheet.dashHeaderTitle}>Home</Text>
         <View style={MyStyleSheet.dashHeaderIcons}>
-          <TouchableOpacity style={MyStyleSheet.dashIconBtn}>
+          {/* 🟢 IN-UPDATE: Gumagana na rin ang chat icon sa header */}
+          <TouchableOpacity style={MyStyleSheet.dashIconBtn} onPress={() => opx.navigate('chat')}>
              <Image source={require('../public/Chat.png')} style={{width: 22, height: 22}} />
           </TouchableOpacity>
           <TouchableOpacity style={MyStyleSheet.dashIconBtn}>
@@ -141,7 +142,7 @@ export default function DashboardPage() {
                   onPress={() => opx.navigate('viewpets', { pet })}
                 >
                   <Image 
-                    source={pet.pimage ? { uri: pet.pimage } : require('../public/bluepaw.png')} 
+                    source={pet.image_url ? { uri: pet.image_url } : require('../public/bluepaw.png')} 
                     style={MyStyleSheet.dashPetCircleAvatar} 
                   />
                 </TouchableOpacity>
@@ -178,6 +179,15 @@ export default function DashboardPage() {
 
       </ScrollView>
 
+      {/* 🟢 BAGONG FLOATING CHAT BUTTON */}
+      <TouchableOpacity 
+        style={styles.floatingChatBtn} 
+        onPress={() => opx.navigate('chat')}
+        activeOpacity={0.8}
+      >
+        <Ionicons name="mail" size={24} color="#FFFFFF" />
+      </TouchableOpacity>
+
       {/* FIXED BOTTOM NAVIGATION */}
       <View style={MyStyleSheet.minimalBottomNav}>
         <TouchableOpacity style={MyStyleSheet.navTab}>
@@ -202,3 +212,24 @@ export default function DashboardPage() {
     </SafeAreaView>
   )
 }
+
+// 🟢 NAGDAGDAG NG STYLES PARA SA FLOATING BUTTON
+const styles = StyleSheet.create({
+  floatingChatBtn: {
+    position: 'absolute',
+    bottom: 100, // Sakto lang sa ibabaw ng bottom navigation mo
+    right: 20,
+    zIndex: 99,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: '#2E3A91', // Parehong blue na gamit mo sa app
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+    elevation: 8,
+  }
+});
