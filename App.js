@@ -66,7 +66,7 @@ export default function App() {
   return (
     <UserProvider>
       <NavigationContainer>
-        <MScreen.Navigator initialRouteName='datetime'>
+        <MScreen.Navigator initialRouteName='landing'>
     
    
           {/* <MScreen.Screen name='profilepic' component={AddProfilePic} />

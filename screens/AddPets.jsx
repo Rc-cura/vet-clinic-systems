@@ -9,7 +9,7 @@ import { Dropdown } from 'react-native-element-dropdown';
 import { supabase } from '../context/supabase'; 
 import { useUser } from '../context/UserContext';
 
-// --- FALLBACK OBJECTS (Kapag walang internet o offline pa ang database) ---
+// --- FALLBACK OBJECTS ---
 const fallbackSpecies = [
   { label: 'Dog', value: 'Dog' },
   { label: 'Cat', value: 'Cat' },
@@ -33,6 +33,7 @@ export default function AddPets() {
   const [loadingForm, setLoadingForm] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
+  // 🟢 IN-UPDATE: Tinanggal ang 'remarks' at pinalitan ang 'age' ng 'birthdate'
   const [getPet, setPet] = useState({ 
     pimage: null, 
     pname: "", 
@@ -40,9 +41,8 @@ export default function AddPets() {
     breed: "",
     customBreed: "", 
     gender: "", 
-    age: "", 
+    birthdate: "", // Pinalitan dito
     weight: "",
-    remarks: "", 
   });
 
   const [speciesList, setSpeciesList] = useState(fallbackSpecies);
@@ -54,7 +54,7 @@ export default function AddPets() {
     { label: 'Female', value: 'Female' },
   ];
 
-  // ================= FETCH SPECIES/BREEDS PARA SA DROPDOWNS =================
+  // ================= FETCH SPECIES/BREEDS =================
   useEffect(() => {
     const fetchDropdownData = async () => {
       try {
@@ -78,7 +78,6 @@ export default function AddPets() {
   const changeHandler = (field, value) => {
     let filteredValue = value;
     
-    // Kapag pumili ng Species, ifi-filter ang Breed dropdown
     if (field === "species") {
       setPet({ ...getPet, species: value, breed: "", customBreed: "" });
       const relevantBreeds = allBreedsList
@@ -91,7 +90,9 @@ export default function AddPets() {
     }
 
     if (field === "pname" || field === "gender") filteredValue = value.replace(/[^a-zA-Z\s]/g, "");
-    if (field === "age" || field === "weight") filteredValue = value.replace(/[^0-9.]/g, "");
+    if (field === "weight") filteredValue = value.replace(/[^0-9.]/g, "");
+    // 🟢 IN-UPDATE: Pinapayagan na ang numbers, dash, at slash para sa date format
+    if (field === "birthdate") filteredValue = value.replace(/[^0-9\-\/]/g, "");
     
     setPet({ ...getPet, [field]: filteredValue });
   };
@@ -110,14 +111,14 @@ export default function AddPets() {
   };
 
   const handleSavePet = async () => {
-    // 1. Validation Checks
     if (!user || !user.id) {
       Alert.alert("Error", "No user session found. Please log in again.");
       navigation.navigate('login');
       return;
     }
 
-    if (!getPet.pname || !getPet.species || !getPet.breed || !getPet.gender || !getPet.age || !getPet.weight) {
+    // 🟢 IN-UPDATE: Chine-check na ang birthdate imbes na age
+    if (!getPet.pname || !getPet.species || !getPet.breed || !getPet.gender || !getPet.birthdate || !getPet.weight) {
       setErrorMsg("Please fill up all required fields");
       return;
     }
@@ -133,7 +134,6 @@ export default function AddPets() {
     try {
       let finalImageUrl = null;
 
-      // 2. Upload Image to Supabase Storage (Kung may pinili ang user)
       if (getPet.pimage) {
         const fileExt = getPet.pimage.split('.').pop();
         const fileName = `${user.id}/${Date.now()}.${fileExt}`;
@@ -145,24 +145,22 @@ export default function AddPets() {
         finalImageUrl = urlData.publicUrl;
       }
 
-      // 3. Save Pet Data to Database
+      // 🟢 IN-UPDATE: Tumutugma na ito 100% sa database payload ng Web mo
       const { error: insertError } = await supabase.from('pets').insert([{
         owner_id: user.id, 
         pet_name: getPet.pname, 
         species: getPet.species,
         breed: getPet.breed === 'Other' ? getPet.customBreed : getPet.breed,
         gender: getPet.gender, 
-        age: getPet.age, 
+        birthdate: getPet.birthdate || null, // Pareho na sa web
         weight: getPet.weight,
         image_url: finalImageUrl, 
-        remarks: getPet.remarks
+        // 🗑️ Tinanggal na ang remarks dito
       }]);
 
       if (insertError) throw insertError;
 
       Alert.alert("Success", "Pet registered successfully!");
-      
-      // Babalik sa PetManagementPage kapag successful!
       navigation.goBack();
 
     } catch (error) {
@@ -176,7 +174,6 @@ export default function AddPets() {
   return (
     <SafeAreaView style={MyStyleSheet.whiteContainer}>
       <View style={MyStyleSheet.formHeader}>
-        {/* Back Button - Babalik sa PetManagementPage */}
         <TouchableOpacity onPress={() => navigation.goBack()} style={MyStyleSheet.backBtn}>
           <Text style={{ fontSize: 28, color: '#2E3A91' }}>←</Text> 
         </TouchableOpacity>
@@ -206,7 +203,6 @@ export default function AddPets() {
 
         <Text style={MyStyleSheet.formSectionTitle}>Basic information</Text>
 
-        {/* Inputs */}
         <View style={MyStyleSheet.inputGroup}>
           <Text style={MyStyleSheet.fieldLabel}>Pet's name</Text>
           <TextInput value={getPet.pname} onChangeText={(val) => changeHandler("pname", val)} style={MyStyleSheet.styledInput} placeholder="Enter pet's name" placeholderTextColor="#AAA" editable={!loadingForm}/>
@@ -225,13 +221,13 @@ export default function AddPets() {
           <Dropdown style={MyStyleSheet.styledInput} data={genderData} labelField="label" valueField="value" placeholder="Select gender" value={getPet.gender} onChange={item => changeHandler("gender", item.value)} disable={loadingForm} />
 
           <Text style={MyStyleSheet.fieldLabel}>Birthday</Text>
-          <TextInput style={MyStyleSheet.styledInput} placeholder="00/00/0000" placeholderTextColor="#AAA" value={getPet.age} onChangeText={(val) => changeHandler("age", val)} keyboardType="numeric" editable={!loadingForm} />
+          {/* 🟢 IN-UPDATE: In-adjust ang placeholder para alam nila ang format, at tinanggal ang keyboardType="numeric" para makapag-type ng dash (-) */}
+          <TextInput style={MyStyleSheet.styledInput} placeholder="YYYY-MM-DD" placeholderTextColor="#AAA" value={getPet.birthdate} onChangeText={(val) => changeHandler("birthdate", val)} editable={!loadingForm} />
 
           <Text style={MyStyleSheet.fieldLabel}>Weight</Text>
           <TextInput style={MyStyleSheet.styledInput} placeholder="Kg" placeholderTextColor="#AAA" value={getPet.weight} onChangeText={(val) => changeHandler("weight", val)} keyboardType="numeric" editable={!loadingForm} />
 
-          <Text style={MyStyleSheet.fieldLabel}>Remarks</Text>
-          <TextInput style={[MyStyleSheet.styledInput, { height: 100, textAlignVertical: 'top', paddingTop: 15 }]} placeholder="Notes or remarks" placeholderTextColor="#AAA" onChangeText={(val) => setPet({...getPet, remarks: val})} multiline={true} numberOfLines={4} editable={!loadingForm} />
+          {/* 🗑️ TINANGGAL ANG REMARKS INPUT FIELD DITO */}
         </View>
 
         <TouchableOpacity style={[MyStyleSheet.primaryActionBtn, { opacity: loadingForm ? 0.6 : 1 }]} onPress={handleSavePet} disabled={loadingForm}>
@@ -240,7 +236,6 @@ export default function AddPets() {
 
       </ScrollView>
 
-      {/* Spacer sa ilalim */}
       <View style={{ height: 80 }} />
     </SafeAreaView>
   );

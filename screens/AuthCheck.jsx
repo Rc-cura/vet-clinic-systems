@@ -11,36 +11,43 @@ export default function AuthCheck() {
       console.log("1. AuthCheck started...");
 
       try {
-        // Direktang kunin sa Supabase ang session para walang delay
         const { data: { session }, error: authError } = await supabase.auth.getSession();
-        console.log("2. Session fetched:", session ? "Active Session Found" : "No Session");
-
+        
         if (!session || authError) {
-          console.log("3. Walang session. Redirecting to login...");
-          opx.replace('login'); // 🚨 CHECK SPELLING SA APP.JS
+          console.log("2. Walang session. Redirecting to login...");
+          opx.replace('login'); 
           return;
         }
 
         const userId = session.user.id;
-        console.log("4. User ID:", userId);
+        console.log("3. User ID:", userId);
 
-        // Tignan sa database kung may profile na
-        const { data, error } = await supabase
+        // Check 1: Tignan kung may profile meta (background/pic)
+        const { data: metaData } = await supabase
           .from('customer_profile_meta')
           .select('customer_id')
           .eq('customer_id', userId)
-          .single();
+          .maybeSingle(); 
 
-        console.log("5. Database checked. Data:", data, "Error:", error?.code);
+        // Check 2: Tignan kung may address na
+        // Note: Kung ang column name mo sa address table ay 'user_id' imbes na 'customer_id', palitan mo lang yung nasa .eq()
+        const { data: addressData } = await supabase
+          .from('customer_addresses')
+          .select('customer_id') 
+          .eq('customer_id', userId)
+          .maybeSingle();
 
-        if (!data || error?.code === 'PGRST116') {
-          console.log("6. First time user! Going to AddProfilePic...");
-          // 🚨 PAKI-CHECK ANG EXACT SPELLING NITO SA APP.JS MO:
-          opx.replace('profilepic'); 
-        } else {
-          console.log("6. Returning user! Going to dashboard...");
-          // 🚨 PAKI-CHECK ANG EXACT SPELLING NITO SA APP.JS MO:
+        console.log("4. Meta Data:", metaData ? "Found" : "Missing");
+        console.log("5. Address Data:", addressData ? "Found" : "Missing");
+
+        // Kung parehong may laman, sa dashboard na
+        if (metaData && addressData) {
+          console.log("6. Kumpleto ang profile! Going to dashboard...");
           opx.replace('dashboard'); 
+        } else {
+          // Kung may kulang, ipadala sa setup screen
+          console.log("6. May kulang sa profile/address! Going to AddProfilePic...");
+          opx.replace('profilepic'); 
         }
 
       } catch (err) {
@@ -55,7 +62,7 @@ export default function AuthCheck() {
   return (
     <View style={styles.container}>
       <ActivityIndicator size="large" color="#2E3A91" />
-      <Text style={styles.text}>Setting things up...</Text>
+      <Text style={styles.text}>Syncing your profile...</Text>
     </View>
   );
 }

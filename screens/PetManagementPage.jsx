@@ -27,8 +27,13 @@ export default function PetManagementPage() {
     }
     setLoadingList(true);
     try {
+      // 🟢 Kinukuha na natin ang lahat (*) kasama ang image_url
       const { data, error } = await supabase.from('pets').select('*').eq('owner_id', user.id);
       if (error) throw error;
+      
+      // 🟢 DIAGNOSTIC: Ipi-print sa terminal para makita natin kung may link talaga
+      console.log("FETCHED PETS DATA:", data);
+
       setUserPets(data || []);
     } catch (error) {
       console.error("Error fetching pets:", error);
@@ -37,7 +42,6 @@ export default function PetManagementPage() {
     }
   };
 
-  // I-fetch agad ang pets tuwing pinipindot ang Pets Tab
   useEffect(() => {
     if (isFocused) {
       fetchPets();
@@ -46,7 +50,6 @@ export default function PetManagementPage() {
   }, [isFocused, user]);
 
   return (
-    /* CHANGED: Switched background to pure white to match Pic 1 */
     <SafeAreaView style={{ flex: 1, backgroundColor: '#FFF' }}>
       <View style={{ flex: 1 }}>
         
@@ -57,7 +60,6 @@ export default function PetManagementPage() {
 
         {/* Main Content Area */}
         <ScrollView 
-          /* CHANGED: Ensuring the ScrollView itself doesn't have a gray background */
           style={{ backgroundColor: '#FFF' }}
           contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 200 }} 
           showsVerticalScrollIndicator={false}
@@ -74,7 +76,6 @@ export default function PetManagementPage() {
                 style={MyStyleSheet.catIllustration} 
                 resizeMode="contain" 
               />
-              {/* Pic 1 has very light, clean text */}
               <Text style={[MyStyleSheet.emptyStateSubtitle, { color: '#BDBDBD', marginTop: 30 }]}>
                 There are no pets listed here.{"\n"}Create their profiles now!
               </Text>
@@ -86,7 +87,14 @@ export default function PetManagementPage() {
             <View style={styles.petsList}>
               {userPets.map((pet) => (
                 <View key={pet.id} style={styles.petCard}>
-                  <Image source={pet.image_url ? { uri: pet.image_url } : require('../public/bluepaw.png')} style={styles.petImage} />
+                  
+                  {/* 🟢 DITO PINAPAKITA ANG IMAGE. Nilagyan ng resizeMode para hindi ma-distort at siguradong lalabas */}
+                  <Image 
+                    source={pet.image_url ? { uri: pet.image_url } : require('../public/bluepaw.png')} 
+                    style={styles.petImage} 
+                    resizeMode="cover"
+                  />
+                  
                   <View style={styles.petInfo}>
                     <Text style={styles.petName}>{pet.pet_name}</Text>
                     <Text style={styles.petBreed}>{pet.breed}</Text>
@@ -144,8 +152,6 @@ export default function PetManagementPage() {
             <Text style={[MyStyleSheet.navTabText, { color: '#2E3A91' }]}>Pets</Text>
           </TouchableOpacity>
 
-       
-
           <TouchableOpacity style={MyStyleSheet.navTab} onPress={() => navigation.navigate('appointment')}>
             <Image source={require('../public/Calendar.png')} style={MyStyleSheet.navTabIcon} />
             <Text style={MyStyleSheet.navTabText}>Appointments</Text>
@@ -169,7 +175,7 @@ const styles = StyleSheet.create({
     padding: 12, marginBottom: 20, shadowColor: '#000', shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.1, shadowRadius: 12, elevation: 6,
   },
-  petImage: { width: 100, height: 120, borderRadius: 20, marginRight: 15, backgroundColor: '#F0F0F0' },
+  petImage: { width: 100, height: 120, borderRadius: 20, marginRight: 15, backgroundColor: '#F0F0F0', overflow: 'hidden' },
   petInfo: { flex: 1, justifyContent: 'center' },
   petName: { fontSize: 22, fontWeight: '900', color: '#2E3A91' },
   petBreed: { fontSize: 13, color: '#2E3A91', marginBottom: 8 },

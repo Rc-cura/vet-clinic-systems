@@ -11,23 +11,30 @@ export default function ViewPetsPage() {
   const { pet } = route.params || {}
 
   // ================= AGE CALCULATOR FUNCTION =================
-  const calculateAge = (birthdayString) => {
-    if (!birthdayString) return 'N/A';
+  const calculateAge = (birthdateData) => {
+    if (!birthdateData) return 'N/A';
 
-    // Sinusubukan nitong lagyan ng slashes kung 6 digits lang (hal: 072705 -> 07/27/05)
-    let formattedDate = birthdayString;
-    if (birthdayString.length === 6 && !birthdayString.includes('/')) {
-      formattedDate = `${birthdayString.slice(0, 2)}/${birthdayString.slice(2, 4)}/${birthdayString.slice(4)}`;
-    } 
-    // Kung 8 digits naman (hal: 07272005 -> 07/27/2005)
-    else if (birthdayString.length === 8 && !birthdayString.includes('/')) {
-      formattedDate = `${birthdayString.slice(0, 2)}/${birthdayString.slice(2, 4)}/${birthdayString.slice(4)}`;
+    // Kung plain number lang ang sinave for some reason (hal: "2")
+    if (!isNaN(birthdateData) && String(birthdateData).length <= 2) {
+        return `${birthdateData} yrs old`;
     }
 
-    const birthDate = new Date(formattedDate);
+    // Subukan i-parse as Standard Date (kadalasan YYYY-MM-DD ang bigay ni Supabase)
+    let birthDate = new Date(birthdateData);
+
+    // Kung sakaling custom MMDDYY string format yung sinave 
+    if (isNaN(birthDate.getTime())) {
+      let formattedDate = String(birthdateData);
+      if (formattedDate.length === 6 && !formattedDate.includes('/')) {
+        formattedDate = `${formattedDate.slice(0, 2)}/${formattedDate.slice(2, 4)}/${formattedDate.slice(4)}`;
+      } else if (formattedDate.length === 8 && !formattedDate.includes('/')) {
+        formattedDate = `${formattedDate.slice(0, 2)}/${formattedDate.slice(2, 4)}/${formattedDate.slice(4)}`;
+      }
+      birthDate = new Date(formattedDate);
+    }
     
-    // Kung hindi valid na date ang na-input, ibalik na lang ang original string
-    if (isNaN(birthDate.getTime())) return birthdayString; 
+    // Kung talagang hindi date format ang dumating, ibalik nalang yung original text
+    if (isNaN(birthDate.getTime())) return String(birthdateData);
 
     const today = new Date();
     let age = today.getFullYear() - birthDate.getFullYear();
@@ -37,7 +44,7 @@ export default function ViewPetsPage() {
       age--;
     }
 
-    // Kung less than 1 year old, months ang ipakita natin
+    // Kung less than 1 year, display as months
     if (age < 1) {
       let months = (today.getFullYear() - birthDate.getFullYear()) * 12 + today.getMonth() - birthDate.getMonth();
       return months > 0 ? `${months} months` : 'Just born';
@@ -46,35 +53,60 @@ export default function ViewPetsPage() {
     return `${age} yrs old`;
   };
 
+  const displayPetName = pet?.pet_name || pet?.name || 'Unknown Pet';
+  const displayImage = pet?.image_url || pet?.imageUrl;
+
   return (
     <SafeAreaView style={MyStyleSheet.whiteContainer}>
-      {/* 1. Header with Back Arrow and Dynamic Title */}
+      {/* 1. Header with Back Arrow */}
       <View style={MyStyleSheet.formHeader}>
         <TouchableOpacity onPress={() => opx.goBack()} style={MyStyleSheet.backBtn}>
           <Text style={{ fontSize: 28, color: '#2E3A91' }}>←</Text> 
         </TouchableOpacity>
         
         <Text style={MyStyleSheet.petHeaderTitle}>
-          {pet?.pet_name ? `${pet.pet_name}’s profile` : "Pet's profile"}
+          Review Details
         </Text>
         <View style={{ width: 40 }} />
       </View>
 
       <ScrollView contentContainerStyle={MyStyleSheet.addPetScroll} showsVerticalScrollIndicator={false}>
         
-        {/* 2. Detailed Info Rows */}
-        <View style={[MyStyleSheet.inputGroup, { marginTop: 20 }]}>
+        {/* Image at Pangalan */}
+        <View style={{ alignItems: 'center', marginTop: 20, marginBottom: 10 }}>
+          <View style={{
+            width: 140, 
+            height: 140, 
+            borderRadius: 70, 
+            backgroundColor: '#f1f5f9', 
+            justifyContent: 'center', 
+            alignItems: 'center',
+            overflow: 'hidden',
+            borderWidth: 4,
+            borderColor: '#e2e8f0',
+            marginBottom: 15
+          }}>
+            {displayImage ? (
+              <Image 
+                source={{ uri: displayImage }} 
+                style={{ width: '100%', height: '100%', resizeMode: 'cover' }} 
+              />
+            ) : (
+              <Text style={{ fontSize: 50 }}>🐾</Text>
+            )}
+          </View>
           
-          <View style={MyStyleSheet.detailRow}>
-            <Text style={MyStyleSheet.detailLabelText}>Species</Text>
-            <Text style={MyStyleSheet.detailValueTextGray}>{pet?.species || 'N/A'}</Text>
-          </View>
+          <Text style={{ fontSize: 28, fontWeight: '900', color: '#1e293b' }}>
+            {displayPetName}
+          </Text>
+          <Text style={{ fontSize: 14, fontWeight: '700', color: '#5b86e5', textTransform: 'uppercase', marginTop: 4 }}>
+            {pet?.species || 'N/A'} {pet?.breed ? `• ${pet.breed}` : ''}
+          </Text>
+        </View>
 
-          <View style={MyStyleSheet.detailRow}>
-            <Text style={MyStyleSheet.detailLabelText}>Breed</Text>
-            <Text style={MyStyleSheet.detailValueTextGray}>{pet?.breed || 'N/A'}</Text>
-          </View>
-
+        {/* 2. Detailed Info Rows */}
+        <View style={[MyStyleSheet.inputGroup, { marginTop: 20, backgroundColor: '#f8fafc', padding: 20, borderRadius: 20 }]}>
+          
           <View style={MyStyleSheet.detailRow}>
             <Text style={MyStyleSheet.detailLabelText}>Gender</Text>
             <Text style={MyStyleSheet.detailValueTextGray}>{pet?.gender || 'N/A'}</Text>
@@ -82,19 +114,19 @@ export default function ViewPetsPage() {
 
           <View style={MyStyleSheet.detailRow}>
             <Text style={MyStyleSheet.detailLabelText}>Age</Text>
-            {/* 🔴 IN-UPDATE: Dito na gagamitin yung calculateAge function */}
-            <Text style={MyStyleSheet.detailValueTextGray}>{calculateAge(pet?.age)}</Text>
+            {/* 🔴 DITO YUNG FIX: Ginamit natin yung pet.birthdate (o birthday kung yun ang name) */}
+            <Text style={MyStyleSheet.detailValueTextGray}>{calculateAge(pet?.birthdate || pet?.birthday)}</Text>
           </View>
 
           <View style={MyStyleSheet.detailRow}>
             <Text style={MyStyleSheet.detailLabelText}>Weight</Text>
-            <Text style={MyStyleSheet.detailValueTextGray}>{pet?.weight ? `${pet.weight}kg` : 'N/A'}</Text>
+            <Text style={MyStyleSheet.detailValueTextGray}>{pet?.weight ? `${pet.weight} kg` : 'N/A'}</Text>
           </View>
 
         </View>
 
         {/* 3. Action Buttons Section */}
-        <View style={{ marginTop: 40 }}>
+        <View style={{ marginTop: 30 }}>
           <TouchableOpacity 
             style={MyStyleSheet.primaryActionBtn} 
             onPress={() => opx.navigate('editpets', { pet })}
@@ -111,9 +143,6 @@ export default function ViewPetsPage() {
         </View>
 
       </ScrollView>
-
-      
-
     </SafeAreaView>
   )
 }
