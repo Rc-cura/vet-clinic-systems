@@ -51,6 +51,10 @@ import BookVaccine from './screens/BookVaccine';
 import BookSurgery from './screens/BookSurgery';
 import BookGrooming from './screens/BookGromming';
 import BookAppointmentRemarks from './screens/BookAppointmentRemarks';
+import SelectDatePage from './screens/SelectDatePage';
+import SelectPetPage from './screens/SelectPetPage';
+import SummaryPage from './screens/SummaryPage';
+import SelectServicePage from './screens/SelectServicePage';
 
 
 
@@ -76,6 +80,50 @@ export default function App() {
           <MScreen.Screen name='chat' component={ChatModule} />
           <MScreen.Screen name='auth' component={AuthCheck} />
           <MScreen.Screen name='healthcard' component={HealthCard} /> */}
+
+          <MScreen.Screen
+            name='selectservice'
+            component={SelectServicePage}
+            options={{
+              headerShown: false,
+              title: 'Select Service',
+              headerLeft: () => null,
+              headerTitleAlign: 'left',
+            }}
+          />
+
+          <MScreen.Screen
+            name='selectpet'
+            component={SelectPetPage}
+            options={{
+              headerShown: false,
+              title: 'Select Pet',
+              headerLeft: () => null,
+              headerTitleAlign: 'left',
+            }}
+          />
+
+          <MScreen.Screen
+            name='selectdate'
+            component={SelectDatePage}
+            options={{
+              headerShown: false,
+              title: 'Select Date',
+              headerLeft: () => null,
+              headerTitleAlign: 'left',
+            }}
+          />
+
+          <MScreen.Screen
+            name='summary'
+            component={SummaryPage}
+            options={{
+              headerShown: false,
+              title: 'Summary',
+              headerLeft: () => null,
+              headerTitleAlign: 'left',
+            }}
+          />
 
           <MScreen.Screen
             name='profilepic'
@@ -324,7 +372,7 @@ export default function App() {
             }}
           />
           <MScreen.Screen
-            name='selectpet'
+            name='selectpets'
             component={BookAppointmentPets}
             options={{
               headerShown: false,
@@ -354,7 +402,7 @@ export default function App() {
             }}
           />
           <MScreen.Screen
-            name='summary'
+            name='summaryy'
             component={BookAppointmentSummary}
             options={{
               headerShown: false,
