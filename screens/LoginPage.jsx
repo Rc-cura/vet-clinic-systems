@@ -16,27 +16,80 @@ export default function LoginPage() {
     setLogin({ ...getLogin, [field]: value });
   };
 
+  // ================= WEB LOGIC INTEGRATION =================
   const loginAccount = async () => {
     if (getLogin.email === "" || getLogin.password === "") {
         setMsg("Please fill up all fields");
         return;
     }
+    
     setLoading(true);
     setMsg("");
+    
     try {
-      const { error: authError } = await supabase.auth.signInWithPassword({
+      // 1. Check password credentials
+      const { data: authData, error: signInError } = await supabase.auth.signInWithPassword({
         email: getLogin.email,
         password: getLogin.password,
       });
-      if (authError) throw authError;
-      await supabase.auth.signOut();
+
+      // Ignore "Email not confirmed" base sa web logic mo
+      if (signInError && !signInError.message.includes('Email not confirmed')) {
+        throw signInError;
+      }
+
+      // 2. THE BOUNCER: Check if the user's profile is active
+      if (authData?.user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('is_active')
+          .eq('id', authData.user.id)
+          .single();
+
+        if (profile && profile.is_active === false) {
+          await supabase.auth.signOut(); // Kick them out instantly
+          throw new Error("Your account has been disabled. Please contact the administrator.");
+        }
+      }
+
+      // 3. Proceed with OTP if the account is active
       const { error: otpError } = await supabase.auth.signInWithOtp({
         email: getLogin.email,
         options: { shouldCreateUser: false }
       });
+
       if (otpError) throw otpError;
-      Alert.alert("Password Correct!", `An OTP has been sent to ${getLogin.email}`);
+
+      Alert.alert("Success", `An OTP has been sent to ${getLogin.email}`);
       opx.navigate('otplogin', { email: getLogin.email }); 
+      
+    } catch (error) {
+      // Custom error message cleaner base sa web logic mo
+      if (!error.message || !error.message.startsWith('For security purposes')) {
+        setMsg(error.message);
+      } else {
+        setMsg('');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // ================= FORGOT PASSWORD FUNCTION =================
+  const handleForgotPassword = async () => {
+    if (getLogin.email === "") {
+      setMsg("Please enter your email first to reset your password.");
+      return;
+    }
+    setLoading(true);
+    setMsg("");
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(getLogin.email);
+      if (error) throw error;
+      Alert.alert(
+        "Check your email", 
+        `Password reset instructions have been sent to ${getLogin.email}`
+      );
     } catch (error) {
       setMsg(error.message);
     } finally {
@@ -64,7 +117,7 @@ export default function LoginPage() {
             <Text style={[MyStyleSheet.landingWelcomeText, { marginBottom: 30, fontSize: 40 }]}>Sign In</Text>
 
             {Msg ? (
-              <Text style={{ color: "red", marginBottom: 15, textAlign: 'center' }}>{Msg}</Text>
+              <Text style={{ color: "red", marginBottom: 15, textAlign: 'center', paddingHorizontal: 10 }}>{Msg}</Text>
             ) : null}
 
             {/* Email Input */}
@@ -86,7 +139,12 @@ export default function LoginPage() {
               secureTextEntry 
             />
 
-            <TouchableOpacity style={{ alignSelf: 'flex-end', marginBottom: 30 }}>
+            {/* Forgot Password Button */}
+            <TouchableOpacity 
+              style={{ alignSelf: 'flex-end', marginBottom: 30 }}
+              onPress={handleForgotPassword}
+              disabled={loading}
+            >
               <Text style={{ color: '#2E3A91', fontWeight: '600' }}>Forgot Password?</Text>
             </TouchableOpacity>
 
@@ -97,17 +155,20 @@ export default function LoginPage() {
               disabled={loading}
             >
               <Text style={MyStyleSheet.landingSignUpText}>
-                {loading ? "Verifying..." : "Sign In"}
+                {loading ? "Logging in..." : "Log In"}
               </Text>
             </TouchableOpacity>
 
             {/* Google Sign In Button */}
-            <TouchableOpacity style={[MyStyleSheet.landingSignInBtn, { marginTop: 15, flexDirection: 'row' }]}>
+            <TouchableOpacity 
+              style={[MyStyleSheet.landingSignInBtn, { marginTop: 15, flexDirection: 'row' }]}
+              onPress={() => Alert.alert("Notice", "OAuth login requires expo-auth-session configuration on mobile.")}
+            >
               <Image 
                 source={{ uri: 'https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg' }} 
                 style={{ width: 20, height: 20, marginRight: 10 }} 
               />
-              <Text style={MyStyleSheet.landingSignInText}>Sign In with google</Text>
+              <Text style={MyStyleSheet.landingSignInText}>Continue with Google</Text>
             </TouchableOpacity>
 
             <TouchableOpacity 

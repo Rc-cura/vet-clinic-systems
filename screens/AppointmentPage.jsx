@@ -13,12 +13,11 @@ export default function AppointmentPage() {
   const [activeTab, setActiveTab] = useState('Upcoming')
   const [isExpanded, setIsExpanded] = useState(false)
   
-  // 🟢 BAGONG STATES PARA SA SUPABASE DATA
   const [appointments, setAppointments] = useState([])
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
 
-  // ================= 1. FETCH REAL APPOINTMENTS FROM SUPABASE =================
+  // ================= 1. FETCH REAL APPOINTMENTS =================
   useEffect(() => {
     const fetchAppointments = async () => {
       if (!user) return;
@@ -28,7 +27,7 @@ export default function AppointmentPage() {
           .from('appointments')
           .select('*, pets(pet_name, image_url)')
           .eq('client_id', user.id)
-          .order('appointment_date', { ascending: true }); // Sort by date
+          .order('appointment_date', { ascending: true }); 
 
         if (error) throw error;
         setAppointments(data || []);
@@ -41,11 +40,11 @@ export default function AppointmentPage() {
 
     if (isFocused) {
       fetchAppointments();
-      setIsExpanded(false); // Close drawer when returning to tab
+      setIsExpanded(false); 
     }
   }, [isFocused, user]);
 
-  // ================= 2. FILTERING LOGIC (PAREHO SA WEB MO) =================
+  // ================= 2. FILTERING LOGIC =================
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
@@ -65,7 +64,6 @@ export default function AppointmentPage() {
   const getFilteredData = () => {
     let filtered = appointments;
 
-    // Search function
     if (searchQuery) {
       filtered = filtered.filter(apt => 
         (apt.pets?.pet_name || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -73,7 +71,6 @@ export default function AppointmentPage() {
       );
     }
 
-    // Tabs filter matching web logic
     return filtered.filter(apt => {
       const status = (apt.status || 'Pending').toLowerCase();
       
@@ -87,7 +84,7 @@ export default function AppointmentPage() {
         return ['scheduled', 'confirmed', 'approved'].includes(status) && isFuture(apt.appointment_date);
       }
       if (activeTab === 'Past') {
-        return ['completed', 'cancelled'].includes(status) || isPast(apt.appointment_date);
+        return ['completed', 'cancelled', 'canceled'].includes(status) || isPast(apt.appointment_date);
       }
       return false;
     });
@@ -97,32 +94,18 @@ export default function AppointmentPage() {
 
   // ================= 3. NAVIGATION CLICKS =================
   const handleCardPress = (item) => {
-    const status = (item.status || 'Pending').toLowerCase();
-    
-    // Ibinagay ko ito sa logic mo kanina
-    if (status === 'pending' || status === 'pending confirmation') {
-      opx.navigate('pending', { appointment: item });
-    } else if (status === 'approved' || status === 'scheduled' || status === 'confirmed') {
-      opx.navigate('approved', { appointment: item });
-    } else if (status === 'completed') {
-      opx.navigate('completed', { appointment: item });
-    } else if (status === 'cancelled') {
-      opx.navigate('cancelled', { appointment: item });
-    } else {
-      opx.navigate('viewdetails', { appointment: item }); // Fallback
-    }
+    // 🟢 DITO ANG UPDATE: Pupunta na lahat sa iisang screen na ginawa natin kanina
+    opx.navigate('viewdetails', { appointment: item });
   };
 
   // ================= 4. RENDER CARD =================
   const renderAppointmentCard = ({ item }) => {
     const status = (item.status || 'Pending').toLowerCase();
     const isPendingStatus = ['pending', 'reschedule requested', 'pending confirmation'].includes(status);
-    const isPastStatus = ['completed', 'cancelled'].includes(status) || isPast(item.appointment_date);
+    const isPastStatus = ['completed', 'cancelled', 'canceled'].includes(status) || isPast(item.appointment_date);
     
-    // Use proper styles based on status
     const cardStyle = isPendingStatus ? MyStyleSheet.orangeApptCard : MyStyleSheet.blueApptCard;
 
-    // Format display time
     const displayTime = (() => {
       if (!item.appointment_time) return '';
       const [h, m] = item.appointment_time.split(':');
@@ -132,7 +115,6 @@ export default function AppointmentPage() {
       return `${hour12}:${m} ${period}`;
     })();
 
-    // Format display date
     const displayDate = new Date(item.appointment_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
     return (
@@ -176,7 +158,10 @@ export default function AppointmentPage() {
                   >
                     <Text style={MyStyleSheet.secondaryOutlineText}>View details</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity style={[MyStyleSheet.secondaryOutlineBtn, { flex: 0.48, height: 40, borderRadius: 12 }]}>
+                  <TouchableOpacity 
+                    style={[MyStyleSheet.secondaryOutlineBtn, { flex: 0.48, height: 40, borderRadius: 12 }]}
+                    onPress={() => handleCardPress(item)}
+                  >
                     <Text style={MyStyleSheet.secondaryOutlineText}>Cancel</Text>
                   </TouchableOpacity>
                 </>
@@ -202,7 +187,6 @@ export default function AppointmentPage() {
         <Text style={MyStyleSheet.landingWelcomeText}>Appointments</Text>
       </View>
 
-      {/* Pill Styled Filter Tabs */}
       <View style={MyStyleSheet.tabContainerRow}>
         {['Upcoming', 'Today', 'Past', 'Pending'].map((tab) => (
           <TouchableOpacity 
@@ -221,7 +205,6 @@ export default function AppointmentPage() {
           </Text>
       </View>
 
-      {/* Main Container Card */}
       <View style={MyStyleSheet.appointmentMainContainer}>
         <View style={MyStyleSheet.searchContainer}>
           <Image source={require('../public/search_icon.png')} style={{ width: 16, height: 16, marginRight: 10, tintColor: '#AAA' }} />
@@ -261,7 +244,6 @@ export default function AppointmentPage() {
         )}
       </View>
 
-      {/* Floating Drawer Logic (Naka-connect na sa selectservice na ginawa natin) */}
       <View style={[MyStyleSheet.bottomDrawerCard, isExpanded ? { height: 260 } : { height: 100 }]}>
         <TouchableOpacity onPress={() => setIsExpanded(!isExpanded)} style={{ alignItems: 'center', width: '100%' }}>
           <View style={MyStyleSheet.dragHandleBar} />
@@ -270,14 +252,13 @@ export default function AppointmentPage() {
         {isExpanded && (
           <TouchableOpacity 
             style={[MyStyleSheet.primaryActionBtn, { marginTop: 15 }]} 
-            onPress={() => opx.navigate('selectservice')} // 🔴 PUPUNTA NA SA BAGONG BOOKING FLOW
+            onPress={() => opx.navigate('selectservice')} 
           >
             <Text style={MyStyleSheet.primaryActionBtnText}>Book appointment</Text>
           </TouchableOpacity>
         )}
       </View>
 
-      {/* Bottom Nav */}
       <View style={MyStyleSheet.minimalBottomNav}>
         <TouchableOpacity style={MyStyleSheet.navTab} onPress={() => opx.navigate('dashboard')}>
           <Image source={require('../public/HomePage.png')} style={MyStyleSheet.navTabIcon} />
