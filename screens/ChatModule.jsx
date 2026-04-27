@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, TouchableOpacity, TextInput, SafeAreaView, FlatList, KeyboardAvoidingView, Platform, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, SafeAreaView, FlatList, KeyboardAvoidingView, Platform, StyleSheet, ActivityIndicator, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 // Import Supabase and your User Context
@@ -18,37 +18,88 @@ export default function Chat() {
   
   const flatListRef = useRef(null);
 
-  // ================= 1. KUNIN ANG MGA SECRETARY =================
-  useEffect(() => {
-    const fetchContacts = async () => {
-      try {
-        const { data: staffData, error } = await supabase
-          .from('profiles')
-          .select('id, first_name, last_name, role')
-          .eq('role', 'secretary'); // Hahanapin lang ang mga secretary
+  // ================= 1. KUNIN ANG MGA SECRETARY AT LATEST MESSAGE =================
+  const fetchContacts = async () => {
+    if (!user) return;
+    try {
+      // Kunin ang mga Secretary
+      const { data: staffData, error: staffError } = await supabase
+        .from('profiles')
+        .select('id, first_name, last_name, role')
+        .eq('role', 'secretary');
 
-        if (staffData) {
-          const formattedContacts = staffData.map(staff => ({
+      // Kunin lahat ng messages ng user na ito para sa "Latest Message" snippet at Unread count
+      const { data: msgsData, error: msgsError } = await supabase
+        .from('messages')
+        .select('*')
+        .or(`receiver_id.eq.${user.id},sender_id.eq.${user.id}`)
+        .order('created_at', { ascending: false });
+
+      if (staffData && msgsData) {
+        const formattedContacts = staffData.map(staff => {
+          // Hanapin ang latest message sa pagitan ng user at ng staff na ito
+          const contactMsgs = msgsData.filter(m => 
+            (m.sender_id === staff.id && m.receiver_id === user.id) || 
+            (m.sender_id === user.id && m.receiver_id === staff.id)
+          );
+          
+          const latestMsg = contactMsgs.length > 0 ? contactMsgs[0] : null;
+          
+          // I-check kung unread ba yung message at ikaw ang receiver
+          const hasUnread = latestMsg && latestMsg.receiver_id === user.id && latestMsg.is_read === false;
+
+          return {
             id: staff.id,
             name: `${staff.first_name} ${staff.last_name}`,
             role: staff.role,
-          }));
-          setContacts(formattedContacts);
-        }
-      } catch (error) {
-        console.error("Error fetching contacts:", error);
-      } finally {
-        setLoadingContacts(false);
+            latestMessage: latestMsg ? latestMsg.content : 'No messages yet.',
+            time: latestMsg ? new Date(latestMsg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '',
+            hasUnread: hasUnread
+          };
+        });
+        
+        // I-sort para nasa taas yung may bagong unread message
+        formattedContacts.sort((a, b) => (a.hasUnread === b.hasUnread ? 0 : a.hasUnread ? -1 : 1));
+        setContacts(formattedContacts);
       }
-    };
-    fetchContacts();
-  }, []);
+    } catch (error) {
+      console.error("Error fetching contacts:", error);
+    } finally {
+      setLoadingContacts(false);
+    }
+  };
 
-  // ================= 2. REAL-TIME CHAT LOGIC =================
+  useEffect(() => {
+    fetchContacts();
+
+    // Real-time listener para sa listahan ng contacts (pang update ng unread dot)
+    const contactsChannel = supabase
+      .channel('public:messages_list')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, () => {
+        fetchContacts();
+      })
+      .subscribe();
+
+    return () => { supabase.removeChannel(contactsChannel); };
+  }, [user]);
+
+  // ================= 2. REAL-TIME CHAT LOGIC AT MARK AS READ =================
   useEffect(() => {
     if (!user || !selectedContact) return;
 
-    const fetchMessages = async () => {
+    const loadChatRoom = async () => {
+      // 1. Mark as Read - i-uupdate ang database kapag binuksan ang chat
+      await supabase
+        .from('messages')
+        .update({ is_read: true })
+        .eq('sender_id', selectedContact.id)
+        .eq('receiver_id', user.id)
+        .eq('is_read', false);
+
+      // Tanggalin ang blue dot sa local state agad
+      setContacts(prev => prev.map(c => c.id === selectedContact.id ? { ...c, hasUnread: false } : c));
+
+      // 2. I-fetch ang lahat ng messages para idisplay
       const { data } = await supabase
         .from('messages')
         .select('*')
@@ -58,7 +109,7 @@ export default function Chat() {
       if (data) setMessages(data);
     };
     
-    fetchMessages();
+    loadChatRoom();
 
     // Listener para pumasok agad ang chat kahit hindi i-refresh ang app
     const channel = supabase
@@ -73,6 +124,11 @@ export default function Chat() {
             (newMsg.sender_id === selectedContact.id && newMsg.receiver_id === user.id)
           ) {
             setMessages((prev) => [...prev, newMsg]);
+            
+            // Auto mark-as-read kapag bukas yung chat room mo at may pumasok
+            if (newMsg.receiver_id === user.id) {
+              supabase.from('messages').update({ is_read: true }).eq('id', newMsg.id).then();
+            }
           }
         }
       )
@@ -83,18 +139,29 @@ export default function Chat() {
 
   // ================= 3. SEND MESSAGE =================
   const handleSendMessage = async () => {
-    if (!newMessage.trim() || !user || !selectedContact) return;
+    if (!newMessage.trim() || !selectedContact) return;
+
+    const { data: { user: authUser } } = await supabase.auth.getUser();
+    
+    if (!authUser) {
+      console.error("User is not logged in!");
+      return;
+    }
 
     const messageText = newMessage;
     setNewMessage(''); 
 
     const { error } = await supabase.from('messages').insert({
-      sender_id: user.id,
+      sender_id: authUser.id,
       receiver_id: selectedContact.id,
-      content: messageText
+      content: messageText,
+      is_read: false // Default ay unread para sa receiver
     });
 
-    if (error) console.error('Chat Error:', error);
+    if (error) {
+      console.error('Chat Error:', error);
+      Alert.alert("Error", "Failed to send message.");
+    }
   };
 
   // ================= RENDER 1: CONTACTS LIST =================
@@ -124,10 +191,20 @@ export default function Chat() {
                 <View style={styles.avatarPlaceholder}>
                   <Text style={styles.avatarText}>{item.name.charAt(0)}</Text>
                 </View>
-                <View>
-                  <Text style={styles.contactName}>{item.name}</Text>
-                  <Text style={styles.contactRole}>Clinic Staff</Text>
+                <View style={styles.contactInfo}>
+                  <Text style={[styles.contactName, item.hasUnread && styles.boldText]}>{item.name}</Text>
+                  {/* Nagpapakita ng snippet ng chat, nag-iiba din ang kulay kung unread */}
+                  <Text 
+                    style={[styles.latestMessageText, item.hasUnread && styles.unreadMessageText]} 
+                    numberOfLines={1}
+                  >
+                    {item.latestMessage} • {item.time}
+                  </Text>
                 </View>
+                
+                {/* BLUE DOT INDICATOR */}
+                {item.hasUnread && <View style={styles.unreadDot} />}
+
               </TouchableOpacity>
             )}
             ListEmptyComponent={<Text style={styles.emptyText}>No clinic staff available right now.</Text>}
@@ -151,7 +228,7 @@ export default function Chat() {
           </TouchableOpacity>
           <View style={{ alignItems: 'center' }}>
             <Text style={styles.headerTitle}>{selectedContact.name}</Text>
-            <Text style={styles.onlineText}>● Online</Text>
+            <Text style={styles.onlineText}>Clinic Staff</Text>
           </View>
           <View style={{ width: 40 }} />
         </View>
@@ -210,21 +287,28 @@ const styles = StyleSheet.create({
   },
   backBtn: { padding: 5 },
   backBtnText: { fontSize: 28, color: '#2E3A91' },
-  headerTitle: { fontSize: 18, fontWeight: '800', color: '#2E3A91' },
-  onlineText: { fontSize: 10, color: '#10B981', fontWeight: 'bold', marginTop: 2 },
+  headerTitle: { fontSize: 18, fontWeight: '800', color: '#1E293B' },
+  onlineText: { fontSize: 11, color: '#64748B', marginTop: 2 },
   
   contactCard: {
-    flexDirection: 'row', alignItems: 'center', backgroundColor: '#F8F9FD',
-    padding: 15, borderRadius: 20, marginBottom: 15,
-    borderWidth: 1, borderColor: '#E2E8F0',
+    flexDirection: 'row', alignItems: 'center', backgroundColor: '#FFF',
+    paddingVertical: 15, borderBottomWidth: 1, borderBottomColor: '#F1F5F9',
   },
   avatarPlaceholder: {
-    width: 50, height: 50, borderRadius: 25, backgroundColor: '#2E3A91',
+    width: 54, height: 54, borderRadius: 27, backgroundColor: '#2E3A91',
     alignItems: 'center', justifyContent: 'center', marginRight: 15,
   },
   avatarText: { fontSize: 20, fontWeight: 'bold', color: '#FFF' },
-  contactName: { fontSize: 16, fontWeight: 'bold', color: '#1E293B' },
-  contactRole: { fontSize: 11, color: '#64748B', textTransform: 'uppercase', marginTop: 2 },
+  
+  contactInfo: { flex: 1, paddingRight: 10 },
+  contactName: { fontSize: 16, color: '#1E293B', marginBottom: 3 },
+  boldText: { fontWeight: '900', color: '#0F172A' },
+  
+  latestMessageText: { fontSize: 13, color: '#64748B' },
+  unreadMessageText: { fontWeight: 'bold', color: '#1E293B' },
+  
+  unreadDot: { width: 12, height: 12, borderRadius: 6, backgroundColor: '#3B82F6', marginLeft: 5 },
+
   emptyText: { textAlign: 'center', color: '#94A3B8', marginTop: 50 },
 
   messageBubbleWrapper: { marginBottom: 15, maxWidth: '80%' },

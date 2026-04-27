@@ -55,6 +55,8 @@ import SelectDatePage from './screens/SelectDatePage';
 import SelectPetPage from './screens/SelectPetPage';
 import SummaryPage from './screens/SummaryPage';
 import SelectServicePage from './screens/SelectServicePage';
+import AppointmentDetails from './screens/AppointmentDetails';
+import NotificationsPage from './screens/NotificationPage';
 
 
 
@@ -80,6 +82,23 @@ export default function App() {
           <MScreen.Screen name='chat' component={ChatModule} />
           <MScreen.Screen name='auth' component={AuthCheck} />
           <MScreen.Screen name='healthcard' component={HealthCard} /> */}
+          
+          <MScreen.Screen 
+  name="notifications" 
+  component={NotificationsPage} 
+  options={{ headerShown: false }} 
+/>
+
+          <MScreen.Screen
+            name='viewdetails'
+            component={AppointmentDetails}
+            options={{
+              headerShown: false,
+              title: 'Appointment Details',
+              headerLeft: () => null,
+              headerTitleAlign: 'left',
+            }}
+          />
 
           <MScreen.Screen
             name='selectservice'

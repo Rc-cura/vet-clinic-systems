@@ -1,118 +1,95 @@
 import { View, Text, TextInput, TouchableOpacity, Image, SafeAreaView, ScrollView, KeyboardAvoidingView, Platform, Alert } from 'react-native'
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import MyStyleSheet from '../styles/MyStyleSheet'
 import { useUser } from '../context/UserContext';
-
-// Import your Supabase client
 import { supabase } from '../context/supabase'; 
 
 export default function RegisterPage() {
   const opx = useNavigation();
   const { updateUser } = useUser(); 
   
-  const [getUser, setUser] = useState({ 
-    fname: "", 
-    lname: "", 
-    email: "", 
-    contact: "", 
-    password: "", 
-    cpassword: "" 
+  // ================= WEB STATE ALIGNMENT =================
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
   });
   
-  const [Msg, setMsg] = useState("");
+  const [passwordStrength, setPasswordStrength] = useState('');
+  const [errorMsg, setErrorMsg] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Password Strength Logic
-  useEffect(() => {
-    if (getUser.password.length > 0) {
-      const hasUpperCase = /[A-Z]/.test(getUser.password);
-      const hasNumber = /[0-9]/.test(getUser.password);
-      const hasSymbol = /[!@#$%^&*(),.?":{}|<>]/.test(getUser.password);
-
-      if (getUser.password.length < 9) {
-        setMsg("Weak Password");
-      } else if (!(hasUpperCase && hasNumber && hasSymbol)) {
-        setMsg("Medium Password");
-      } else {
-        setMsg("Strong Password");
-      }
-    } else {
-      setMsg("");
-    }
-  }, [getUser.password]);
-
-  const changeHandler = (field, value) => {
-    let filteredValue = value;
-    if (field === "fname" || field === "lname") {
-      filteredValue = value.replace(/[^a-zA-Z\s]/g, ""); 
-    }
-    if (field === "contact") {
-      filteredValue = value.replace(/[^0-9]/g, "").slice(0, 11); 
-    }
-    setUser({ ...getUser, [field]: filteredValue });
+  // ================= WEB PASSWORD STRENGTH LOGIC =================
+  const getPasswordStrength = (password) => {
+    let score = 0;
+    if (password.length >= 8) score++;
+    if (/[A-Z]/.test(password)) score++;
+    if (/[0-9]/.test(password)) score++;
+    if (/[^A-Za-z0-9]/.test(password)) score++;
+    if (password.length >= 12) score++;
+    
+    if (score <= 2) return 'Weak';
+    if (score === 3 || score === 4) return 'Moderate';
+    if (score >= 5) return 'Strong';
+    return '';
   };
 
-  const RegisteredAccs = async () => {
-    const { fname, lname, email, contact, password, cpassword } = getUser;
+  const handleChange = (field, value) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    if (field === 'password') {
+      setPasswordStrength(getPasswordStrength(value));
+    }
+  };
 
-    // Validation checks
-    if (!fname || !lname || !email || !password || !cpassword) {
-      setMsg("Please fill up all fields");
+  // ================= WEB SUBMIT LOGIC =================
+  const handleSubmit = async () => {
+    setErrorMsg('');
+
+    const firstName = formData.firstName.trim();
+    const lastName = formData.lastName.trim();
+    const email = formData.email.trim().toLowerCase();
+
+    // Validation checks exactly like the web
+    if (firstName.length < 2 || lastName.length < 2) {
+      setErrorMsg('Please enter at least 2 characters for first and last name.');
       return;
     }
 
-    if (lname.trim().length < 2) {
-      setMsg("Surname must be at least 2 characters long.");
-      return;
-    }
-
-    if (!email.toLowerCase().endsWith("@gmail.com")) {
-      setMsg("Must be a @gmail.com address");
-      return;
-    }
-
-    const hasUpperCase = /[A-Z]/.test(password);
-    const hasNumber = /[0-9]/.test(password);
-    const hasSymbol = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-
-    if (password.length < 9 || !hasUpperCase || !hasNumber || !hasSymbol) {
-      setMsg("Password must be Strong (Caps, Numbers, Symbols, 9+ chars)");
-      return;
-    }
-
-    if (password !== cpassword) {
-      setMsg("Passwords do not match");
+    if (formData.password !== formData.confirmPassword) {
+      setErrorMsg('Passwords do not match.');
       return;
     }
 
     setLoading(true);
-    setMsg("Registering...");
 
     try {
-      // 1. Create the user in Supabase Auth
+      // 1. Create the user in Supabase Auth mapping Web Logic
       const { data, error } = await supabase.auth.signUp({
         email: email,
-        password: password,
+        password: formData.password,
         options: {
           data: {
-            display_name: `${fname} ${lname}`, 
+            first_name: firstName,
+            last_name: lastName,
+            role: 'client',
           }
         }
       });
 
       if (error) throw error;
 
-      if (data.user) {
-        // 2. Save extra details to profiles table
+      if (data?.user) {
+        // 2. Save extra details to profiles table manually to ensure stability
         const { error: profileError } = await supabase
           .from('profiles')
           .upsert([
             { 
               id: data.user.id, 
-              first_name: fname, 
-              last_name: lname, 
-              contact_number: contact,
+              first_name: firstName, 
+              last_name: lastName, 
               email: email,
               role: 'client'
             },
@@ -120,15 +97,13 @@ export default function RegisterPage() {
 
         if (profileError) throw profileError;
 
-        updateUser(getUser); 
-        setMsg("");
-        
+        updateUser(data.user); 
         Alert.alert("Success", "Account created successfully! Check your email for the OTP.");
         opx.navigate("otp", { email: email });
       }
 
     } catch (error) {
-      setMsg(error.message);
+      setErrorMsg(error.message);
     } finally {
       setLoading(false);
     }
@@ -149,30 +124,77 @@ export default function RegisterPage() {
             
             <Text style={[MyStyleSheet.landingWelcomeText, { fontSize: 40, marginBottom: 20 }]}>Sign Up</Text>
 
-            {Msg ? (
-              <Text style={{ 
-                color: Msg.includes("Weak") || Msg.includes("match") ? "red" : "#2E3A91", 
-                marginBottom: 15, textAlign: 'center', fontWeight: 'bold' 
-              }}>
-                {Msg}
+            {errorMsg ? (
+              <Text style={{ color: "red", marginBottom: 15, textAlign: 'center', fontWeight: 'bold' }}>
+                {errorMsg}
               </Text>
             ) : null}
 
             {/* Input Fields */}
-            <TextInput style={MyStyleSheet.styledInput} value={getUser.fname} onChangeText={(e) => changeHandler("fname", e)} placeholder='First Name' placeholderTextColor="#AAA" />
-            <TextInput style={MyStyleSheet.styledInput} value={getUser.lname} onChangeText={(e) => changeHandler("lname", e)} placeholder='Last Name' placeholderTextColor="#AAA" />
-            <TextInput style={MyStyleSheet.styledInput} value={getUser.email} onChangeText={(e) => changeHandler("email", e)} placeholder='Email Address' placeholderTextColor="#AAA" keyboardType="email-address" autoCapitalize="none" />
-            <TextInput style={MyStyleSheet.styledInput} value={getUser.password} onChangeText={(e) => changeHandler("password", e)} placeholder='Password' placeholderTextColor="#AAA" secureTextEntry />
-            <TextInput style={MyStyleSheet.styledInput} value={getUser.cpassword} onChangeText={(e) => changeHandler("cpassword", e)} placeholder='Confirm Password' placeholderTextColor="#AAA" secureTextEntry />
+            <TextInput 
+              style={MyStyleSheet.styledInput} 
+              value={formData.firstName} 
+              onChangeText={(e) => handleChange("firstName", e)} 
+              placeholder='Enter First Name' 
+              placeholderTextColor="#AAA" 
+            />
+            <TextInput 
+              style={MyStyleSheet.styledInput} 
+              value={formData.lastName} 
+              onChangeText={(e) => handleChange("lastName", e)} 
+              placeholder='Enter Last Name' 
+              placeholderTextColor="#AAA" 
+            />
+            <TextInput 
+              style={MyStyleSheet.styledInput} 
+              value={formData.email} 
+              onChangeText={(e) => handleChange("email", e)} 
+              placeholder='Enter Email' 
+              placeholderTextColor="#AAA" 
+              keyboardType="email-address" 
+              autoCapitalize="none" 
+            />
+            
+            <TextInput 
+              style={MyStyleSheet.styledInput} 
+              value={formData.password} 
+              onChangeText={(e) => handleChange("password", e)} 
+              placeholder='Enter Password' 
+              placeholderTextColor="#AAA" 
+              secureTextEntry 
+            />
+
+            {/* Dynamic Password Strength Text */}
+            {formData.password ? (
+              <Text style={{
+                marginTop: -10, 
+                marginBottom: 15, 
+                marginLeft: 5,
+                fontSize: 13, 
+                fontWeight: '600',
+                color: passwordStrength === 'Weak' ? '#e53e3e' : passwordStrength === 'Moderate' ? '#d69e2e' : '#38a169'
+              }}>
+                Password strength: {passwordStrength}
+              </Text>
+            ) : null}
+
+            <TextInput 
+              style={MyStyleSheet.styledInput} 
+              value={formData.confirmPassword} 
+              onChangeText={(e) => handleChange("confirmPassword", e)} 
+              placeholder='Confirm Password' 
+              placeholderTextColor="#AAA" 
+              secureTextEntry 
+            />
 
             {/* Main Sign Up Button */}
             <TouchableOpacity 
               style={[MyStyleSheet.landingSignUpBtn, { marginTop: 10, opacity: loading ? 0.7 : 1 }]} 
-              onPress={RegisteredAccs}
+              onPress={handleSubmit}
               disabled={loading}
             >
               <Text style={MyStyleSheet.landingSignUpText}>
-                {loading ? "CREATING..." : "Sign Up"}
+                {loading ? "Creating..." : "Create"}
               </Text>
             </TouchableOpacity>
 
@@ -180,13 +202,13 @@ export default function RegisterPage() {
             <View style={{ marginTop: 25, alignItems: 'center' }}>
               <Text style={{ color: '#AAA', marginBottom: 15 }}>Or sign up with</Text>
               <View style={{ flexDirection: 'row' }}>
-                <TouchableOpacity style={MyStyleSheet.socialIconCircle}>
+                <TouchableOpacity style={MyStyleSheet.socialIconCircle} onPress={() => Alert.alert('Notice', 'Mobile OAuth requires setup.')}>
                   <Image source={{ uri: 'https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg' }} style={{ width: 25, height: 25 }} />
                 </TouchableOpacity>
-                <TouchableOpacity style={MyStyleSheet.socialIconCircle}>
+                <TouchableOpacity style={MyStyleSheet.socialIconCircle} onPress={() => Alert.alert('Notice', 'Mobile OAuth requires setup.')}>
                   <Image source={{ uri: 'https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg' }} style={{ width: 25, height: 25 }} />
                 </TouchableOpacity>
-                <TouchableOpacity style={MyStyleSheet.socialIconCircle}>
+                <TouchableOpacity style={MyStyleSheet.socialIconCircle} onPress={() => Alert.alert('Notice', 'Mobile OAuth requires setup.')}>
                   <Image source={{ uri: 'https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_%282019%29.png' }} style={{ width: 25, height: 25 }} />
                 </TouchableOpacity>
               </View>
@@ -195,7 +217,7 @@ export default function RegisterPage() {
             {/* Login Redirect */}
             <TouchableOpacity onPress={() => opx.navigate('login')} style={{ marginTop: 30, alignItems: 'center' }}>
               <Text style={{ color: '#AAA' }}>
-                Already have an account? <Text style={{ color: '#2E3A91', fontWeight: 'bold' }}>Login</Text>
+                Already have an account? <Text style={{ color: '#2E3A91', fontWeight: 'bold' }}>Log in</Text>
               </Text>
             </TouchableOpacity>
 
