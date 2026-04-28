@@ -1,13 +1,14 @@
-import React, { useState, useEffect, useMemo } from 'react';
-// 🟢 Idinagdag ang Linking at Alert
-import { View, Text, SafeAreaView, ScrollView, TouchableOpacity, TextInput, ActivityIndicator, Modal, StyleSheet, Linking, Alert } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, SafeAreaView, ScrollView, TouchableOpacity, TextInput, ActivityIndicator, Modal, Linking as RNLinking, Alert } from 'react-native';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { Ionicons, Feather } from '@expo/vector-icons';
+// 🟢 NEW: Import natin ang expo-linking
+import * as Linking from 'expo-linking'; 
+
 import { supabase } from '../context/supabase';
 import { useUser } from '../context/UserContext';
-import MyStyleSheet from '../styles/MyStyleSheet'; 
+import styles from '../styles/MyStyleSheet'; 
 
-// ================= HELPER FUNCTIONS =================
 const toCurrency = (value) => {
   return new Intl.NumberFormat('en-PH', {
     style: 'currency',
@@ -26,7 +27,7 @@ const toDateLabel = (value) => {
 };
 
 const toPaymentStatus = (rawStatus) => {
-  return String(rawStatus || '').toLowerCase() === 'completed' ? 'Paid' : 'Pending';
+  return String(rawStatus || '').toLowerCase() === 'paid' ? 'Paid' : 'Pending Payment';
 };
 
 export default function BillingPage() {
@@ -34,80 +35,116 @@ export default function BillingPage() {
   const isFocused = useIsFocused();
   const { user } = useUser();
 
+  // 🟢 NEW: Sasaluhin natin yung URL kapag bumalik sa app
+  const incomingUrl = Linking.useURL(); 
+
   const [loading, setLoading] = useState(true);
   const [invoices, setInvoices] = useState([]);
   const [filter, setFilter] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedInvoice, setSelectedInvoice] = useState(null);
-  
-  // 🟢 BAGONG STATE PARA SA PAYMENT
   const [isPaying, setIsPaying] = useState(false);
 
-  // ================= 1. FETCH INVOICES =================
+  // ================= 1. CATCH RETURN URL FROM PAYMONGO =================
   useEffect(() => {
-    async function loadInvoices() {
-      if (!user) {
-        setLoading(false);
-        return;
+    const handleSuccessUrl = async () => {
+      if (incomingUrl) {
+        // Basahin ang parameters sa URL na ibinato ni PayMongo pabalik
+        const { queryParams } = Linking.parse(incomingUrl);
+
+        if (queryParams && queryParams.payment_success === 'true' && queryParams.sale_id) {
+          try {
+            // I-update ang sales table to Paid
+            await supabase.from('sales').update({ status: 'Paid' }).eq('id', queryParams.sale_id);
+            
+            // I-update din ang appointments table to Completed
+            if (queryParams.apt_id && queryParams.apt_id !== 'undefined') {
+                await supabase.from('appointments').update({ status: 'Completed' }).eq('id', queryParams.apt_id);
+            }
+
+            Alert.alert("Payment Successful", "Your invoice has been paid!");
+            setSelectedInvoice(null);
+            loadInvoices(); // Refresh the list
+          } catch (err) {
+            console.error("DB Update Error after payment:", err);
+          }
+        }
       }
-      
-      setLoading(true);
-      try {
-        const { data: appointments, error } = await supabase
-          .from('appointments')
-          .select('id, appointment_date, service_type, status, pets(pet_name)')
-          .eq('client_id', user.id)
-          .neq('status', 'Cancelled')
-          .order('appointment_date', { ascending: false });
+    };
 
-        if (error) throw error;
+    handleSuccessUrl();
+  }, [incomingUrl]);
 
-        const mappedInvoices = (appointments || []).map((appointment) => {
-          const appointmentDate = appointment.appointment_date ? new Date(appointment.appointment_date) : null;
-          const dueDate = appointmentDate
-            ? new Date(new Date(appointmentDate).setDate(appointmentDate.getDate() + 1))
-            : null;
-
-          const amount = Number(appointment.total_amount || 1000); 
-          const status = toPaymentStatus(appointment.status);
-
-          return {
-            id: appointment.id,
-            invoiceNumber: `INV-${String(appointment.id || '').slice(0, 8).toUpperCase()}`,
-            petName: appointment.pets?.pet_name || 'Unknown pet',
-            service: appointment.service_type || 'Consultation',
-            date: appointmentDate,
-            dueDate,
-            amount,
-            status,
-            items: [
-              { description: appointment.service_type || 'Consultation service', price: amount / 2 },
-              { description: 'Clinic consultation fee', price: amount / 2 },
-            ],
-          };
-        });
-
-        setInvoices(mappedInvoices);
-      } catch (error) {
-        console.error('Error loading invoices:', error);
-      } finally {
-        setLoading(false);
-      }
+  // ================= 2. FETCH INVOICES =================
+  const loadInvoices = async () => {
+    if (!user) {
+      setLoading(false);
+      return;
     }
+    
+    setLoading(true);
+    try {
+      const { data: salesData, error } = await supabase
+        .from('sales')
+        .select('*, appointments(pets(pet_name))')
+        .eq('client_id', user.id)
+        .order('created_at', { ascending: false });
 
+      if (error) throw error;
+
+      const mappedInvoices = (salesData || []).map((sale) => {
+        const invoiceDate = sale.date ? new Date(sale.date) : new Date(sale.created_at);
+        const dueDate = new Date(new Date(invoiceDate).setDate(invoiceDate.getDate() + 1));
+        
+        const amount = Number(sale.total_amount || 0);
+        const status = toPaymentStatus(sale.status);
+        const petName = sale.appointments?.pets?.pet_name || 'General Purchase';
+
+        let parsedItems = [];
+        if (sale.items) {
+          parsedItems = typeof sale.items === 'string' ? JSON.parse(sale.items) : sale.items;
+        } else {
+          parsedItems = [{ description: sale.type === 'product' ? 'Product Purchase' : 'Service Fee', price: amount }];
+        }
+
+        return {
+          id: sale.id,
+          appointmentId: sale.appointment_id,
+          invoiceNumber: `INV-${String(sale.id || '').slice(-8).toUpperCase()}`,
+          petName: petName,
+          service: sale.type === 'appointment' ? 'Veterinary Service' : 'Clinic Purchase',
+          date: invoiceDate,
+          dueDate,
+          amount,
+          status,
+          items: parsedItems,
+          notes: sale.notes || ''
+        };
+      });
+
+      setInvoices(mappedInvoices);
+    } catch (error) {
+      console.error('Error loading invoices:', error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
     if (isFocused) {
       loadInvoices();
     }
   }, [isFocused, user]);
 
-  // ================= 2. PAYMONGO PAYMENT FUNCTION =================
-  // 🟢 BAGONG FUNCTION PARA SA PAYMONGO
+  // ================= 3. PAYMONGO PAYMENT FUNCTION =================
   const handlePayment = async (invoice) => {
     setIsPaying(true);
     try {
-      // ⚠️ IMPORTANT: Palitan ito ng totoong IPv4 Address ng PC mo kung saan naka-run ang Next.js!
-      // Halimbawa: 'http://192.168.1.45:3000'
-      const BACKEND_URL = 'http://10.254.127.9:3000';
+      // ⚠️ IMPORTANT: I-check kung tama pa rin ang IP address ng Next.js server mo
+      const BACKEND_URL = 'http://10.254.127.9:3000'; 
+      
+      // 🟢 NEW: Gumawa ng deep link para sa app na ito
+      const appReturnUrl = Linking.createURL('');
 
       const response = await fetch(`${BACKEND_URL}/api/checkout`, {
         method: 'POST',
@@ -116,15 +153,16 @@ export default function BillingPage() {
           amount: invoice.amount,
           description: `Payment for ${invoice.service} - ${invoice.petName}`,
           invoiceNumber: invoice.invoiceNumber,
-          appointmentId: invoice.id 
+          saleId: invoice.id, 
+          appointmentId: invoice.appointmentId,
+          returnUrl: appReturnUrl // 🟢 Ipapasa natin ito sa backend
         })
       });
 
       const data = await response.json();
 
       if (data.checkoutUrl) {
-        // Ito ang magbubukas ng browser papunta sa PayMongo
-        Linking.openURL(data.checkoutUrl);
+        RNLinking.openURL(data.checkoutUrl);
       } else {
         Alert.alert('Payment Failed', data.error || 'Could not generate payment link.');
       }
@@ -136,12 +174,15 @@ export default function BillingPage() {
     }
   };
 
-  // ================= 3. CALCULATIONS =================
+  // ================= 4. CALCULATIONS & FILTER =================
   const totalPaid = invoices.filter((inv) => inv.status === 'Paid').reduce((sum, inv) => sum + inv.amount, 0);
-  const totalPending = invoices.filter((inv) => inv.status === 'Pending').reduce((sum, inv) => sum + inv.amount, 0);
+  const totalPending = invoices.filter((inv) => inv.status !== 'Paid').reduce((sum, inv) => sum + inv.amount, 0);
 
   const visibleInvoices = invoices.filter((invoice) => {
-    const matchesFilter = filter === 'All' || invoice.status === filter;
+    let matchesFilter = true;
+    if (filter === 'Paid') matchesFilter = invoice.status === 'Paid';
+    if (filter === 'Pending') matchesFilter = invoice.status !== 'Paid';
+
     if (!matchesFilter) return false;
 
     const q = searchQuery.toLowerCase().trim();
@@ -157,7 +198,6 @@ export default function BillingPage() {
   return (
     <SafeAreaView style={styles.container}>
       
-      {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
           <Text style={styles.backBtnText}>←</Text>
@@ -168,14 +208,12 @@ export default function BillingPage() {
 
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         
-        {/* Banner */}
         <View style={styles.bannerCard}>
           <Text style={styles.bannerSubtitle}>BILLING CENTER</Text>
           <Text style={styles.bannerTitle}>Invoices & Payments</Text>
           <Text style={styles.bannerDesc}>Track paid and pending invoices generated from your appointments.</Text>
         </View>
 
-        {/* Stats Row */}
         <View style={styles.statsRow}>
           <View style={styles.statCard}>
             <View style={styles.statHeader}>
@@ -194,10 +232,7 @@ export default function BillingPage() {
           </View>
         </View>
 
-        {/* Main Section */}
         <View style={styles.mainSection}>
-          
-          {/* Filters */}
           <View style={styles.filterRow}>
             {['All', 'Paid', 'Pending'].map((status) => (
               <TouchableOpacity
@@ -210,7 +245,6 @@ export default function BillingPage() {
             ))}
           </View>
 
-          {/* Search */}
           <View style={styles.searchBox}>
             <Ionicons name="search" size={18} color="#94A3B8" />
             <TextInput
@@ -222,7 +256,6 @@ export default function BillingPage() {
             />
           </View>
 
-          {/* Invoices List */}
           {loading ? (
             <ActivityIndicator size="large" color="#2E3A91" style={{ marginTop: 40 }} />
           ) : visibleInvoices.length === 0 ? (
@@ -309,27 +342,27 @@ export default function BillingPage() {
                 </View>
               </View>
 
-              {/* Table Header */}
               <View style={styles.tableHeader}>
                 <Text style={styles.tableHeaderText}>DESCRIPTION</Text>
                 <Text style={styles.tableHeaderTextRight}>PRICE</Text>
               </View>
               
-              {/* Table Body */}
-              {selectedInvoice?.items.map((item, idx) => (
-                <View key={idx} style={styles.tableRow}>
-                  <Text style={styles.tableCellText}>{item.description}</Text>
-                  <Text style={styles.tableCellTextRight}>{toCurrency(item.price)}</Text>
-                </View>
-              ))}
+              <ScrollView style={{ maxHeight: 150 }} showsVerticalScrollIndicator={true}>
+                {selectedInvoice?.items.map((item, idx) => (
+                  <View key={idx} style={styles.tableRow}>
+                    <Text style={styles.tableCellText}>{item.qty || 1}x {item.description}</Text>
+                    <Text style={styles.tableCellTextRight}>{toCurrency(item.price * (item.qty || 1))}</Text>
+                  </View>
+                ))}
+              </ScrollView>
 
               <View style={styles.grandTotalBox}>
                 <Text style={styles.grandTotalLabel}>GRAND TOTAL</Text>
                 <Text style={styles.grandTotalValue}>{toCurrency(selectedInvoice?.amount)}</Text>
               </View>
 
-              {/* 🟢 NA-UPDATE NA PAY NOW BUTTON */}
-              {selectedInvoice?.status === 'Pending' && (
+              {/* Pay Now Button */}
+              {selectedInvoice?.status !== 'Paid' && (
                 <TouchableOpacity 
                   style={[styles.payBtn, isPaying && { opacity: 0.7 }]} 
                   onPress={() => handlePayment(selectedInvoice)}
@@ -354,84 +387,3 @@ export default function BillingPage() {
     </SafeAreaView>
   );
 }
-
-// ================= STYLES =================
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F8F9FD' },
-  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 20, paddingVertical: 15, backgroundColor: '#FFF', borderBottomWidth: 1, borderBottomColor: '#E2E8F0' },
-  backBtn: { padding: 5 },
-  backBtnText: { fontSize: 28, color: '#2E3A91' },
-  headerTitle: { fontSize: 18, fontWeight: '800', color: '#1E293B' },
-  content: { padding: 20 },
-
-  bannerCard: { backgroundColor: '#2E3A91', borderRadius: 25, padding: 25, marginBottom: 20 },
-  bannerSubtitle: { color: 'rgba(255,255,255,0.7)', fontSize: 10, fontWeight: 'bold', letterSpacing: 1.5 },
-  bannerTitle: { color: '#FFF', fontSize: 28, fontWeight: 'bold', marginTop: 5 },
-  bannerDesc: { color: 'rgba(255,255,255,0.8)', fontSize: 13, marginTop: 10, lineHeight: 18 },
-
-  statsRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 },
-  statCard: { width: '48%', backgroundColor: '#FFF', borderRadius: 20, padding: 15, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.05, shadowRadius: 5, elevation: 2 },
-  statHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 },
-  statLabel: { fontSize: 10, fontWeight: 'bold', color: '#64748B', textTransform: 'uppercase' },
-  statValue: { fontSize: 20, fontWeight: 'bold', color: '#2E3A91' },
-
-  mainSection: { backgroundColor: '#FFF', borderRadius: 25, padding: 20, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.05, shadowRadius: 5, elevation: 2 },
-  
-  filterRow: { flexDirection: 'row', marginBottom: 15 },
-  filterBtn: { paddingHorizontal: 15, paddingVertical: 8, borderRadius: 20, backgroundColor: '#F1F5F9', marginRight: 10 },
-  filterBtnActive: { backgroundColor: '#2E3A91' },
-  filterBtnText: { fontSize: 13, fontWeight: 'bold', color: '#64748B' },
-  filterBtnTextActive: { color: '#FFF' },
-
-  searchBox: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#F8FAFC', borderWidth: 1, borderColor: '#E2E8F0', borderRadius: 15, paddingHorizontal: 15, height: 45, marginBottom: 20 },
-  searchInput: { flex: 1, marginLeft: 10, fontSize: 14, color: '#1E293B' },
-
-  emptyState: { padding: 30, alignItems: 'center', backgroundColor: '#F8FAFC', borderRadius: 15 },
-  emptyText: { color: '#94A3B8', fontSize: 14 },
-
-  invoiceCard: { backgroundColor: '#F8FAFC', borderRadius: 15, padding: 15, marginBottom: 15, borderWidth: 1, borderColor: '#E2E8F0' },
-  invoiceRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 15 },
-  invoiceCol: { flex: 1 },
-  invoiceLabel: { fontSize: 10, fontWeight: 'bold', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 4 },
-  invoiceNumber: { fontSize: 14, fontWeight: 'bold', color: '#2E3A91' },
-  invoiceTextStrong: { fontSize: 14, fontWeight: 'bold', color: '#2E3A91' },
-  invoiceTextSub: { fontSize: 12, color: '#64748B' },
-  invoiceAmount: { fontSize: 18, fontWeight: 'bold', color: '#2E3A91' },
-
-  invoiceFooter: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', borderTopWidth: 1, borderTopColor: '#E2E8F0', paddingTop: 15 },
-  statusBadge: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 15 },
-  statusPaid: { backgroundColor: '#D1FAE5' },
-  statusPending: { backgroundColor: '#FEF3C7' },
-  statusText: { fontSize: 11, fontWeight: 'bold' },
-  statusTextPaid: { color: '#047857' },
-  statusTextPending: { color: '#B45309' },
-  
-  viewBtn: { backgroundColor: '#FFF', borderWidth: 1, borderColor: '#E2E8F0', paddingHorizontal: 15, paddingVertical: 8, borderRadius: 12 },
-  viewBtnText: { fontSize: 12, fontWeight: 'bold', color: '#64748B' },
-
-  // Modal
-  modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'flex-end' },
-  modalContent: { backgroundColor: '#FFF', borderTopLeftRadius: 30, borderTopRightRadius: 30, maxHeight: '90%' },
-  modalHeader: { flexDirection: 'row', justifyContent: 'space-between', padding: 25, borderBottomWidth: 1, borderBottomColor: '#E2E8F0' },
-  modalTitle: { fontSize: 22, fontWeight: 'bold', color: '#2E3A91' },
-  closeBtn: { backgroundColor: '#F1F5F9', padding: 8, borderRadius: 15 },
-  modalBody: { padding: 25 },
-  
-  modalGrid: { flexDirection: 'row', flexWrap: 'wrap', marginBottom: 20 },
-  modalGridCol: { width: '50%', marginBottom: 15 },
-  modalGridText: { fontSize: 14, fontWeight: 'bold', color: '#1E293B', marginTop: 2 },
-
-  tableHeader: { flexDirection: 'row', justifyContent: 'space-between', backgroundColor: '#F8FAFC', padding: 10, borderRadius: 8, marginBottom: 10 },
-  tableHeaderText: { fontSize: 10, fontWeight: 'bold', color: '#94A3B8' },
-  tableHeaderTextRight: { fontSize: 10, fontWeight: 'bold', color: '#94A3B8', textAlign: 'right' },
-  tableRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: '#F1F5F9' },
-  tableCellText: { fontSize: 13, color: '#475569', flex: 1 },
-  tableCellTextRight: { fontSize: 13, fontWeight: 'bold', color: '#1E293B', textAlign: 'right' },
-
-  grandTotalBox: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#EEF2FF', padding: 15, borderRadius: 15, marginTop: 20 },
-  grandTotalLabel: { fontSize: 12, fontWeight: 'bold', color: '#2E3A91' },
-  grandTotalValue: { fontSize: 24, fontWeight: 'bold', color: '#1E293B' },
-
-  payBtn: { flexDirection: 'row', backgroundColor: '#2E3A91', padding: 18, borderRadius: 15, alignItems: 'center', justifyContent: 'center', marginTop: 20 },
-  payBtnText: { color: '#FFF', fontSize: 16, fontWeight: 'bold' }
-});

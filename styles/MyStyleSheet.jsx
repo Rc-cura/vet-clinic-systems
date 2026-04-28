@@ -2800,6 +2800,83 @@ miniTabTextActive: {
     height: 45,
     marginBottom: 15,
   },
+  container: { flex: 1, backgroundColor: '#F8F9FD' },
+  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 20, paddingVertical: 15, backgroundColor: '#FFF', borderBottomWidth: 1, borderBottomColor: '#E2E8F0' },
+  backBtn: { padding: 5 },
+  backBtnText: { fontSize: 28, color: '#2E3A91' },
+  headerTitle: { fontSize: 18, fontWeight: '800', color: '#1E293B' },
+  content: { padding: 20 },
+
+  bannerCard: { backgroundColor: '#2E3A91', borderRadius: 25, padding: 25, marginBottom: 20 },
+  bannerSubtitle: { color: 'rgba(255,255,255,0.7)', fontSize: 10, fontWeight: 'bold', letterSpacing: 1.5 },
+  bannerTitle: { color: '#FFF', fontSize: 28, fontWeight: 'bold', marginTop: 5 },
+  bannerDesc: { color: 'rgba(255,255,255,0.8)', fontSize: 13, marginTop: 10, lineHeight: 18 },
+
+  statsRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 },
+  statCard: { width: '48%', backgroundColor: '#FFF', borderRadius: 20, padding: 15, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.05, shadowRadius: 5, elevation: 2 },
+  statHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 },
+  statLabel: { fontSize: 10, fontWeight: 'bold', color: '#64748B', textTransform: 'uppercase' },
+  statValue: { fontSize: 20, fontWeight: 'bold', color: '#2E3A91' },
+
+  mainSection: { backgroundColor: '#FFF', borderRadius: 25, padding: 20, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.05, shadowRadius: 5, elevation: 2 },
+  
+  filterRow: { flexDirection: 'row', marginBottom: 15 },
+  filterBtn: { paddingHorizontal: 15, paddingVertical: 8, borderRadius: 20, backgroundColor: '#F1F5F9', marginRight: 10 },
+  filterBtnActive: { backgroundColor: '#2E3A91' },
+  filterBtnText: { fontSize: 13, fontWeight: 'bold', color: '#64748B' },
+  filterBtnTextActive: { color: '#FFF' },
+
+  searchBox: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#F8FAFC', borderWidth: 1, borderColor: '#E2E8F0', borderRadius: 15, paddingHorizontal: 15, height: 45, marginBottom: 20 },
+  searchInput: { flex: 1, marginLeft: 10, fontSize: 14, color: '#1E293B' },
+
+  emptyState: { padding: 30, alignItems: 'center', backgroundColor: '#F8FAFC', borderRadius: 15 },
+  emptyText: { color: '#94A3B8', fontSize: 14 },
+
+  invoiceCard: { backgroundColor: '#F8FAFC', borderRadius: 15, padding: 15, marginBottom: 15, borderWidth: 1, borderColor: '#E2E8F0' },
+  invoiceRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 15 },
+  invoiceCol: { flex: 1 },
+  invoiceLabel: { fontSize: 10, fontWeight: 'bold', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 4 },
+  invoiceNumber: { fontSize: 14, fontWeight: 'bold', color: '#2E3A91' },
+  invoiceTextStrong: { fontSize: 14, fontWeight: 'bold', color: '#2E3A91' },
+  invoiceTextSub: { fontSize: 12, color: '#64748B' },
+  invoiceAmount: { fontSize: 18, fontWeight: 'bold', color: '#2E3A91' },
+
+  invoiceFooter: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', borderTopWidth: 1, borderTopColor: '#E2E8F0', paddingTop: 15 },
+  statusBadge: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 15 },
+  statusPaid: { backgroundColor: '#D1FAE5' },
+  statusPending: { backgroundColor: '#FEF3C7' },
+  statusText: { fontSize: 11, fontWeight: 'bold' },
+  statusTextPaid: { color: '#047857' },
+  statusTextPending: { color: '#B45309' },
+  
+  viewBtn: { backgroundColor: '#FFF', borderWidth: 1, borderColor: '#E2E8F0', paddingHorizontal: 15, paddingVertical: 8, borderRadius: 12 },
+  viewBtnText: { fontSize: 12, fontWeight: 'bold', color: '#64748B' },
+
+  // Modal
+  modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'flex-end' },
+  modalContent: { backgroundColor: '#FFF', borderTopLeftRadius: 30, borderTopRightRadius: 30, maxHeight: '90%' },
+  modalHeader: { flexDirection: 'row', justifyContent: 'space-between', padding: 25, borderBottomWidth: 1, borderBottomColor: '#E2E8F0' },
+  modalTitle: { fontSize: 22, fontWeight: 'bold', color: '#2E3A91' },
+  closeBtn: { backgroundColor: '#F1F5F9', padding: 8, borderRadius: 15 },
+  modalBody: { padding: 25 },
+  
+  modalGrid: { flexDirection: 'row', flexWrap: 'wrap', marginBottom: 20 },
+  modalGridCol: { width: '50%', marginBottom: 15 },
+  modalGridText: { fontSize: 14, fontWeight: 'bold', color: '#1E293B', marginTop: 2 },
+
+  tableHeader: { flexDirection: 'row', justifyContent: 'space-between', backgroundColor: '#F8FAFC', padding: 10, borderRadius: 8, marginBottom: 10 },
+  tableHeaderText: { fontSize: 10, fontWeight: 'bold', color: '#94A3B8' },
+  tableHeaderTextRight: { fontSize: 10, fontWeight: 'bold', color: '#94A3B8', textAlign: 'right' },
+  tableRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: '#F1F5F9' },
+  tableCellText: { fontSize: 13, color: '#475569', flex: 1 },
+  tableCellTextRight: { fontSize: 13, fontWeight: 'bold', color: '#1E293B', textAlign: 'right' },
+
+  grandTotalBox: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#EEF2FF', padding: 15, borderRadius: 15, marginTop: 20 },
+  grandTotalLabel: { fontSize: 12, fontWeight: 'bold', color: '#2E3A91' },
+  grandTotalValue: { fontSize: 24, fontWeight: 'bold', color: '#1E293B' },
+
+  payBtn: { flexDirection: 'row', backgroundColor: '#2E3A91', padding: 18, borderRadius: 15, alignItems: 'center', justifyContent: 'center', marginTop: 20 },
+  payBtnText: { color: '#FFF', fontSize: 16, fontWeight: 'bold' }
 
 })
 
